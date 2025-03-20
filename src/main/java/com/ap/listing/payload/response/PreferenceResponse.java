@@ -24,5 +24,4 @@ public class PreferenceResponse {
     private String id;
     private String userId;
     private String preference;
-    private Date createdAt;
 }
