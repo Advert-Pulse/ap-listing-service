@@ -1,0 +1,46 @@
+<configuration>
+    <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss} [%thread] %highlight(%-5level) [%cyan(%logger{10}):%magenta(%line)] %yellow(%method) [%X{breadcrumbId}] [%X{responseStatus}] [%X{remoteAddress}] - %msg%n" />
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- Log file location -->
+        <file>${LOGS_PATH}/${LOGS_INITIAL}.log</file>
+
+        <!-- Log rotation policy -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- Pattern for log file names -->
+            <fileNamePattern>${LOGS_PATH}/backup/${LOGS_INITIAL}.%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+            <!-- Compress logs older than the current day -->
+            <maxHistory>30</maxHistory> <!-- Retain logs for 30 days -->
+            <cleanHistoryOnStart>true</cleanHistoryOnStart> <!-- Clean old files on startup -->
+        </rollingPolicy>
+
+        <!-- JSON encoder for structured logs -->
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <includeContext>true</includeContext>
+            <customFields>{"applicationName": "${APPLICATION_NAME}", "environment": "${ACTIVE_PROFILE}"}</customFields>
+        </encoder>
+    </appender>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- AsyncAppender to make logging asynchronous -->
+    <appender name="ASYNC_FILE" class="ch.qos.logback.classic.AsyncAppender">
+        <shutdownTimeout>7000</shutdownTimeout>
+        <appender-ref ref="FILE" />
+    </appender>
+
+    <appender name="ASYNC_CONSOLE" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="CONSOLE" />
+    </appender>
+
+    <!-- Root Logger -->
+    <root level="INFO">
+        <appender-ref ref="ASYNC_FILE" />
+        <appender-ref ref="ASYNC_CONSOLE" />
+    </root>
+</configuration>
+

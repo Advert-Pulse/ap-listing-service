@@ -1,0 +1,111 @@
+server:
+  servlet:
+    context-path: /listing-service
+spring:
+  application:
+    name: ap-listing-service
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DATABASE}
+    hikari:
+      username: ${POSTGRES_USERNAME}
+      password: ${POSTGRES_PASSWORD}
+      maximum-pool-size: 100
+      minimum-idle: 7
+      leak-detection-threshold: 120000
+      max-lifetime: 1800000
+      idle-timeout: 600000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+      auto-commit: false
+  jpa:
+    properties:
+      hibernate:
+        format_sql: false
+        show_sql: true
+    hibernate:
+      ddl-auto: update
+  sql:
+    init:
+      mode: always
+      schema-locations:
+        - classpath:scripts/001_listing-schema.sql
+
+application:
+  profile: ${ACTIVE_PROFILE:local}
+
+bloggios-auth:
+  jwt:
+    key-provider:
+      key-alias: ${JWT_KEY_STORE_ALIAS}
+      key-store-password: ${JWT_KEY_STORE_PASSWORD}
+      key-store-path: ${JWT_KEY_STORE_PATH}
+    token-data:
+      access-token-expiry-minutes: 16
+      long-access-token-expiry-minutes: 70
+      refresh-token-cookie-name: ${REFRESH_TOKEN_COOKIE_NAME:bg-refresh-mgmt-token}
+      refresh-token-expiry-days: 16
+      is-http-only: true
+      same-site: None
+      secure: true
+  excluded-paths:
+    jwt-paths:
+      exclude-paths:
+        - /v1/url-api/**
+        - /actuator/**
+        - /oauth2/**
+        - /v3/**
+        - /api/v1/auth/**"
+        - /v2/api-docs
+        - /swagger-resources
+        - /swagger-resources/**
+        - /configuration/ui
+        - /configuration/security
+        - /swagger-ui/**
+        - /webjars/**
+        - /swagger-ui.html
+        - /v3/api-docs
+        - /v3/api-docs/**
+      client-authentication-paths:
+        - /user-auth/**
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL}
+    fetch-registry: true
+    register-with-eureka: true
+    enabled: false
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}
+
+swagger-properties:
+  group-name:
+    definition: ${spring.application.name}
+    scan-packages: com.ap.listing
+  info:
+    title: Advert Pulse - AP Listing Service
+    version: v1
+    description: API Documentation for ap-listing-service
+    summary: The Auth Provider Application microservice, developed with Java 17 and Spring Boot, is designed to offer robust authentication and authorization services for Bloggios. This microservice ensures secure access and user management, enhancing the overall security framework of the platform.
+    contact:
+      name: Bloggios
+      email: support@bloggios.com
+      url: https://www.bloggios.com
+    license:
+      name: Apache 2 License
+      url: https://github.com/Bloggios/auth-provider-application/blob/main/LICENSE
+  servers:
+    local:
+      name: Local Port
+      url: http://localhost:8080/listing-service
+    docker:
+      name: Docker Port
+      url: http://localhost:7004/listing-service
+    dev:
+      name: Dev
+      url: https://devapi.advertpulse.com/listing-service
+
+logging:
+  level:
+    com.bloggios: OFF

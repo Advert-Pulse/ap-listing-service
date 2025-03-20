@@ -1,0 +1,84 @@
+import java.time.Year
+
+plugins {
+	id "java"
+	id "org.springframework.boot" version "3.4.1"
+	id "io.spring.dependency-management" version "1.1.7"
+	id "com.github.hierynomus.license" version "0.16.1"
+}
+
+group = 'com.ap.listing'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+	maven {
+		url = System.getenv("ARTIFACTORY_URL") ?: artifactoryUrl
+		credentials {
+			username = "aws"
+			password = System.getenv("ARTIFACTORY_TOKEN") ?: artifactoryToken
+		}
+	}
+}
+
+ext {
+	set("springCloudVersion", "2024.0.0")
+	modelMapperVersion = "2.1.1"
+	springdocVersion = "1.7.0"
+	logstashVersion = "8.0"
+	flywayVersion = "11.2.0"
+	elasticClientVersion = "8.17.0"
+}
+
+dependencies {
+	implementation "org.springframework.boot:spring-boot-starter-web"
+	compileOnly "org.projectlombok:lombok"
+	annotationProcessor "org.projectlombok:lombok"
+	testImplementation "org.springframework.boot:spring-boot-starter-test"
+	testRuntimeOnly "org.junit.platform:junit-platform-launcher"
+	implementation "org.springframework.boot:spring-boot-starter-actuator"
+	implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+	runtimeOnly "org.postgresql:postgresql"
+	implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.4"
+	implementation group: "org.modelmapper", name: "modelmapper", version: "${modelMapperVersion}"
+	implementation group: "net.logstash.logback", name: "logstash-logback-encoder", version: "${logstashVersion}"
+	implementation "org.springframework.boot:spring-boot-starter-security"
+	implementation "org.springframework.kafka:spring-kafka"
+	testImplementation "org.springframework.kafka:spring-kafka-test"
+	implementation "org.springframework.boot:spring-boot-starter-oauth2-resource-server"
+	implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client"
+	implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
+	implementation "com.bloggios.auth-provider-dep:bloggios-auth-provider-dep:2.0.1"
+	implementation "com.bloggios.provider:bloggios-provider:2.0.0"
+	implementation group: "org.jsoup", name: "jsoup", version: "1.17.2"
+	implementation group: "dnsjava", name: "dnsjava", version: "3.6.3"
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+license {
+	include "**/*.java"
+	exclude "**/generated/**"
+	ext.year = Year.now().toString()
+	strictCheck = true
+}
