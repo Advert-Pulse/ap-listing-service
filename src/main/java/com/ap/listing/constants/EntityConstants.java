@@ -16,4 +16,6 @@ public class EntityConstants {
     public static final String PREFERENCE = "preference";
     public static final String WEBSITE = "website";
     public static final String LISTING = "listing";
+    public static final String DOMAIN_METRICS = "domain_metrics";
+    public static final String WEBSITE_PUBLISHER = "website_publisher";
 }
