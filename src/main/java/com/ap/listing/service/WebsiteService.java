@@ -7,7 +7,13 @@ package com.ap.listing.service;
   File: WebsiteService
  */
 
+import com.bloggios.provider.payload.ModuleResponse;
+import org.springframework.http.ResponseEntity;
+
+import java.util.List;
+
 public interface WebsiteService {
 
-
+    ResponseEntity<ModuleResponse> addWebsite(String website);
+    ResponseEntity<ModuleResponse> addMultipleWebsite(List<String> websites);
 }

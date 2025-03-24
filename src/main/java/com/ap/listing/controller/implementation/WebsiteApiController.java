@@ -7,9 +7,14 @@ package com.ap.listing.controller.implementation;
   File: WebsiteApiController
  */
 
+import com.ap.listing.constants.ApiConstants;
 import com.ap.listing.controller.WebsiteApi;
+import com.ap.listing.service.WebsiteService;
 import com.bloggios.provider.payload.ModuleResponse;
+import com.bloggios.provider.utils.ControllerHelper;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,13 +24,25 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WebsiteApiController implements WebsiteApi {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(WebsiteApiController.class);
+
+    private final WebsiteService websiteService;
+
     @Override
     public ResponseEntity<ModuleResponse> addWebsite(String website) {
-        return null;
+        return ControllerHelper.loggedResponse(
+                () -> websiteService.addWebsite(website),
+                ApiConstants.ADD_WEBSITE,
+                LOGGER
+        );
     }
 
     @Override
-    public ResponseEntity<ModuleResponse> addMultipleWebsite(List<String> website) {
-        return null;
+    public ResponseEntity<ModuleResponse> addMultipleWebsite(List<String> websites) {
+        return ControllerHelper.loggedResponse(
+                () -> websiteService.addMultipleWebsite(websites),
+                ApiConstants.ADD_WEBSITE,
+                LOGGER
+        );
     }
 }
