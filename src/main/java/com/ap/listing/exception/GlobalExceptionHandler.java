@@ -63,6 +63,16 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(FeignClientException.class)
+    public ResponseEntity<ExceptionResponse> feignClientException(FeignClientException exception) {
+        log.error("FeignClientException Occurred >> {}", exception.toString());
+        ExceptionResponse exceptionResponse = ErrorResponseGeneratorUtil.generate(exception);
+        return new ResponseEntity<>(
+                exceptionResponse,
+                exception.getHttpStatus()
+        );
+    }
+
     @ExceptionHandler(InternalException.class)
     public ResponseEntity<ExceptionResponse> internalException(InternalException exception) {
         log.error("InternalException Occurred >> {}", exception.toString());

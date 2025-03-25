@@ -109,3 +109,11 @@ swagger-properties:
 logging:
   level:
     com.bloggios: OFF
+
+feign-client:
+  rapid-api:
+    host: domain-metrics-check.p.rapidapi.com
+    api-key: 770cdcf629msh8ac0af84d9825b2p1ba4fdjsn3e5df144492e
+  domain-metrics:
+    name: domainMetricsClient
+    url: https://domain-metrics-check.p.rapidapi.com
