@@ -14,4 +14,6 @@ public class ServiceConstants {
 
     public static final String SELLER = "seller";
     public static final String BUYER = "buyer";
+    public static final String HTTP = "http://";
+    public static final String HTTPS = "https://";
 }

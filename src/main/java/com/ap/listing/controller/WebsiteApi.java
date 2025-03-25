@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@RequestMapping("/website")
+@RequestMapping("/v1/website")
 public interface WebsiteApi {
 
     @Operation(

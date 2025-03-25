@@ -24,6 +24,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 )
 public interface DomainMetricsFeignClient {
 
-    @GetMapping("/{domain}")
+    @GetMapping("/domain-metrics/{domain}/")
     DomainMetricsFeignResponse getDomainMetrics(@PathVariable String domain);
 }

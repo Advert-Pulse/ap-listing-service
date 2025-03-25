@@ -63,6 +63,6 @@ public class DomainMetrics {
     private String majesticTTF2Value;
     private String majesticTF;
 
-    @OneToOne(mappedBy = "domainMetrics")
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Website website;
 }

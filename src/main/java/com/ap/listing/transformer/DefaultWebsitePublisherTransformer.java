@@ -4,30 +4,27 @@ package com.ap.listing.transformer;
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: WebsiteTransformer
+  File: DefaultWebsitePublisherTransformer
  */
 
 import com.ap.listing.model.Website;
+import com.ap.listing.model.WebsitePublisher;
 import com.ap.listing.utils.SecurityContextUtil;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
 @Component
-public class WebsiteTransformer {
+public class DefaultWebsitePublisherTransformer {
 
-    public Website transform(String website) {
-        return Website
+    public WebsitePublisher transform(Website website) {
+        Date now = new Date();
+        return WebsitePublisher
                 .builder()
-                .domain(website)
-                .isAvailable(Boolean.TRUE)
-                .dateCreated(new Date())
+                .website(website)
                 .userId(SecurityContextUtil.getLoggedInUserOrThrow().getUserId())
+                .dateCreated(now)
+                .dateUpdated(now)
                 .build();
-    }
-
-    public Website transformWebsiteNotAvailable(Website website) {
-        website.setIsAvailable(Boolean.FALSE);
-        return website;
     }
 }

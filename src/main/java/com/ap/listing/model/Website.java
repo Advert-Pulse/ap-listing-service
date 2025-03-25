@@ -53,6 +53,6 @@ public class Website {
     @OneToMany(mappedBy = "website", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<WebsitePublisher> publishers = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "website")
     private DomainMetrics domainMetrics;
 }

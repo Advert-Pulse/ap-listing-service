@@ -12,6 +12,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Date;
+
 @Entity
 @Getter
 @Setter
@@ -39,4 +41,10 @@ public class WebsitePublisher {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Website website;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateCreated;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateUpdated;
 }
