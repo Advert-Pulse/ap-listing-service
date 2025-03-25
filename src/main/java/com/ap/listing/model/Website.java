@@ -39,6 +39,7 @@ public class Website {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String websiteId;
 
+    @Column(unique = true, nullable = false)
     private String domain;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -46,6 +47,8 @@ public class Website {
 
     @Column(nullable = false)
     private String userId;
+
+    private Boolean isAvailable;
 
     @OneToMany(mappedBy = "website", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<WebsitePublisher> publishers = new ArrayList<>();

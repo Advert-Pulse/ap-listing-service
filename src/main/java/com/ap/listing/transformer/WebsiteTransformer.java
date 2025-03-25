@@ -23,8 +23,14 @@ public class WebsiteTransformer {
         return Website
                 .builder()
                 .domain(website)
+                .isAvailable(Boolean.TRUE)
                 .dateCreated(new Date())
                 .userId(SecurityContextUtil.getLoggedInUserOrThrow().getUserId())
                 .build();
+    }
+
+    public Website transformWebsiteNotAvailable(Website website) {
+        website.setIsAvailable(Boolean.FALSE);
+        return website;
     }
 }
