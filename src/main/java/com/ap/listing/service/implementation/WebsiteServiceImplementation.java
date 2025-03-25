@@ -9,6 +9,8 @@ package com.ap.listing.service.implementation;
 
 import com.ap.listing.enums.ErrorData;
 import com.ap.listing.exception.BadRequestException;
+import com.ap.listing.feign.DomainMetricsFeignClient;
+import com.ap.listing.payload.response.DomainMetricsFeignResponse;
 import com.ap.listing.service.WebsiteService;
 import com.ap.listing.utils.ExtractBaseUrl;
 import com.ap.listing.utils.UrlChecker;
@@ -23,6 +25,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WebsiteServiceImplementation implements WebsiteService {
 
+    private final DomainMetricsFeignClient domainMetricsFeignClient;
+
     @Override
     public ResponseEntity<ModuleResponse> addWebsite(String website) {
         String baseUrl = ExtractBaseUrl.extractBaseUrl(website);
@@ -30,6 +34,7 @@ public class WebsiteServiceImplementation implements WebsiteService {
         if (!urlAvailable) {
             throw new BadRequestException(ErrorData.WEBSITE_IRRESPONSIVE, "website");
         }
+        DomainMetricsFeignResponse domainMetrics = domainMetricsFeignClient.getDomainMetrics(website);
 
         return null;
     }

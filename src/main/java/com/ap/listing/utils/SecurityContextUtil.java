@@ -28,7 +28,7 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.transformer;
+package com.ap.listing.utils;
 
 import com.bloggios.authprovider.authentication.AuthIdentity;
 import com.bloggios.authprovider.enums.ErrorData;

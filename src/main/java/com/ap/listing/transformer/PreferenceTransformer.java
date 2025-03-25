@@ -8,6 +8,7 @@ package com.ap.listing.transformer;
  */
 
 import com.ap.listing.model.Preference;
+import com.ap.listing.utils.SecurityContextUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

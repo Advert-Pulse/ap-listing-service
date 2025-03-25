@@ -15,7 +15,7 @@ import com.ap.listing.model.Preference;
 import com.ap.listing.payload.response.PreferenceResponse;
 import com.ap.listing.service.PreferenceService;
 import com.ap.listing.transformer.PreferenceTransformer;
-import com.ap.listing.transformer.SecurityContextUtil;
+import com.ap.listing.utils.SecurityContextUtil;
 import com.bloggios.provider.payload.ModuleResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
