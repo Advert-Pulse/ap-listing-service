@@ -7,7 +7,9 @@ package com.ap.listing.transformer;
   File: WebsiteTransformer
  */
 
+import com.ap.listing.model.DomainMetrics;
 import com.ap.listing.model.Website;
+import com.ap.listing.payload.response.DomainMetricsFeignResponse;
 import com.ap.listing.utils.SecurityContextUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
