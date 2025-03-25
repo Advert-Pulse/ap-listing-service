@@ -8,12 +8,26 @@ package com.ap.listing.service.implementation;
  */
 
 import com.ap.listing.service.WebsiteService;
+import com.bloggios.provider.payload.ModuleResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class WebsiteServiceImplementation implements WebsiteService {
+
+    @Override
+    public ResponseEntity<ModuleResponse> addWebsite(String website) {
+
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<ModuleResponse> addMultipleWebsite(List<String> websites) {
+        return null;
+    }
 }
