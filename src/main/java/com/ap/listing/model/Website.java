@@ -41,8 +41,6 @@ public class Website {
 
     private String domain;
 
-    private String domainMetricsId;
-
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateCreated;
 
