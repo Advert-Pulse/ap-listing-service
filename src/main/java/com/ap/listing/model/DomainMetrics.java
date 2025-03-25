@@ -25,7 +25,7 @@ import lombok.*;
         indexes = {
                 @Index(
                         name = "index_domain_metrics_website",
-                        columnList = "website"
+                        columnList = "domainMetricsId"
                 )
         }
 )
@@ -62,4 +62,7 @@ public class DomainMetrics {
     private String majesticTTF2Name;
     private String majesticTTF2Value;
     private String majesticTF;
+
+    @OneToOne(mappedBy = "domainMetrics")
+    private Website website;
 }

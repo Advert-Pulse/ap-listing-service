@@ -35,6 +35,8 @@ public class WebsitePublisher {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String websitePublisherId;
 
-    private String websiteId;
     private String userId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Website website;
 }
