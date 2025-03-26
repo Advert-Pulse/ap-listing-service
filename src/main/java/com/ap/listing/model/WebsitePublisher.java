@@ -102,7 +102,7 @@ public class WebsitePublisher {
     private String requirementForSubmittingFreeArticle;
 
     private String tat;
-    private String otherLanguage;
+    private String otherLanguageSupported;
 
     // contributor or owner
     private String ownershipType;
