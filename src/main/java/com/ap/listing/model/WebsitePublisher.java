@@ -67,7 +67,7 @@ public class WebsitePublisher {
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             schema = "listing",
-            joinColumns = @JoinColumn(name = "Website", referencedColumnName = "websiteId"),
+            joinColumns = @JoinColumn(name = "WebsitePublisher", referencedColumnName = "websitePublisherId"),
             inverseJoinColumns = @JoinColumn(name = "WebsiteCategory", referencedColumnName = "websiteCategoryId")
     )
     @Builder.Default
