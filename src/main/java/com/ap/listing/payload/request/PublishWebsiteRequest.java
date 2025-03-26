@@ -22,7 +22,6 @@ import java.util.List;
 @ToString
 public class PublishWebsiteRequest {
 
-    private String url;
     private String specialRequirements;
     private String specialRequirementsHtml;
     private String productSpecialRequirements;
