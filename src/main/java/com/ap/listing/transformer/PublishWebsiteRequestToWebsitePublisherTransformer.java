@@ -31,33 +31,34 @@ public class PublishWebsiteRequestToWebsitePublisherTransformer {
     private final PublishingIdGenerator publishingIdGenerator;
     private final WebsiteCategoryRepository websiteCategoryRepository;
 
-    public WebsitePublisher transform(PublishWebsiteRequest publishWebsiteRequest, Website websiteData) {
-        WebsitePublisher website = new WebsitePublisher();
+    public WebsitePublisher transform(PublishWebsiteRequest publishWebsiteRequest, Website website) {
+        WebsitePublisher websitePublisher = new WebsitePublisher();
         String publishingId = publishingIdGenerator.generate();
-        website.setPublishingId(publishingId);
-        website.setWebsitePublishingStatus(WebsitePublishingStatus.PENDING_MODERATION.name());
-        //website.setLanguage(publishWebsiteRequest.getLanguage());
-        website.setSpecialRequirements(publishWebsiteRequest.getSpecialRequirements());
-        website.setProductSpecialRequirements(publishWebsiteRequest.getProductSpecialRequirements());
-        website.setCrowdPlacedContent(publishWebsiteRequest.isCrowdPlacedContent());
-        website.setSponsoredContent(publishWebsiteRequest.isSponsoredContent());
-        website.setBasicContentSize(publishWebsiteRequest.getBasicContentSize());
-        website.setLinkAttribute(publishWebsiteRequest.getLinkAttribute());
-        website.setContentPlacementPrice(publishWebsiteRequest.getContentPlacementPrice());
-        website.setWritingAndPlacementPrice(publishWebsiteRequest.getWritingAndPlacementPrice());
-        website.setExtraSizeContentWriting(publishWebsiteRequest.getExtraSizeContentWriting());
-        website.setSpecialTopicPricing(publishWebsiteRequest.getSpecialTopicPricing());
-        website.setExtraLinkPricing(publishWebsiteRequest.getExtraLinkPricing());
-        website.setLinksToBePlacedInOneArticle(publishWebsiteRequest.getLinksToBePlacedInOneArticle());
-        website.setLinkInsertionPrice(publishWebsiteRequest.getLinkInsertionPrice());
-        website.setLinkInsertionSpecialTopicPrice(publishWebsiteRequest.getLinkInsertionSpecialTopicPrice());
-        website.setBestArticleLinkForGuestPosting(publishWebsiteRequest.getBestArticleLinkForGuestPosting());
-        website.setBestArticleLinkForLinkInsertion(publishWebsiteRequest.getBestArticleLinkForLinkInsertion());
-        website.setConsiderPlacingBuyerArticleForFree(publishWebsiteRequest.isConsiderPlacingBuyerArticleForFree());
-        website.setRequirementForSubmittingFreeArticle(publishWebsiteRequest.getRequirementForSubmittingFreeArticle());
-        website.setCategories(getWebsiteCategories(publishWebsiteRequest.getCategories()));
-        log.info("{} >> transform -> website: {}", getClass().getSimpleName(), website);
-        return website;
+        websitePublisher.setPublishingId(publishingId);
+        websitePublisher.setWebsitePublishingStatus(WebsitePublishingStatus.PENDING_MODERATION.name());
+        //websitePublisher.setLanguage(publishWebsiteRequest.getLanguage());
+        websitePublisher.setSpecialRequirements(publishWebsiteRequest.getSpecialRequirements());
+        websitePublisher.setProductSpecialRequirements(publishWebsiteRequest.getProductSpecialRequirements());
+        websitePublisher.setCrowdPlacedContent(publishWebsiteRequest.isCrowdPlacedContent());
+        websitePublisher.setSponsoredContent(publishWebsiteRequest.isSponsoredContent());
+        websitePublisher.setBasicContentSize(publishWebsiteRequest.getBasicContentSize());
+        websitePublisher.setLinkAttribute(publishWebsiteRequest.getLinkAttribute());
+        websitePublisher.setContentPlacementPrice(publishWebsiteRequest.getContentPlacementPrice());
+        websitePublisher.setWritingAndPlacementPrice(publishWebsiteRequest.getWritingAndPlacementPrice());
+        websitePublisher.setExtraSizeContentWriting(publishWebsiteRequest.getExtraSizeContentWriting());
+        websitePublisher.setSpecialTopicPricing(publishWebsiteRequest.getSpecialTopicPricing());
+        websitePublisher.setExtraLinkPricing(publishWebsiteRequest.getExtraLinkPricing());
+        websitePublisher.setLinksToBePlacedInOneArticle(publishWebsiteRequest.getLinksToBePlacedInOneArticle());
+        websitePublisher.setLinkInsertionPrice(publishWebsiteRequest.getLinkInsertionPrice());
+        websitePublisher.setLinkInsertionSpecialTopicPrice(publishWebsiteRequest.getLinkInsertionSpecialTopicPrice());
+        websitePublisher.setBestArticleLinkForGuestPosting(publishWebsiteRequest.getBestArticleLinkForGuestPosting());
+        websitePublisher.setBestArticleLinkForLinkInsertion(publishWebsiteRequest.getBestArticleLinkForLinkInsertion());
+        websitePublisher.setConsiderPlacingBuyerArticleForFree(publishWebsiteRequest.isConsiderPlacingBuyerArticleForFree());
+        websitePublisher.setRequirementForSubmittingFreeArticle(publishWebsiteRequest.getRequirementForSubmittingFreeArticle());
+        websitePublisher.setCategories(getWebsiteCategories(publishWebsiteRequest.getCategories()));
+        websitePublisher.setWebsite(website);
+        log.info("{} >> transform -> websitePublisher: {}", getClass().getSimpleName(), websitePublisher);
+        return websitePublisher;
     }
 
     private List<WebsiteCategory> getWebsiteCategories(List<String> categories) {
