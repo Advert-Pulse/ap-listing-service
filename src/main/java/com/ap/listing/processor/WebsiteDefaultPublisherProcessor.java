@@ -8,6 +8,8 @@ package com.ap.listing.processor;
  */
 
 import com.ap.listing.dao.repository.WebsitePublisherRepository;
+import com.ap.listing.enums.ErrorData;
+import com.ap.listing.exception.BadRequestException;
 import com.ap.listing.model.Website;
 import com.ap.listing.model.WebsitePublisher;
 import com.ap.listing.transformer.DefaultWebsitePublisherTransformer;
@@ -26,13 +28,16 @@ public class WebsiteDefaultPublisherProcessor {
     private final WebsitePublisherRepository websitePublisherRepository;
     private final DefaultWebsitePublisherTransformer defaultWebsitePublisherTransformer;
 
-    public void process(Website website) {
+    public WebsitePublisher process(Website website) {
         String userId = SecurityContextUtil.getLoggedInUserOrThrow().getUserId();
         Optional<WebsitePublisher> byWebsiteAndUserId = websitePublisherRepository.findByWebsiteAndUserId(website, userId);
         if (byWebsiteAndUserId.isEmpty()) {
             WebsitePublisher websitePublisher = defaultWebsitePublisherTransformer.transform(website);
             WebsitePublisher websitePublisherResponse = websitePublisherRepository.save(websitePublisher);
             log.info("Website Publisher saved: {}", websitePublisherResponse);
+            return websitePublisherResponse;
+        } else {
+            throw new BadRequestException(ErrorData.WEBSITE_ALREADY_ADDED);
         }
     }
 }

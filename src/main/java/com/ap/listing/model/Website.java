@@ -45,6 +45,9 @@ public class Website {
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateCreated;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateUpdated;
+
     @Column(nullable = false)
     private String userId;
 

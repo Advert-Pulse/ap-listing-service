@@ -17,17 +17,20 @@ import java.util.Date;
 public class WebsiteTransformer {
 
     public Website transform(String website) {
+        Date now = new Date();
         return Website
                 .builder()
                 .domain(website)
                 .isAvailable(Boolean.TRUE)
-                .dateCreated(new Date())
+                .dateCreated(now)
+                .dateUpdated(now)
                 .userId(SecurityContextUtil.getLoggedInUserOrThrow().getUserId())
                 .build();
     }
 
-    public Website transformWebsiteNotAvailable(Website website) {
-        website.setIsAvailable(Boolean.FALSE);
+    public Website transformWebsiteWithAvailability(Website website, Boolean availability) {
+        website.setIsAvailable(availability);
+        website.setDateUpdated(new Date());
         return website;
     }
 }

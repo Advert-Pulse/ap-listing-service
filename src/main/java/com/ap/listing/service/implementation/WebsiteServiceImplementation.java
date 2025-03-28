@@ -9,19 +9,23 @@ package com.ap.listing.service.implementation;
 
 import com.ap.listing.constants.ServiceConstants;
 import com.ap.listing.dao.repository.DomainMetricsRepository;
+import com.ap.listing.dao.repository.WebsitePublisherRepository;
 import com.ap.listing.dao.repository.WebsiteRepository;
 import com.ap.listing.enums.ErrorData;
 import com.ap.listing.exception.BadRequestException;
 import com.ap.listing.feign.DomainMetricsFeignClient;
+import com.ap.listing.generator.AddWebsiteResponseGenerator;
 import com.ap.listing.model.DomainMetrics;
 import com.ap.listing.model.Website;
+import com.ap.listing.model.WebsitePublisher;
+import com.ap.listing.payload.response.AddWebsiteResponse;
 import com.ap.listing.payload.response.DomainMetricsFeignResponse;
+import com.ap.listing.processor.UrlAvailabilityWebsiteProcessor;
 import com.ap.listing.processor.WebsiteDefaultPublisherProcessor;
 import com.ap.listing.service.WebsiteService;
 import com.ap.listing.transformer.DomainMetricsFeignResponseToDomainMetricsTransformer;
 import com.ap.listing.transformer.WebsiteTransformer;
 import com.ap.listing.utils.ExtractBaseUrl;
-import com.ap.listing.utils.SecurityContextUtil;
 import com.ap.listing.utils.UrlChecker;
 import com.bloggios.provider.payload.ModuleResponse;
 import jakarta.transaction.Transactional;
@@ -32,7 +36,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import static com.ap.listing.constants.ServiceConstants.HTTPS;
 
@@ -47,10 +50,12 @@ public class WebsiteServiceImplementation implements WebsiteService {
     private final DomainMetricsFeignResponseToDomainMetricsTransformer domainMetricsFeignResponseToDomainMetricsTransformer;
     private final DomainMetricsRepository domainMetricsRepository;
     private final WebsiteDefaultPublisherProcessor websiteDefaultPublisherProcessor;
+    private final WebsitePublisherRepository websitePublisherRepository;
+    private final UrlAvailabilityWebsiteProcessor urlAvailabilityWebsiteProcessor;
 
     @Override
     @Transactional
-    public ResponseEntity<ModuleResponse> addWebsite(String website) {
+    public ResponseEntity<AddWebsiteResponse> addWebsite(String website) {
         String domain = website.toLowerCase();
         if (!domain.startsWith(ServiceConstants.HTTP) && !domain.startsWith(HTTPS)) {
             domain = HTTPS + domain;
@@ -59,20 +64,9 @@ public class WebsiteServiceImplementation implements WebsiteService {
         Optional<Website> byDomain = websiteRepository.findByDomain(domain);
         boolean urlAvailable = UrlChecker.isUrlAvailable(baseUrl);
         if (byDomain.isPresent()) {
-            if (!urlAvailable) {
-                Website websiteEntity = websiteTransformer.transformWebsiteNotAvailable(byDomain.get());
-                websiteRepository.save(websiteEntity);
-                throw new BadRequestException(ErrorData.WEBSITE_IRRESPONSIVE, "website");
-            }
-            websiteDefaultPublisherProcessor.process(byDomain.get());
-            return ResponseEntity.ok(
-                    ModuleResponse
-                            .builder()
-                            .message("Website is available to be added")
-                            .userId(UUID.fromString(SecurityContextUtil.getLoggedInUserOrThrow().getUserId()))
-                            .id(UUID.fromString(byDomain.get().getWebsiteId()))
-                            .build()
-            );
+            urlAvailabilityWebsiteProcessor.process(byDomain.get(), urlAvailable);
+            WebsitePublisher websitePublisher = websiteDefaultPublisherProcessor.process(byDomain.get());
+            return AddWebsiteResponseGenerator.generate(byDomain.get(), websitePublisher, Boolean.FALSE);
         } else {
             if (!urlAvailable) {
                 throw new BadRequestException(ErrorData.WEBSITE_IRRESPONSIVE, "website");
@@ -94,15 +88,8 @@ public class WebsiteServiceImplementation implements WebsiteService {
             DomainMetrics domainMetricsTransform = domainMetricsFeignResponseToDomainMetricsTransformer.transform(domainMetrics, websiteResponse);
             DomainMetrics domainMetricsResponse = domainMetricsRepository.save(domainMetricsTransform);
             log.info("Domain Metrics Saved : {}", domainMetricsResponse);
-            websiteDefaultPublisherProcessor.process(websiteEntity);
-            return ResponseEntity.ok(
-                    ModuleResponse
-                            .builder()
-                            .message("Website has been added to server")
-                            .userId(UUID.fromString(SecurityContextUtil.getLoggedInUserOrThrow().getUserId()))
-                            .id(UUID.fromString(websiteResponse.getWebsiteId()))
-                            .build()
-            );
+            WebsitePublisher websitePublisher = websiteDefaultPublisherProcessor.process(websiteEntity);
+            return AddWebsiteResponseGenerator.generate(websiteResponse, websitePublisher, Boolean.FALSE);
         }
     }
 

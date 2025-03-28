@@ -104,7 +104,7 @@ public class WebsitePublisher {
     private String tat;
     private String otherLanguageSupported;
 
-    // contributor or owner
+    // OwnershipType Enum
     private String ownershipType;
 
     private String userId;
