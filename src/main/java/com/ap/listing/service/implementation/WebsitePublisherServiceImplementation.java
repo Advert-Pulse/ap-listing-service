@@ -11,7 +11,6 @@ import com.ap.listing.dao.repository.WebsitePublisherRepository;
 import com.ap.listing.dao.repository.WebsiteRepository;
 import com.ap.listing.enums.ErrorData;
 import com.ap.listing.exception.BadRequestException;
-import com.ap.listing.model.Website;
 import com.ap.listing.model.WebsitePublisher;
 import com.ap.listing.payload.request.PublishWebsiteRequest;
 import com.ap.listing.service.WebsitePublisherService;
@@ -38,16 +37,16 @@ public class WebsitePublisherServiceImplementation implements WebsitePublisherSe
     private final WebsitePublisherRepository websitePublisherRepository;
 
     @Override
-    public ResponseEntity<ModuleResponse> publishSite(PublishWebsiteRequest publishWebsiteRequest, String websiteId) {
+    public ResponseEntity<ModuleResponse> publishSite(PublishWebsiteRequest publishWebsiteRequest, String websitePublisherId) {
         ValueCheckerUtil.isValidUUID(
-                websiteId,
-                ()-> new BadRequestException(ErrorData.WEBSITE_ID_INVALID, "websiteId")
+                websitePublisherId,
+                ()-> new BadRequestException(ErrorData.WEBSITE_PUBLISHER_ID_INVALID, "websitePublisherId")
         );
+        WebsitePublisher websitePublisher = websitePublisherRepository.findById(websitePublisherId)
+                .orElseThrow(() -> new BadRequestException(ErrorData.WEBSITE_PUBLISHER_NOT_FOUND, "websitePublisherId"));
         publishWebsiteRequestValidator.validate(publishWebsiteRequest);
-        Website website = websiteRepository.findById(websiteId)
-                .orElseThrow(() -> new BadRequestException(ErrorData.WEBSITE_NOT_FOUND_BY_ID));
-        WebsitePublisher websitePublisher = publishWebsiteRequestToWebsitePublisherTransformer.transform(publishWebsiteRequest, website);
-        WebsitePublisher websitePublisherResponse = websitePublisherRepository.save(websitePublisher);
+        WebsitePublisher transformedWebsitePublisher = publishWebsiteRequestToWebsitePublisherTransformer.transform(publishWebsiteRequest, websitePublisher);
+        WebsitePublisher websitePublisherResponse = websitePublisherRepository.save(transformedWebsitePublisher);
         log.info("Website publisher saved to database: {}", websitePublisherResponse);
         return ResponseEntity.ok(ModuleResponse
                 .builder()

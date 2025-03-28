@@ -8,8 +8,6 @@ package com.ap.listing.transformer;
  */
 
 import com.ap.listing.dao.repository.WebsiteCategoryRepository;
-import com.ap.listing.enums.WebsitePublishingStatus;
-import com.ap.listing.model.Website;
 import com.ap.listing.model.WebsiteCategory;
 import com.ap.listing.model.WebsitePublisher;
 import com.ap.listing.payload.request.PublishWebsiteRequest;
@@ -31,12 +29,8 @@ public class PublishWebsiteRequestToWebsitePublisherTransformer {
     private final PublishingIdGenerator publishingIdGenerator;
     private final WebsiteCategoryRepository websiteCategoryRepository;
 
-    public WebsitePublisher transform(PublishWebsiteRequest publishWebsiteRequest, Website website) {
-        WebsitePublisher websitePublisher = new WebsitePublisher();
-        String publishingId = publishingIdGenerator.generate();
-        websitePublisher.setPublishingId(publishingId);
-        websitePublisher.setWebsitePublishingStatus(WebsitePublishingStatus.PENDING_MODERATION.name());
-        //websitePublisher.setLanguage(publishWebsiteRequest.getLanguage());
+    public WebsitePublisher transform(PublishWebsiteRequest publishWebsiteRequest, WebsitePublisher websitePublisher) {
+
         websitePublisher.setSpecialRequirements(publishWebsiteRequest.getSpecialRequirements());
         websitePublisher.setProductSpecialRequirements(publishWebsiteRequest.getProductSpecialRequirements());
         websitePublisher.setCrowdPlacedContent(publishWebsiteRequest.isCrowdPlacedContent());
@@ -56,7 +50,6 @@ public class PublishWebsiteRequestToWebsitePublisherTransformer {
         websitePublisher.setConsiderPlacingBuyerArticleForFree(publishWebsiteRequest.isConsiderPlacingBuyerArticleForFree());
         websitePublisher.setRequirementForSubmittingFreeArticle(publishWebsiteRequest.getRequirementForSubmittingFreeArticle());
         websitePublisher.setCategories(getWebsiteCategories(publishWebsiteRequest.getCategories()));
-        websitePublisher.setWebsite(website);
         log.info("{} >> transform -> websitePublisher: {}", getClass().getSimpleName(), websitePublisher);
         return websitePublisher;
     }

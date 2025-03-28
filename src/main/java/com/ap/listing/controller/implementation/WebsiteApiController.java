@@ -9,6 +9,7 @@ package com.ap.listing.controller.implementation;
 
 import com.ap.listing.constants.ApiConstants;
 import com.ap.listing.controller.WebsiteApi;
+import com.ap.listing.payload.response.AddWebsiteResponse;
 import com.ap.listing.service.WebsiteService;
 import com.bloggios.provider.payload.ModuleResponse;
 import com.bloggios.provider.utils.ControllerHelper;
@@ -29,7 +30,7 @@ public class WebsiteApiController implements WebsiteApi {
     private final WebsiteService websiteService;
 
     @Override
-    public ResponseEntity<ModuleResponse> addWebsite(String website) {
+    public ResponseEntity<AddWebsiteResponse> addWebsite(String website) {
         return ControllerHelper.loggedResponse(
                 () -> websiteService.addWebsite(website),
                 ApiConstants.ADD_WEBSITE,

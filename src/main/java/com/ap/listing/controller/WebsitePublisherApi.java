@@ -40,5 +40,5 @@ public interface WebsitePublisherApi {
             }
     )
     @PostMapping
-    ResponseEntity<ModuleResponse> publishSite(@RequestBody PublishWebsiteRequest publishWebsiteRequest, @RequestParam String websiteId);
+    ResponseEntity<ModuleResponse> publishSite(@RequestBody PublishWebsiteRequest publishWebsiteRequest, @RequestParam String websitePublisherId);
 }

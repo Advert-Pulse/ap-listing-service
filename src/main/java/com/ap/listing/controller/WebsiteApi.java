@@ -7,6 +7,7 @@ package com.ap.listing.controller;
   File: WebsiteApi
  */
 
+import com.ap.listing.payload.response.AddWebsiteResponse;
 import com.bloggios.provider.payload.ExceptionResponse;
 import com.bloggios.provider.payload.ModuleResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -45,7 +46,7 @@ public interface WebsiteApi {
             consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    ResponseEntity<ModuleResponse> addWebsite(@RequestParam String website);
+    ResponseEntity<AddWebsiteResponse> addWebsite(@RequestParam String website);
 
     @Operation(
             responses = {

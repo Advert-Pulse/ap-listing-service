@@ -9,7 +9,6 @@ package com.ap.listing.service.implementation;
 
 import com.ap.listing.constants.ServiceConstants;
 import com.ap.listing.dao.repository.DomainMetricsRepository;
-import com.ap.listing.dao.repository.WebsitePublisherRepository;
 import com.ap.listing.dao.repository.WebsiteRepository;
 import com.ap.listing.enums.ErrorData;
 import com.ap.listing.exception.BadRequestException;

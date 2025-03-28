@@ -28,9 +28,9 @@ public class WebsitePublisherApiController implements WebsitePublisherApi {
     private final WebsitePublisherService websitePublisherService;
 
     @Override
-    public ResponseEntity<ModuleResponse> publishSite(PublishWebsiteRequest publishWebsiteRequest, String websiteId) {
+    public ResponseEntity<ModuleResponse> publishSite(PublishWebsiteRequest publishWebsiteRequest, String websitePublisherId) {
         return ControllerHelper.loggedResponse(
-                () -> websitePublisherService.publishSite(publishWebsiteRequest, websiteId),
+                () -> websitePublisherService.publishSite(publishWebsiteRequest, websitePublisherId),
                 ApiConstants.PUBLISH_SITE,
                 LOGGER
         );

@@ -13,5 +13,5 @@ import org.springframework.http.ResponseEntity;
 
 public interface WebsitePublisherService {
 
-    ResponseEntity<ModuleResponse> publishSite(PublishWebsiteRequest publishWebsiteRequest, String websiteId);
+    ResponseEntity<ModuleResponse> publishSite(PublishWebsiteRequest publishWebsiteRequest, String websitePublisherId);
 }

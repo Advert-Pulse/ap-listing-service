@@ -35,9 +35,10 @@ public enum ErrorData {
     FEIGN_UNAUTHORIZED("AP__ERROR--3021", "Unauthorized" ),
     FEIGN_FORBIDDEN("AP__ERROR--3022", "Forbidden" ),
     FEIGN_INTERNAL_SERVER_ERROR("AP__ERROR--3023", "Internal server error" ),
-    WEBSITE_ID_INVALID("AP__ERROR--3024", "Invalid website id" ),
+    WEBSITE_PUBLISHER_ID_INVALID("AP__ERROR--3024", "Invalid website publisher id" ),
     WEBSITE_NOT_FOUND_BY_ID("AP__ERROR--3025", "Website not found by given Id"),
-    WEBSITE_ALREADY_ADDED("AP__ERROR--3026", "Website already added"),;
+    WEBSITE_ALREADY_ADDED("AP__ERROR--3026", "Website already added"),
+    WEBSITE_PUBLISHER_NOT_FOUND("AP__ERROR--3027", "Website publisher not found" ),;
 
     private final String code;
     private final String message;
