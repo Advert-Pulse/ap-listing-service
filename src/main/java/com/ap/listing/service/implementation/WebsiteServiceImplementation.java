@@ -50,7 +50,6 @@ public class WebsiteServiceImplementation implements WebsiteService {
     private final DomainMetricsFeignResponseToDomainMetricsTransformer domainMetricsFeignResponseToDomainMetricsTransformer;
     private final DomainMetricsRepository domainMetricsRepository;
     private final WebsiteDefaultPublisherProcessor websiteDefaultPublisherProcessor;
-    private final WebsitePublisherRepository websitePublisherRepository;
     private final UrlAvailabilityWebsiteProcessor urlAvailabilityWebsiteProcessor;
 
     @Override
