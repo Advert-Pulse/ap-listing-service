@@ -23,7 +23,6 @@ public class AddWebsiteResponse {
     private String websiteId;
     private String domain;
     private Boolean isAvailable;
-    private DomainMetrics domainMetrics;
     private String websitePublisherId;
     private boolean isNewDomain;
 }

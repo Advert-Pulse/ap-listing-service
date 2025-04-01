@@ -1,0 +1,53 @@
+name: Build Gradle
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-south-1
+
+      - name: Get AWS CodeArtifact Token
+        id: codeartifact
+        run: |
+          TOKEN=$(aws codeartifact get-authorization-token \
+            --domain bloggios \
+            --domain-owner ${{ secrets.AWS_DOMAIN_OWNER }} \
+            --region ap-south-1 \
+            --query authorizationToken \
+            --output text)
+          echo "ARTIFACTORY_TOKEN=${TOKEN}" >> $GITHUB_ENV
+          echo "ARTIFACTORY_URL=${{ secrets.ARTIFACTORY_URL }}" >> $GITHUB_ENV
+
+      - name: Inject Credentials into gradle.properties
+        run: |
+          echo "artifactoryUrl=$ARTIFACTORY_URL" >> gradle.properties
+          echo "artifactoryToken=$ARTIFACTORY_TOKEN" >> gradle.properties
+
+      - name: Grant Execute Permission to Gradle Wrapper
+        run: chmod +x gradlew
+
+      - name: Build with Gradle
+        run: ./gradlew clean build

@@ -41,11 +41,7 @@ public interface WebsiteApi {
                     })
             }
     )
-    @PostMapping(
-            value = "/add-single",
-            consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
+    @PostMapping("/add-single")
     ResponseEntity<AddWebsiteResponse> addWebsite(@RequestParam String website);
 
     @Operation(

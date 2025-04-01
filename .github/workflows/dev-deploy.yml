@@ -1,0 +1,104 @@
+name: Deploy to Dev
+
+on:
+  workflow_run:
+    workflows: [ "Build Gradle" ]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Java 21 Initialization
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          server-id: github
+          settings-path: ${{ github.workspace }}
+
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "$VM_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-south-1
+
+      - name: Get AWS CodeArtifact Token
+        id: codeartifact
+        run: |
+          TOKEN=$(aws codeartifact get-authorization-token \
+            --domain bloggios \
+            --domain-owner ${{ secrets.AWS_DOMAIN_OWNER }} \
+            --region ap-south-1 \
+            --query authorizationToken \
+            --output text)
+          echo "ARTIFACTORY_TOKEN=${TOKEN}" >> $GITHUB_ENV
+          echo "ARTIFACTORY_URL=${{ secrets.ARTIFACTORY_URL }}" >> $GITHUB_ENV
+
+      - name: SSH into Google VM and Set Environment Variables
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USERNAME }}
+          key: ${{ secrets.VM_PRIVATE_KEY }}
+          port: 22
+          script: |
+            echo "Creating or Updating Artifactory environment variables..."
+            sudo sed -i '/^export ARTIFACTORY_URL=/d' /etc/environment
+            sudo sed -i '/^export ARTIFACTORY_TOKEN=/d' /etc/environment
+            sudo sh -c "echo 'export ARTIFACTORY_URL=${{ env.ARTIFACTORY_URL }}' >> /etc/environment"
+            sudo sh -c "echo 'export ARTIFACTORY_TOKEN=${{ env.ARTIFACTORY_TOKEN }}' >> /etc/environment"
+            source /etc/environment
+            echo "Environment variables set successfully."
+
+      - name: Generating Image
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USERNAME }}
+          key: ${{ secrets.VM_PRIVATE_KEY }}
+          port: 22
+          script: |
+            cd /ap/microservices
+            rm -rf ap-listing-service
+            git clone git@github.com:Advert-Pulse/ap-listing-service.git
+            cd ap-listing-service
+            chmod +x Dockerfile
+            source /etc/environment
+            echo "ARTIFACTORY_URL is $ARTIFACTORY_URL"
+            echo "ARTIFACTORY_TOKEN is $ARTIFACTORY_TOKEN"
+            
+            docker build \
+              --build-arg ARTIFACTORY_URL=$ARTIFACTORY_URL \
+              --build-arg ARTIFACTORY_TOKEN=$ARTIFACTORY_TOKEN \
+              -t ap-listing-service:latest .
+
+
+      - name: Deploy Application
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.vm_host }}
+          username: ${{ secrets.vm_username }}
+          key: ${{ secrets.vm_private_key }}
+          port: 22
+          script: |
+            cd /ap/docker-files/backend
+            set +e
+            docker-compose -f docker-compose-dev.yml rm -sf ap-listing-service
+            docker-compose -f docker-compose-dev.yml up -d ap-listing-service
+            set -e

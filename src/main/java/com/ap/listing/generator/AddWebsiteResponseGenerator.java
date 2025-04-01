@@ -24,7 +24,6 @@ public class AddWebsiteResponseGenerator {
                 .websiteId(website.getWebsiteId())
                 .domain(website.getDomain())
                 .isAvailable(website.getIsAvailable())
-                .domainMetrics(website.getDomainMetrics())
                 .websitePublisherId(websitePublisher.getWebsitePublisherId())
                 .isNewDomain(isNewDomain)
                 .build();
