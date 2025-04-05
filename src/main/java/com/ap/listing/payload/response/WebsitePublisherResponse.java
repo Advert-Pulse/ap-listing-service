@@ -79,7 +79,7 @@ public class WebsitePublisherResponse {
     private boolean considerPlacingBuyerArticleForFree;
     private String requirementForSubmittingFreeArticle;
     private String tat;
-    private String otherLanguageSupported;
+    private boolean otherLanguageSupported;
     private String ownershipType;
     private String userId;
     private WebsiteResponse website;

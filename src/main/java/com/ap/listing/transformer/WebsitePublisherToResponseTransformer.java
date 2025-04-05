@@ -92,7 +92,7 @@ public class WebsitePublisherToResponseTransformer {
         response.setConsiderPlacingBuyerArticleForFree(publisher.isConsiderPlacingBuyerArticleForFree());
         response.setRequirementForSubmittingFreeArticle(publisher.getRequirementForSubmittingFreeArticle());
         response.setTat(publisher.getTat());
-        response.setOtherLanguageSupported(publisher.getOtherLanguageSupported());
+        response.setOtherLanguageSupported(publisher.isOtherLanguageSupported());
         response.setOwnershipType(publisher.getOwnershipType());
         response.setUserId(publisher.getUserId());
         response.setWebsite(websiteToWebsiteResponseTransformer.transform(publisher.getWebsite()));
