@@ -38,7 +38,6 @@ package com.ap.listing.service.implementation;
  */
 
 import com.ap.listing.dao.repository.WebsitePublisherRepository;
-import com.ap.listing.dao.repository.WebsiteRepository;
 import com.ap.listing.enums.ErrorData;
 import com.ap.listing.exception.AuthenticationException;
 import com.ap.listing.exception.BadRequestException;
@@ -66,7 +65,6 @@ import java.util.UUID;
 public class WebsitePublisherServiceImplementation implements WebsitePublisherService {
 
     private final PublishWebsiteRequestValidator publishWebsiteRequestValidator;
-    private final WebsiteRepository websiteRepository;
     private final PublishWebsiteRequestToWebsitePublisherTransformer publishWebsiteRequestToWebsitePublisherTransformer;
     private final WebsitePublisherRepository websitePublisherRepository;
     private final WebsitePublisherToResponseTransformer websitePublisherToResponseTransformer;

@@ -65,6 +65,7 @@ dependencies {
 	implementation "com.bloggios.provider:bloggios-provider:${bloggiosProvider}"
 	implementation group: "org.jsoup", name: "jsoup", version: "1.17.2"
 	implementation group: "dnsjava", name: "dnsjava", version: "3.6.3"
+	implementation "com.bloggios.query:bloggios-sql-query-provider:1.0.0"
 }
 
 dependencyManagement {

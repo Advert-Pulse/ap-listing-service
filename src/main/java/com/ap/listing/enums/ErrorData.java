@@ -70,7 +70,8 @@ public enum ErrorData {
     WEBSITE_ALREADY_ADDED("AP__ERROR--3026", "Website already added"),
     WEBSITE_PUBLISHER_NOT_FOUND("AP__ERROR--3027", "Website publisher not found" ),
     WEBSITE_PUBLISHER_NOT_FOUND_PUBLISHING_ID("AP__ERROR--3028", "Website publisher not found using publishing Id" ),
-    ACCESS_DENIED_GET_PUBLISH_WEBSITE("AP__ERROR--3029", "Not authorized to get the details of a Website Publisher" ),;
+    ACCESS_DENIED_GET_PUBLISH_WEBSITE("AP__ERROR--3029", "Not authorized to get the details of a Website Publisher" ),
+    WEBSITE_CATEGORY_ALREADY_PRESENT("AP__ERROR--3301", "Website category already exists" ),;
 
     private final String code;
     private final String message;
