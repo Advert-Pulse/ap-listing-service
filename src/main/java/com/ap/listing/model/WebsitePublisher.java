@@ -132,7 +132,7 @@ public class WebsitePublisher {
     private String requirementForSubmittingFreeArticle;
 
     private String tat;
-    private String otherLanguageSupported;
+    private boolean otherLanguageSupported;
 
     // OwnershipType Enum
     private String ownershipType;
