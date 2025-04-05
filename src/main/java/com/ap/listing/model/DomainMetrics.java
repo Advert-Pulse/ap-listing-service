@@ -49,6 +49,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ToString
 @Table(
         name = EntityConstants.DOMAIN_METRICS,
         schema = EntityConstants.LISTING_SCHEMA,

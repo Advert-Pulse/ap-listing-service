@@ -70,7 +70,7 @@ public class DefaultWebsitePublisherTransformer {
                 .dateCreated(now)
                 .dateUpdated(now)
                 .build();
-        log.info("Website Publisher transformed: {}", websitePublisher);
+        log.info("Website Publisher transformed: {}", websitePublisher.toString());
         return websitePublisher;
     }
 }

@@ -34,28 +34,31 @@ package com.ap.listing.transformer;
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: WebsiteCategoryResponseTransformer
+  File: WebsiteCategoryResponsesToListResponseTransformer
  */
 
 import com.ap.listing.model.WebsiteCategory;
+import com.ap.listing.payload.response.ListResponse;
 import com.ap.listing.payload.response.WebsiteCategoryResponse;
-import com.ap.listing.utils.StringCapitalizer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @Slf4j
-public class WebsiteCategoryResponseTransformer {
+public class WebsiteCategoryResponsesToListResponseTransformer {
 
-    public WebsiteCategoryResponse transform(WebsiteCategory websiteCategory) {
-        WebsiteCategoryResponse websiteCategoryResponse = WebsiteCategoryResponse
+    public ListResponse transform(List<WebsiteCategoryResponse> websiteCategoryResponses) {
+        ListResponse listResponse = ListResponse
                 .builder()
-                .category(StringCapitalizer.formatText(websiteCategory.getCategory()))
-                .description(websiteCategory.getDescription())
-                .createdAt(websiteCategory.getCreatedAt())
-                .updatedAt(websiteCategory.getUpdatedAt())
+                .object(websiteCategoryResponses)
+                .page(0)
+                .size(websiteCategoryResponses.size())
+                .totalPages(0)
+                .totalRecordsCount(websiteCategoryResponses.size())
                 .build();
-        log.info("WebsiteCategoryResponseTransformer transform websiteCategory = {}", websiteCategoryResponse.toString());
-        return websiteCategoryResponse;
+        log.info("WebsiteCategoryResponsesToListResponseTransformer transformed : {}", listResponse.toString());
+        return listResponse;
     }
 }

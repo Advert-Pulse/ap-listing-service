@@ -80,7 +80,7 @@ public class PublishWebsiteRequestToWebsitePublisherTransformer {
         websitePublisher.setConsiderPlacingBuyerArticleForFree(publishWebsiteRequest.isConsiderPlacingBuyerArticleForFree());
         websitePublisher.setRequirementForSubmittingFreeArticle(publishWebsiteRequest.getRequirementForSubmittingFreeArticle());
         websitePublisher.setCategories(getWebsiteCategories(publishWebsiteRequest.getCategories()));
-        log.info("{} >> transform -> websitePublisher: {}", getClass().getSimpleName(), websitePublisher);
+        log.info("{} >> transform -> websitePublisher: {}", getClass().getSimpleName(), websitePublisher.toString());
         return websitePublisher;
     }
 
