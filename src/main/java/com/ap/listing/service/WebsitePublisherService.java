@@ -38,10 +38,12 @@ package com.ap.listing.service;
  */
 
 import com.ap.listing.payload.request.PublishWebsiteRequest;
+import com.ap.listing.payload.response.WebsitePublisherResponse;
 import com.bloggios.provider.payload.ModuleResponse;
 import org.springframework.http.ResponseEntity;
 
 public interface WebsitePublisherService {
 
     ResponseEntity<ModuleResponse> publishSite(PublishWebsiteRequest publishWebsiteRequest, String websitePublisherId);
+    ResponseEntity<WebsitePublisherResponse> getPublishWebsite(String publishingId);
 }

@@ -46,5 +46,5 @@ import java.util.Optional;
 public interface WebsitePublisherRepository extends JpaRepository<WebsitePublisher, String> {
 
     Optional<WebsitePublisher> findByWebsiteAndUserId(Website website, String userId);
-    Optional<Object> findByPublishingId(String publishingId);
+    Optional<WebsitePublisher> findByPublishingId(String publishingId);
 }

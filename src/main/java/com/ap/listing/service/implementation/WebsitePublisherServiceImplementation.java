@@ -40,17 +40,21 @@ package com.ap.listing.service.implementation;
 import com.ap.listing.dao.repository.WebsitePublisherRepository;
 import com.ap.listing.dao.repository.WebsiteRepository;
 import com.ap.listing.enums.ErrorData;
+import com.ap.listing.exception.AuthenticationException;
 import com.ap.listing.exception.BadRequestException;
 import com.ap.listing.model.WebsitePublisher;
 import com.ap.listing.payload.request.PublishWebsiteRequest;
+import com.ap.listing.payload.response.WebsitePublisherResponse;
 import com.ap.listing.service.WebsitePublisherService;
 import com.ap.listing.transformer.PublishWebsiteRequestToWebsitePublisherTransformer;
+import com.ap.listing.transformer.WebsitePublisherToResponseTransformer;
 import com.ap.listing.utils.SecurityContextUtil;
 import com.ap.listing.validator.PublishWebsiteRequestValidator;
 import com.bloggios.provider.payload.ModuleResponse;
 import com.bloggios.provider.utils.ValueCheckerUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -65,6 +69,7 @@ public class WebsitePublisherServiceImplementation implements WebsitePublisherSe
     private final WebsiteRepository websiteRepository;
     private final PublishWebsiteRequestToWebsitePublisherTransformer publishWebsiteRequestToWebsitePublisherTransformer;
     private final WebsitePublisherRepository websitePublisherRepository;
+    private final WebsitePublisherToResponseTransformer websitePublisherToResponseTransformer;
 
     @Override
     public ResponseEntity<ModuleResponse> publishSite(PublishWebsiteRequest publishWebsiteRequest, String websitePublisherId) {
@@ -84,5 +89,16 @@ public class WebsitePublisherServiceImplementation implements WebsitePublisherSe
                 .userId(UUID.fromString(SecurityContextUtil.getLoggedInUserOrThrow().getUserId()))
                 .id(UUID.fromString(websitePublisherResponse.getWebsitePublisherId()))
                 .build());
+    }
+
+    @Override
+    public ResponseEntity<WebsitePublisherResponse> getPublishWebsite(String publishingId) {
+        WebsitePublisher websitePublisher = websitePublisherRepository.findByPublishingId(publishingId)
+                .orElseThrow(() -> new BadRequestException(ErrorData.WEBSITE_PUBLISHER_NOT_FOUND_PUBLISHING_ID));
+        if (!websitePublisher.getUserId().equals(SecurityContextUtil.getLoggedInUserOrThrow().getUserId())) {
+            throw new AuthenticationException(ErrorData.ACCESS_DENIED_GET_PUBLISH_WEBSITE, HttpStatus.FORBIDDEN);
+        }
+        WebsitePublisherResponse transform = websitePublisherToResponseTransformer.transform(websitePublisher);
+        return ResponseEntity.ok(transform);
     }
 }
