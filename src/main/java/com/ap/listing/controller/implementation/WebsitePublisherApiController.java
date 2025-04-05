@@ -40,6 +40,7 @@ package com.ap.listing.controller.implementation;
 import com.ap.listing.constants.ApiConstants;
 import com.ap.listing.controller.WebsitePublisherApi;
 import com.ap.listing.payload.request.PublishWebsiteRequest;
+import com.ap.listing.payload.response.WebsitePublisherResponse;
 import com.ap.listing.service.WebsitePublisherService;
 import com.bloggios.provider.payload.ModuleResponse;
 import com.bloggios.provider.utils.ControllerHelper;
@@ -62,6 +63,15 @@ public class WebsitePublisherApiController implements WebsitePublisherApi {
         return ControllerHelper.loggedResponse(
                 () -> websitePublisherService.publishSite(publishWebsiteRequest, websitePublisherId),
                 ApiConstants.PUBLISH_SITE,
+                LOGGER
+        );
+    }
+
+    @Override
+    public ResponseEntity<WebsitePublisherResponse> getPublishWebsite(String publishingId) {
+        return ControllerHelper.loggedResponse(
+                () -> websitePublisherService.getPublishWebsite(publishingId),
+                ApiConstants.GET_PUBLISH_WEBSITE,
                 LOGGER
         );
     }

@@ -46,4 +46,7 @@ public class ApiConstants {
     public static final String GET_PREFERENCE = "GetPreference";
     public static final String ADD_WEBSITE = "AddWebsite";
     public static final String PUBLISH_SITE = "PublishSite";
+    public static final String GET_PUBLISH_WEBSITE = "GetPublishWebsite";
+    public static final String ADD_WEBSITE_CATEGORY = "AddWebsiteCategory";
+    public static final String GET_WEBSITE_CATEGORY_LIST = "GetWebsiteCategoryList";
 }
