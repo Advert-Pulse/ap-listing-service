@@ -37,7 +37,6 @@ package com.ap.listing.transformer;
   File: WebsiteCategoryResponsesToListResponseTransformer
  */
 
-import com.ap.listing.model.WebsiteCategory;
 import com.ap.listing.payload.response.ListResponse;
 import com.ap.listing.payload.response.WebsiteCategoryResponse;
 import lombok.extern.slf4j.Slf4j;

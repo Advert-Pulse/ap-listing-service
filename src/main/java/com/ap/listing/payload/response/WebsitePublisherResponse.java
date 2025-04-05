@@ -37,7 +37,6 @@ package com.ap.listing.payload.response;
   File: PublishWebsiteResponse
  */
 
-import com.ap.listing.model.Website;
 import com.ap.listing.model.WebsiteCategory;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
@@ -83,7 +82,7 @@ public class WebsitePublisherResponse {
     private String otherLanguageSupported;
     private String ownershipType;
     private String userId;
-    private Website website;
+    private WebsiteResponse website;
     private Date dateCreated;
     private Date dateUpdated;
 }

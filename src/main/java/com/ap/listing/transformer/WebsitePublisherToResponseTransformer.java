@@ -48,6 +48,12 @@ import java.util.ArrayList;
 @Slf4j
 public class WebsitePublisherToResponseTransformer {
 
+    private final WebsiteToWebsiteResponseTransformer websiteToWebsiteResponseTransformer;
+
+    public WebsitePublisherToResponseTransformer(WebsiteToWebsiteResponseTransformer websiteToWebsiteResponseTransformer) {
+        this.websiteToWebsiteResponseTransformer = websiteToWebsiteResponseTransformer;
+    }
+
     public WebsitePublisherResponse transform(WebsitePublisher publisher) {
         if (publisher == null) return null;
 
@@ -89,7 +95,7 @@ public class WebsitePublisherToResponseTransformer {
         response.setOtherLanguageSupported(publisher.getOtherLanguageSupported());
         response.setOwnershipType(publisher.getOwnershipType());
         response.setUserId(publisher.getUserId());
-        response.setWebsite(publisher.getWebsite());
+        response.setWebsite(websiteToWebsiteResponseTransformer.transform(publisher.getWebsite()));
         response.setDateCreated(publisher.getDateCreated());
         response.setDateUpdated(publisher.getDateUpdated());
         log.info("Website publisher transformed response: {}", response.toString());

@@ -49,8 +49,5 @@ jobs:
       - name: Grant Execute Permission to Gradle Wrapper
         run: chmod +x gradlew
 
-      - name: Check License
-        run: ./gradlew licenseFormat
-
       - name: Build with Gradle
         run: ./gradlew clean build
