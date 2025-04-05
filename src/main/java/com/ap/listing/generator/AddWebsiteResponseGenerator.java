@@ -56,6 +56,7 @@ public class AddWebsiteResponseGenerator {
                 .isAvailable(website.getIsAvailable())
                 .websitePublisherId(websitePublisher.getWebsitePublisherId())
                 .isNewDomain(isNewDomain)
+                .publisherId(websitePublisher.getPublishingId())
                 .build();
         log.info("Response generated for addWebsite : addWebsiteResponse={}", addWebsiteResponse);
         return ResponseEntity.ok(addWebsiteResponse);

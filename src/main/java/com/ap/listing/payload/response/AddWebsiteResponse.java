@@ -54,4 +54,5 @@ public class AddWebsiteResponse {
     private Boolean isAvailable;
     private String websitePublisherId;
     private boolean isNewDomain;
+    private String publisherId;
 }
