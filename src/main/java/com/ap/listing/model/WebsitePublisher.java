@@ -117,8 +117,8 @@ public class WebsitePublisher {
     private String linksToBePlacedInOneArticle;
 
     // link insertion
-    private double linkInsertionPrice;
-    private double linkInsertionSpecialTopicPrice;
+    private Double linkInsertionPrice;
+    private Double linkInsertionSpecialTopicPrice;
 
     @JdbcTypeCode(SqlTypes.ARRAY)
     @Column(columnDefinition = "text[]")
