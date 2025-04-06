@@ -75,8 +75,8 @@ public class PublishWebsiteRequestValidator {
         validatePricing(publishWebsiteRequest.getExtraLinkPricing(), "Extra Link");
         validatePricing(publishWebsiteRequest.getLinkInsertionPrice(), "Link Insertion");
         validatePricing(publishWebsiteRequest.getSpecialTopicPricing(), "Special Topic");
-        validateUrlList(publishWebsiteRequest.getBestArticleLinkForGuestPosting(), "Best Article Link for Guest Posting");
-        validateUrlList(publishWebsiteRequest.getBestArticleLinkForLinkInsertion(), "Best Article Link for Link Insertion");
+        //validateUrlList(publishWebsiteRequest.getBestArticleLinkForGuestPosting(), "Best Article Link for Guest Posting");
+        //validateUrlList(publishWebsiteRequest.getBestArticleLinkForLinkInsertion(), "Best Article Link for Link Insertion");
     }
 
     private void categoryValidator(List<String> categories) throws BadRequestException {
