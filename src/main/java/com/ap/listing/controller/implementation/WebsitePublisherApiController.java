@@ -40,10 +40,12 @@ package com.ap.listing.controller.implementation;
 import com.ap.listing.constants.ApiConstants;
 import com.ap.listing.controller.WebsitePublisherApi;
 import com.ap.listing.payload.request.PublishWebsiteRequest;
+import com.ap.listing.payload.response.ListResponse;
 import com.ap.listing.payload.response.WebsitePublisherResponse;
 import com.ap.listing.service.WebsitePublisherService;
 import com.bloggios.provider.payload.ModuleResponse;
 import com.bloggios.provider.utils.ControllerHelper;
+import com.bloggios.query.payload.ListPayload;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,6 +74,15 @@ public class WebsitePublisherApiController implements WebsitePublisherApi {
         return ControllerHelper.loggedResponse(
                 () -> websitePublisherService.getPublishWebsite(publishingId),
                 ApiConstants.GET_PUBLISH_WEBSITE,
+                LOGGER
+        );
+    }
+
+    @Override
+    public ResponseEntity<ListResponse> myPublishedWebsites(ListPayload listPayload) {
+        return ControllerHelper.loggedResponse(
+                () -> websitePublisherService.myPublishedWebsites(listPayload),
+                ApiConstants.MY_PUBLISHED_SITES,
                 LOGGER
         );
     }

@@ -1,0 +1,171 @@
+website-publisher:
+  data:
+    websitePublisherId:
+      type: STRING
+      filterAndSortField: websitePublisherId
+      searchAllowed: true
+      searchField: websitePublisherId
+      partialSearch: false
+    publishingId:
+      type: STRING
+      filterAndSortField: publishingId
+      searchAllowed: true
+      searchField: publishingId
+      partialSearch: true
+    websitePublishingStatus:
+      type: STRING
+      filterAndSortField: websitePublishingStatus
+      searchAllowed: true
+      searchField: websitePublishingStatus
+      partialSearch: true
+    domain:
+      type: STRING
+      filterAndSortField: domain
+      searchAllowed: true
+      searchField: domain
+      partialSearch: true
+    language:
+      type: STRING
+      filterAndSortField: language
+      searchAllowed: true
+      searchField: language
+      partialSearch: true
+    specialRequirements:
+      type: STRING
+      filterAndSortField: specialRequirements
+      searchAllowed: true
+      searchField: specialRequirements
+      partialSearch: true
+    productSpecialRequirements:
+      type: STRING
+      filterAndSortField: productSpecialRequirements
+      searchAllowed: true
+      searchField: productSpecialRequirements
+      partialSearch: true
+    crowdPlacedContent:
+      type: BOOLEAN
+      filterAndSortField: crowdPlacedContent
+      searchAllowed: false
+      searchField: crowdPlacedContent
+      partialSearch: false
+    isSponsoredContent:
+      type: BOOLEAN
+      filterAndSortField: isSponsoredContent
+      searchAllowed: false
+      searchField: isSponsoredContent
+      partialSearch: false
+    category:
+      type: STRING
+      filterAndSortField: category
+      searchAllowed: false
+      searchField: category
+      partialSearch: false
+      nestedPath: categories
+    basicContentSize:
+      type: STRING
+      filterAndSortField: basicContentSize
+      searchAllowed: true
+      searchField: basicContentSize
+      partialSearch: true
+    linkAttribute:
+      type: STRING
+      filterAndSortField: linkAttribute
+      searchAllowed: true
+      searchField: linkAttribute
+      partialSearch: true
+    contentPlacementPrice:
+      type: DOUBLE
+      filterAndSortField: contentPlacementPrice
+      searchAllowed: false
+      searchField: contentPlacementPrice
+      partialSearch: false
+    writingAndPlacementPrice:
+      type: DOUBLE
+      filterAndSortField: writingAndPlacementPrice
+      searchAllowed: false
+      searchField: writingAndPlacementPrice
+      partialSearch: false
+    extraSizeContentWriting:
+      type: DOUBLE
+      filterAndSortField: extraSizeContentWriting
+      searchAllowed: false
+      searchField: extraSizeContentWriting
+      partialSearch: false
+    specialTopicPricing:
+      type: DOUBLE
+      filterAndSortField: specialTopicPricing
+      searchAllowed: false
+      searchField: specialTopicPricing
+      partialSearch: false
+    extraLinkPricing:
+      type: DOUBLE
+      filterAndSortField: extraLinkPricing
+      searchAllowed: false
+      searchField: extraLinkPricing
+      partialSearch: false
+    linksToBePlacedInOneArticle:
+      type: STRING
+      filterAndSortField: linksToBePlacedInOneArticle
+      searchAllowed: true
+      searchField: linksToBePlacedInOneArticle
+      partialSearch: true
+    linkInsertionPrice:
+      type: DOUBLE
+      filterAndSortField: linkInsertionPrice
+      searchAllowed: false
+      searchField: linkInsertionPrice
+      partialSearch: false
+    linkInsertionSpecialTopicPrice:
+      type: DOUBLE
+      filterAndSortField: linkInsertionSpecialTopicPrice
+      searchAllowed: false
+      searchField: linkInsertionSpecialTopicPrice
+      partialSearch: false
+    considerPlacingBuyerArticleForFree:
+      type: BOOLEAN
+      filterAndSortField: considerPlacingBuyerArticleForFree
+      searchAllowed: false
+      searchField: considerPlacingBuyerArticleForFree
+      partialSearch: false
+    requirementForSubmittingFreeArticle:
+      type: STRING
+      filterAndSortField: requirementForSubmittingFreeArticle
+      searchAllowed: true
+      searchField: requirementForSubmittingFreeArticle
+      partialSearch: true
+    tat:
+      type: STRING
+      filterAndSortField: tat
+      searchAllowed: true
+      searchField: tat
+      partialSearch: true
+    otherLanguageSupported:
+      type: BOOLEAN
+      filterAndSortField: otherLanguageSupported
+      searchAllowed: false
+      searchField: otherLanguageSupported
+      partialSearch: false
+    ownershipType:
+      type: STRING
+      filterAndSortField: ownershipType
+      searchAllowed: true
+      searchField: ownershipType
+      partialSearch: true
+    userId:
+      type: STRING
+      filterAndSortField: userId
+      searchAllowed: true
+      searchField: userId
+      partialSearch: true
+    dateCreated:
+      type: DATE_TIME
+      filterAndSortField: dateCreated
+      searchAllowed: false
+      searchField: dateCreated
+      partialSearch: false
+    dateUpdated:
+      type: DATE_TIME
+      filterAndSortField: dateUpdated
+      searchAllowed: false
+      searchField: dateUpdated
+      partialSearch: false

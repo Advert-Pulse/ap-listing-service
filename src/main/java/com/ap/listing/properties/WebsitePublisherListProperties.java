@@ -28,25 +28,32 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.service;
+package com.ap.listing.properties;
 
 /*
   Developer: Rohit Parihar
-  Project: ap-listing-service
+  Project: ap-auth-provider
   GitHub: github.com/rohit-zip
-  File: WebsitePublisherService
+  File: UserAuthListProperties
  */
 
-import com.ap.listing.payload.request.PublishWebsiteRequest;
-import com.ap.listing.payload.response.ListResponse;
-import com.ap.listing.payload.response.WebsitePublisherResponse;
-import com.bloggios.provider.payload.ModuleResponse;
-import com.bloggios.query.payload.ListPayload;
-import org.springframework.http.ResponseEntity;
+import com.bloggios.provider.utils.YmlFileMapParserFactory;
+import com.bloggios.query.payload.ListProviderPayload;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
-public interface WebsitePublisherService {
+import java.util.HashMap;
+import java.util.Map;
 
-    ResponseEntity<ModuleResponse> publishSite(PublishWebsiteRequest publishWebsiteRequest, String websitePublisherId);
-    ResponseEntity<WebsitePublisherResponse> getPublishWebsite(String publishingId);
-    ResponseEntity<ListResponse> myPublishedWebsites(ListPayload listPayload);
+@Configuration
+@ConfigurationProperties(prefix = "website-publisher")
+@PropertySource(value = "classpath:configuration/website-publisher.yml", factory = YmlFileMapParserFactory.class)
+@Getter
+@Setter
+public class WebsitePublisherListProperties {
+
+    private Map<String, ListProviderPayload> data = new HashMap<>();
 }

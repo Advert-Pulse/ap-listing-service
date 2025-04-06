@@ -38,9 +38,11 @@ package com.ap.listing.controller;
  */
 
 import com.ap.listing.payload.request.PublishWebsiteRequest;
+import com.ap.listing.payload.response.ListResponse;
 import com.ap.listing.payload.response.WebsitePublisherResponse;
 import com.bloggios.provider.payload.ExceptionResponse;
 import com.bloggios.provider.payload.ModuleResponse;
+import com.bloggios.query.payload.ListPayload;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -88,4 +90,23 @@ public interface WebsitePublisherApi {
     )
     @GetMapping("/{publishingId}")
     ResponseEntity<WebsitePublisherResponse> getPublishWebsite(@PathVariable String publishingId);
+
+    @Operation(
+            responses = {
+                    @ApiResponse(description = "SUCCESS", responseCode = "200", content = @Content(
+                            mediaType = "application/json", schema = @Schema(implementation = ListResponse.class)
+                    )),
+                    @ApiResponse(description = "No Content", responseCode = "401", content = {
+                            @Content(schema = @Schema())
+                    }),
+                    @ApiResponse(description = "FORBIDDEN", responseCode = "403", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))
+                    }),
+                    @ApiResponse(description = "BAD REQUEST", responseCode = "400", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = ExceptionResponse.class))
+                    })
+            }
+    )
+    @PostMapping("/my-list")
+    ResponseEntity<ListResponse> myPublishedWebsites(@RequestBody ListPayload listPayload);
 }

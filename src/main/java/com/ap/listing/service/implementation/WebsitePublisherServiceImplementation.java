@@ -43,20 +43,26 @@ import com.ap.listing.exception.AuthenticationException;
 import com.ap.listing.exception.BadRequestException;
 import com.ap.listing.model.WebsitePublisher;
 import com.ap.listing.payload.request.PublishWebsiteRequest;
+import com.ap.listing.payload.response.ListResponse;
 import com.ap.listing.payload.response.WebsitePublisherResponse;
+import com.ap.listing.properties.WebsitePublisherListProperties;
 import com.ap.listing.service.WebsitePublisherService;
 import com.ap.listing.transformer.PublishWebsiteRequestToWebsitePublisherTransformer;
 import com.ap.listing.transformer.WebsitePublisherToResponseTransformer;
 import com.ap.listing.utils.SecurityContextUtil;
 import com.ap.listing.validator.PublishWebsiteRequestValidator;
 import com.bloggios.provider.payload.ModuleResponse;
-import com.bloggios.provider.utils.ValueCheckerUtil;
+import com.bloggios.query.payload.ListPayload;
+import com.bloggios.query.processor.ListProcessor;
+import com.bloggios.query.query.InitQuery;
+import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -68,6 +74,9 @@ public class WebsitePublisherServiceImplementation implements WebsitePublisherSe
     private final PublishWebsiteRequestToWebsitePublisherTransformer publishWebsiteRequestToWebsitePublisherTransformer;
     private final WebsitePublisherRepository websitePublisherRepository;
     private final WebsitePublisherToResponseTransformer websitePublisherToResponseTransformer;
+    private final ListProcessor listProcessor;
+    private final WebsitePublisherListProperties websitePublisherListProperties;
+    private final InitQuery<WebsitePublisher> initQuery;
 
     @Override
     public ResponseEntity<ModuleResponse> publishSite(PublishWebsiteRequest publishWebsiteRequest, String websitePublisherId) {
@@ -94,5 +103,18 @@ public class WebsitePublisherServiceImplementation implements WebsitePublisherSe
         }
         WebsitePublisherResponse transform = websitePublisherToResponseTransformer.transform(websitePublisher);
         return ResponseEntity.ok(transform);
+    }
+
+    @Override
+    public ResponseEntity<ListResponse> myPublishedWebsites(ListPayload listPayload) {
+        ListPayload transformedListPayload = listProcessor.initProcess(listPayload, websitePublisherListProperties.getData(), "dateUpdated");
+        TypedQuery<WebsitePublisher> build = initQuery.build(transformedListPayload, WebsitePublisher.class);
+        List<WebsitePublisher> resultList = build.getResultList();
+        ListResponse listResponse = ListResponse
+                .builder()
+                .object(resultList)
+                .page(0)
+                .build();
+        return ResponseEntity.ok(listResponse);
     }
 }
