@@ -71,11 +71,7 @@ public class WebsitePublisherServiceImplementation implements WebsitePublisherSe
 
     @Override
     public ResponseEntity<ModuleResponse> publishSite(PublishWebsiteRequest publishWebsiteRequest, String websitePublisherId) {
-        ValueCheckerUtil.isValidUUID(
-                websitePublisherId,
-                ()-> new BadRequestException(ErrorData.WEBSITE_PUBLISHER_ID_INVALID, "websitePublisherId")
-        );
-        WebsitePublisher websitePublisher = websitePublisherRepository.findById(websitePublisherId)
+        WebsitePublisher websitePublisher = websitePublisherRepository.findByPublishingId(websitePublisherId)
                 .orElseThrow(() -> new BadRequestException(ErrorData.WEBSITE_PUBLISHER_NOT_FOUND, "websitePublisherId"));
         publishWebsiteRequestValidator.validate(publishWebsiteRequest);
         WebsitePublisher transformedWebsitePublisher = publishWebsiteRequestToWebsitePublisherTransformer.transform(publishWebsiteRequest, websitePublisher);
