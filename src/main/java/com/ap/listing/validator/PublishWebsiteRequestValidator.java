@@ -63,7 +63,7 @@ public class PublishWebsiteRequestValidator {
     private final WebsiteCategoryRepository websiteCategoryRepository;
 
     public void validate(PublishWebsiteRequest publishWebsiteRequest) {
-        categoryValidator(publishWebsiteRequest.getCategories());
+        //categoryValidator(publishWebsiteRequest.getCategories());
         specialRequirementsValidator(publishWebsiteRequest.getSpecialRequirements());
         productSpecialRequirementsValidator(publishWebsiteRequest.getProductSpecialRequirements());
         basicContentSizeValidator(publishWebsiteRequest.getBasicContentSize());

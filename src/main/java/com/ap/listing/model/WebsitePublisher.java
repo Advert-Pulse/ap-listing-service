@@ -109,11 +109,11 @@ public class WebsitePublisher {
 
     // dofollow and nofollow
     private String linkAttribute;
-    private double contentPlacementPrice;
-    private double writingAndPlacementPrice;
-    private double extraSizeContentWriting;
-    private double specialTopicPricing;
-    private double extraLinkPricing;
+    private Double contentPlacementPrice;
+    private Double writingAndPlacementPrice;
+    private Double extraSizeContentWriting;
+    private Double specialTopicPricing;
+    private Double extraLinkPricing;
     private String linksToBePlacedInOneArticle;
 
     // link insertion
