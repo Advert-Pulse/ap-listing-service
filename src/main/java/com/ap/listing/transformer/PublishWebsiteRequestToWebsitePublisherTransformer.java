@@ -46,10 +46,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Component
 @RequiredArgsConstructor
@@ -82,6 +79,8 @@ public class PublishWebsiteRequestToWebsitePublisherTransformer {
         websitePublisher.setCategories(getWebsiteCategories(publishWebsiteRequest.getCategories()));
         websitePublisher.setOtherLanguageSupported(publishWebsiteRequest.isOtherLanguageSupported());
         websitePublisher.setTat(publishWebsiteRequest.getTat());
+        websitePublisher.setMinPrice(getMinPrice(publishWebsiteRequest));
+        websitePublisher.setMaxPrice(getMaxPrice(publishWebsiteRequest));
         log.info("{} >> transform -> websitePublisher: {}", getClass().getSimpleName(), websitePublisher.toString());
         return websitePublisher;
     }
@@ -95,5 +94,35 @@ public class PublishWebsiteRequestToWebsitePublisherTransformer {
             return websiteCategories;
         }
         return Collections.emptyList();
+    }
+    
+    private Double getMinPrice(PublishWebsiteRequest publishWebsiteRequest) {
+        List<Double> prices = Arrays.asList(
+                publishWebsiteRequest.getContentPlacementPrice(),
+                publishWebsiteRequest.getWritingAndPlacementPrice(),
+                publishWebsiteRequest.getExtraSizeContentWriting(),
+                publishWebsiteRequest.getSpecialTopicPricing(),
+                publishWebsiteRequest.getExtraLinkPricing(),
+                publishWebsiteRequest.getLinkInsertionPrice(),
+                publishWebsiteRequest.getLinkInsertionSpecialTopicPrice()
+        );
+
+        prices.removeIf(Objects::isNull);
+        return prices.isEmpty() ? null : Collections.min(prices);
+    }
+
+    private Double getMaxPrice(PublishWebsiteRequest publishWebsiteRequest) {
+        List<Double> prices = Arrays.asList(
+                publishWebsiteRequest.getContentPlacementPrice(),
+                publishWebsiteRequest.getWritingAndPlacementPrice(),
+                publishWebsiteRequest.getExtraSizeContentWriting(),
+                publishWebsiteRequest.getSpecialTopicPricing(),
+                publishWebsiteRequest.getExtraLinkPricing(),
+                publishWebsiteRequest.getLinkInsertionPrice(),
+                publishWebsiteRequest.getLinkInsertionSpecialTopicPrice()
+        );
+
+        prices.removeIf(Objects::isNull);
+        return prices.isEmpty() ? null : Collections.max(prices);
     }
 }

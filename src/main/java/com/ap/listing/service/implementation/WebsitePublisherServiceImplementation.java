@@ -46,6 +46,7 @@ import com.ap.listing.payload.request.PublishWebsiteRequest;
 import com.ap.listing.payload.response.ListResponse;
 import com.ap.listing.payload.response.WebsitePublisherResponse;
 import com.ap.listing.processor.MyPublishedWebsiteUserIdFilterProcessor;
+import com.ap.listing.processor.WebsitePublishingStatusAnalyser;
 import com.ap.listing.properties.WebsitePublisherListProperties;
 import com.ap.listing.service.WebsitePublisherService;
 import com.ap.listing.transformer.PublishWebsiteRequestToWebsitePublisherTransformer;
@@ -81,6 +82,7 @@ public class WebsitePublisherServiceImplementation implements WebsitePublisherSe
     private final InitQuery<WebsitePublisher> initQuery;
     private final MyPublishedWebsiteListValidator myPublishedWebsiteListValidator;
     private final MyPublishedWebsiteUserIdFilterProcessor myPublishedWebsiteUserIdFilterProcessor;
+    private final WebsitePublishingStatusAnalyser websitePublishingStatusAnalyser;
 
     @Override
     public ResponseEntity<ModuleResponse> publishSite(PublishWebsiteRequest publishWebsiteRequest, String websitePublisherId) {
@@ -88,8 +90,10 @@ public class WebsitePublisherServiceImplementation implements WebsitePublisherSe
                 .orElseThrow(() -> new BadRequestException(ErrorData.WEBSITE_PUBLISHER_NOT_FOUND, "websitePublisherId"));
         publishWebsiteRequestValidator.validate(publishWebsiteRequest);
         WebsitePublisher transformedWebsitePublisher = publishWebsiteRequestToWebsitePublisherTransformer.transform(publishWebsiteRequest, websitePublisher);
-        WebsitePublisher websitePublisherResponse = websitePublisherRepository.save(transformedWebsitePublisher);
+        WebsitePublisher analysed = websitePublishingStatusAnalyser.analyse(transformedWebsitePublisher);
+        WebsitePublisher websitePublisherResponse = websitePublisherRepository.save(analysed);
         log.info("Website publisher saved to database: {}", websitePublisherResponse);
+
         return ResponseEntity.ok(ModuleResponse
                 .builder()
                 .message("Website Published and currently in moderation process")

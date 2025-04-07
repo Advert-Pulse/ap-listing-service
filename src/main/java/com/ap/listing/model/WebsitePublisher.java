@@ -147,4 +147,7 @@ public class WebsitePublisher {
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateUpdated;
+
+    private Double minPrice;
+    private Double maxPrice;
 }
