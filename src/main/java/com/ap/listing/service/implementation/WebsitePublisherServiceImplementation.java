@@ -46,6 +46,7 @@ import com.ap.listing.payload.request.PublishWebsiteRequest;
 import com.ap.listing.payload.response.ListResponse;
 import com.ap.listing.payload.response.WebsitePublisherResponse;
 import com.ap.listing.processor.MyPublishedWebsiteUserIdFilterProcessor;
+import com.ap.listing.processor.WebsitePublisherToWebsiteSyncProcessor;
 import com.ap.listing.processor.WebsitePublishingStatusAnalyser;
 import com.ap.listing.properties.WebsitePublisherListProperties;
 import com.ap.listing.service.WebsitePublisherService;
@@ -83,6 +84,7 @@ public class WebsitePublisherServiceImplementation implements WebsitePublisherSe
     private final MyPublishedWebsiteListValidator myPublishedWebsiteListValidator;
     private final MyPublishedWebsiteUserIdFilterProcessor myPublishedWebsiteUserIdFilterProcessor;
     private final WebsitePublishingStatusAnalyser websitePublishingStatusAnalyser;
+    private final WebsitePublisherToWebsiteSyncProcessor websitePublisherToWebsiteSyncProcessor;
 
     @Override
     public ResponseEntity<ModuleResponse> publishSite(PublishWebsiteRequest publishWebsiteRequest, String websitePublisherId) {
@@ -93,7 +95,7 @@ public class WebsitePublisherServiceImplementation implements WebsitePublisherSe
         WebsitePublisher analysed = websitePublishingStatusAnalyser.analyse(transformedWebsitePublisher);
         WebsitePublisher websitePublisherResponse = websitePublisherRepository.save(analysed);
         log.info("Website publisher saved to database: {}", websitePublisherResponse);
-
+        websitePublisherToWebsiteSyncProcessor.doSync(websitePublisherResponse);
         return ResponseEntity.ok(ModuleResponse
                 .builder()
                 .message("Website Published and currently in moderation process")
