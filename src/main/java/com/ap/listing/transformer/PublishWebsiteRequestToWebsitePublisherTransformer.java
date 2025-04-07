@@ -95,7 +95,7 @@ public class PublishWebsiteRequestToWebsitePublisherTransformer {
         }
         return Collections.emptyList();
     }
-    
+
     private Double getMinPrice(PublishWebsiteRequest publishWebsiteRequest) {
         List<Double> prices = Arrays.asList(
                 publishWebsiteRequest.getContentPlacementPrice(),
@@ -107,8 +107,10 @@ public class PublishWebsiteRequestToWebsitePublisherTransformer {
                 publishWebsiteRequest.getLinkInsertionSpecialTopicPrice()
         );
 
-        prices.removeIf(Objects::isNull);
-        return prices.isEmpty() ? null : Collections.min(prices);
+        return prices.stream()
+                .filter(Objects::nonNull)
+                .min(Double::compare)
+                .orElse(null);
     }
 
     private Double getMaxPrice(PublishWebsiteRequest publishWebsiteRequest) {
@@ -122,7 +124,9 @@ public class PublishWebsiteRequestToWebsitePublisherTransformer {
                 publishWebsiteRequest.getLinkInsertionSpecialTopicPrice()
         );
 
-        prices.removeIf(Objects::isNull);
-        return prices.isEmpty() ? null : Collections.max(prices);
+        return prices.stream()
+                .filter(Objects::nonNull)
+                .max(Double::compare)
+                .orElse(null);
     }
 }
