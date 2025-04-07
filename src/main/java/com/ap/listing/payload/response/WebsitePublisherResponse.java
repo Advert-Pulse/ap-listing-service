@@ -78,7 +78,7 @@ public class WebsitePublisherResponse {
     private List<String> bestArticleLinkForLinkInsertion;
     private boolean considerPlacingBuyerArticleForFree;
     private String requirementForSubmittingFreeArticle;
-    private String tat;
+    private Integer tat;
     private boolean otherLanguageSupported;
     private String ownershipType;
     private String userId;

@@ -131,7 +131,7 @@ public class WebsitePublisher {
     private boolean considerPlacingBuyerArticleForFree;
     private String requirementForSubmittingFreeArticle;
 
-    private String tat;
+    private Integer tat;
     private boolean otherLanguageSupported;
 
     // OwnershipType Enum

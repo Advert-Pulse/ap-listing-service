@@ -85,4 +85,27 @@ public class Website {
 
     @OneToMany(mappedBy = "website", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<WebsitePublisher> publishers = new ArrayList<>();
+
+    private Double minPrice;
+    private Double maxPrice;
+
+    private boolean isDoFollow;
+    private boolean isNoFollow;
+
+    private String basicContentSize;
+    private boolean isOwnerAvailable;
+    private Integer tat;
+    private boolean isExampleOfWork;
+    private boolean isSponsoredContent;
+    private boolean isContentPlacement;
+    private boolean isWritingPlacement;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            schema = "listing",
+            joinColumns = @JoinColumn(name = "Website", referencedColumnName = "websiteId"),
+            inverseJoinColumns = @JoinColumn(name = "WebsiteCategory", referencedColumnName = "websiteCategoryId")
+    )
+    @Builder.Default
+    private List<WebsiteCategory> categories = new ArrayList<>();
 }

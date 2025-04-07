@@ -76,5 +76,5 @@ public class PublishWebsiteRequest {
 
     // added in the google sheet
     private boolean otherLanguageSupported;
-    private String tat;
+    private Integer tat;
 }
