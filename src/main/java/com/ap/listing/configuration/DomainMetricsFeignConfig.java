@@ -43,12 +43,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class RapidApiFeignConfig {
+public class DomainMetricsFeignConfig {
 
-    @Value("${feign-client.rapid-api.host}")
+    @Value("${feign-client.domain-metrics.host}")
     private String host;
 
-    @Value("${feign-client.rapid-api.api-key}")
+    @Value("${feign-client.domain-metrics.api-key}")
     private String apiKey;
 
     @Bean
