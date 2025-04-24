@@ -42,13 +42,16 @@ import com.ap.listing.dao.repository.DomainMetricsRepository;
 import com.ap.listing.dao.repository.WebsiteRepository;
 import com.ap.listing.enums.ErrorData;
 import com.ap.listing.exception.BadRequestException;
+import com.ap.listing.feign.AhrefFeignClient;
 import com.ap.listing.feign.DomainMetricsFeignClient;
 import com.ap.listing.generator.AddWebsiteResponseGenerator;
 import com.ap.listing.model.DomainMetrics;
 import com.ap.listing.model.Website;
 import com.ap.listing.model.WebsitePublisher;
 import com.ap.listing.payload.response.AddWebsiteResponse;
+import com.ap.listing.payload.response.AhrefWebsiteTrafficResponse;
 import com.ap.listing.payload.response.DomainMetricsFeignResponse;
+import com.ap.listing.processor.AddWebsiteRapidApiProcessor;
 import com.ap.listing.processor.UrlAvailabilityWebsiteProcessor;
 import com.ap.listing.processor.WebsiteDefaultPublisherProcessor;
 import com.ap.listing.service.WebsiteService;
@@ -65,6 +68,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 import static com.ap.listing.constants.ServiceConstants.HTTPS;
 
@@ -80,6 +84,8 @@ public class WebsiteServiceImplementation implements WebsiteService {
     private final DomainMetricsRepository domainMetricsRepository;
     private final WebsiteDefaultPublisherProcessor websiteDefaultPublisherProcessor;
     private final UrlAvailabilityWebsiteProcessor urlAvailabilityWebsiteProcessor;
+    private final AhrefFeignClient ahrefFeignClient;
+    private final AddWebsiteRapidApiProcessor addWebsiteRapidApiProcessor;
 
     @Override
     @Transactional
@@ -117,6 +123,7 @@ public class WebsiteServiceImplementation implements WebsiteService {
             DomainMetrics domainMetricsResponse = domainMetricsRepository.save(domainMetricsTransform);
             log.info("Domain Metrics Saved : {}", domainMetricsResponse);
             WebsitePublisher websitePublisher = websiteDefaultPublisherProcessor.process(websiteEntity);
+            CompletableFuture.runAsync(()-> addWebsiteRapidApiProcessor.process(feignUrl));
             return AddWebsiteResponseGenerator.generate(websiteResponse, websitePublisher, Boolean.FALSE);
         }
     }

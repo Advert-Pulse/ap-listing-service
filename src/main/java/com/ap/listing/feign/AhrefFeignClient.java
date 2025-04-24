@@ -7,10 +7,11 @@ package com.ap.listing.feign;
   File: AhrefFeignClient
  */
 
-import com.ap.listing.configuration.AhrefFeignConfig;
 import com.ap.listing.configuration.FeignConfig;
+import com.ap.listing.configuration.FeignInterceptors;
 import com.ap.listing.payload.response.AhrefWebsiteTrafficResponse;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -18,12 +19,12 @@ import org.springframework.web.bind.annotation.RequestParam;
         name = "${feign-client.ahref.website-traffic.name}",
         url = "${feign-client.ahref.website-traffic.url}",
         configuration = {
-                AhrefFeignConfig.class,
+                FeignInterceptors.class,
                 FeignConfig.class
         }
 )
 public interface AhrefFeignClient {
 
-    @GetMapping
+    @GetMapping("/traffic")
     AhrefWebsiteTrafficResponse getWebsiteTraffic(@RequestParam String url);
 }

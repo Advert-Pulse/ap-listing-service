@@ -38,15 +38,17 @@ package com.ap.listing.configuration;
  */
 
 import feign.RequestInterceptor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class DomainMetricsFeignConfig {
+@Slf4j
+public class FeignInterceptors {
 
     @Value("${feign-client.domain-metrics.host}")
-    private String host;
+    private String domainMetricsDomain;
 
     @Value("${feign-client.domain-metrics.api-key}")
     private String apiKey;
@@ -54,8 +56,14 @@ public class DomainMetricsFeignConfig {
     @Bean
     public RequestInterceptor requestInterceptor() {
         return requestTemplate -> {
-            requestTemplate.header("x-rapidapi-host", host);
-            requestTemplate.header("x-rapidapi-key", apiKey);
+            log.info("Feign Interceptor {}", requestTemplate);
+            if (requestTemplate.url().contains("/traffic")) {
+                requestTemplate.header("x-rapidapi-host", "ahrefs2.p.rapidapi.com");
+                requestTemplate.header("x-rapidapi-key", apiKey);
+            } else {
+                requestTemplate.header("x-rapidapi-host", domainMetricsDomain);
+                requestTemplate.header("x-rapidapi-key", apiKey);
+            }
         };
     }
 }
