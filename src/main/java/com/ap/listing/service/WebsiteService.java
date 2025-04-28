@@ -46,5 +46,5 @@ import java.util.List;
 public interface WebsiteService {
 
     ResponseEntity<AddWebsiteResponse> addWebsite(String website);
-    ResponseEntity<ModuleResponse> addMultipleWebsite(List<String> websites);
+    ResponseEntity<List<AddWebsiteResponse>> addMultipleWebsite(List<String> websites);
 }

@@ -95,5 +95,5 @@ public interface WebsiteApi {
             }
     )
     @PostMapping("/add-multiple")
-    ResponseEntity<ModuleResponse> addMultipleWebsite(@RequestParam List<String> websites);
+    ResponseEntity<List<AddWebsiteResponse>> addMultipleWebsite(@RequestParam List<String> websites);
 }

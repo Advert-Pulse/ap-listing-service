@@ -69,7 +69,7 @@ public class WebsiteApiController implements WebsiteApi {
     }
 
     @Override
-    public ResponseEntity<ModuleResponse> addMultipleWebsite(List<String> websites) {
+    public ResponseEntity<List<AddWebsiteResponse>> addMultipleWebsite(List<String> websites) {
         return ControllerHelper.loggedResponse(
                 () -> websiteService.addMultipleWebsite(websites),
                 ApiConstants.ADD_WEBSITE,

@@ -11,15 +11,15 @@
  * <p>
  * You may not:
  * 1. Copy, modify, distribute, or sublicense this software without express
- *    written permission from Advert Pulse or Bloggios.
+ * written permission from Advert Pulse or Bloggios.
  * 2. Reverse engineer, decompile, disassemble, or otherwise attempt to derive
- *    the source code of the software.
+ * the source code of the software.
  * 3. Modify this license in any way, including but not limited to altering its
- *    terms, even by Advert Pulse or any other entity, without express written
- *    permission from Bloggios administrators. Bloggios is the creator of this
- *    license and retains exclusive rights to update or modify it.
+ * terms, even by Advert Pulse or any other entity, without express written
+ * permission from Bloggios administrators. Bloggios is the creator of this
+ * license and retains exclusive rights to update or modify it.
  * 4. Update or modify the license without written permission from Bloggios
- *    administrators.
+ * administrators.
  * <p>
  * The software is provided "as is," and Advert Pulse makes no warranties,
  * express or implied, regarding the software, including but not limited to any
@@ -42,6 +42,7 @@ import com.ap.listing.dao.repository.DomainMetricsRepository;
 import com.ap.listing.dao.repository.WebsiteRepository;
 import com.ap.listing.enums.ErrorData;
 import com.ap.listing.exception.BadRequestException;
+import com.ap.listing.exception.BaseException;
 import com.ap.listing.feign.DomainMetricsFeignClient;
 import com.ap.listing.generator.AddWebsiteResponseGenerator;
 import com.ap.listing.model.DomainMetrics;
@@ -62,8 +63,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static com.ap.listing.constants.ServiceConstants.HTTPS;
@@ -122,7 +126,30 @@ public class WebsiteServiceImplementation implements WebsiteService {
     }
 
     @Override
-    public ResponseEntity<ModuleResponse> addMultipleWebsite(List<String> websites) {
-        return null;
+    public ResponseEntity<List<AddWebsiteResponse>> addMultipleWebsite(List<String> websites) {
+        if (CollectionUtils.isEmpty(websites)) {
+            throw new BadRequestException(ErrorData.WEBSITE_IRRESPONSIVE, "websites");
+        }
+        if (websites.size() == 1) {
+            throw new BadRequestException(ErrorData.WEBSITE_IRRESPONSIVE, "websites");
+        }
+        if (websites.size() > 5) {
+            throw new BadRequestException(ErrorData.WEBSITE_IRRESPONSIVE, "websites");
+        }
+        List<AddWebsiteResponse> list = new ArrayList<>();
+        websites
+                .stream()
+                .filter(Objects::nonNull)
+                .forEach(website -> {
+                    try {
+                        ResponseEntity<AddWebsiteResponse> addWebsiteResponseResponseEntity = this.addWebsite(website);
+                        AddWebsiteResponse body = addWebsiteResponseResponseEntity.getBody();
+                        list.add(body);
+                    } catch (BaseException e) {
+                        log.error("Failed to add website: {}", website);
+                        log.error("Error: {}", e.getMessage());
+                    }
+                });
+        return ResponseEntity.ok(list);
     }
 }
