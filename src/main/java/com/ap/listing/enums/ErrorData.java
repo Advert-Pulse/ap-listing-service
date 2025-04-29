@@ -72,7 +72,10 @@ public enum ErrorData {
     WEBSITE_PUBLISHER_NOT_FOUND_PUBLISHING_ID("AP__ERROR--3028", "Website publisher not found using publishing Id" ),
     ACCESS_DENIED_GET_PUBLISH_WEBSITE("AP__ERROR--3029", "Not authorized to get the details of a Website Publisher" ),
     WEBSITE_CATEGORY_ALREADY_PRESENT("AP__ERROR--3301", "Website category already exists" ),
-    MY_PUBLISHED_SITE_USER_ID_FILTER("AP__ERROR--3302", "User Id is not allowed in Filter for my published site" ),;
+    MY_PUBLISHED_SITE_USER_ID_FILTER("AP__ERROR--3302", "User Id is not allowed in Filter for my published site" ),
+    NO_LIST_ADDED("AP__ERROR--3303", "Please add a list of websites" ),
+    ONLY_ONE_WEBSITE_ADDED("AP__ERROR--3304", "Only one website added" ),
+    WEBSITE_MAX_SIZE("AP__ERROR--3305", "Maximum number of websites allowed is 5" ),;
 
     private final String code;
     private final String message;
