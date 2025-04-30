@@ -37,6 +37,7 @@ package com.ap.listing.controller;
   File: WebsiteApi
  */
 
+import com.ap.listing.payload.request.AddMultipleWebsiteRequest;
 import com.ap.listing.payload.response.AddWebsiteResponse;
 import com.bloggios.provider.payload.ExceptionResponse;
 import com.bloggios.provider.payload.ModuleResponse;
@@ -47,6 +48,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -95,5 +97,5 @@ public interface WebsiteApi {
             }
     )
     @PostMapping("/add-multiple")
-    ResponseEntity<List<AddWebsiteResponse>> addMultipleWebsite(@RequestParam List<String> websites);
+    ResponseEntity<List<AddWebsiteResponse>> addMultipleWebsite(@RequestBody AddMultipleWebsiteRequest websites);
 }
