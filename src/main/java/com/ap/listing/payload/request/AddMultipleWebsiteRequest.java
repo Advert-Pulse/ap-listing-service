@@ -28,23 +28,27 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.service;
+package com.ap.listing.payload.request;
 
 /*
-  Developer: Rohit Parihar
+  Developer: Sudhanshu Nautiyal
   Project: ap-listing-service
-  GitHub: github.com/rohit-zip
-  File: WebsiteService
+  File: AddMultipleWebsiteRequest
  */
 
-import com.ap.listing.payload.response.AddWebsiteResponse;
-import com.bloggios.provider.payload.ModuleResponse;
-import org.springframework.http.ResponseEntity;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
 
 import java.util.List;
 
-public interface WebsiteService {
-
-    ResponseEntity<AddWebsiteResponse> addWebsite(String website);
-    ResponseEntity<List<AddWebsiteResponse>> addMultipleWebsite(List<String> websites);
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
+@ToString
+public class AddMultipleWebsiteRequest {
+    private List<String> websites;
 }

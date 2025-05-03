@@ -39,6 +39,7 @@ package com.ap.listing.controller.implementation;
 
 import com.ap.listing.constants.ApiConstants;
 import com.ap.listing.controller.WebsiteApi;
+import com.ap.listing.payload.request.AddMultipleWebsiteRequest;
 import com.ap.listing.payload.response.AddWebsiteResponse;
 import com.ap.listing.service.WebsiteService;
 import com.bloggios.provider.payload.ModuleResponse;
@@ -69,9 +70,9 @@ public class WebsiteApiController implements WebsiteApi {
     }
 
     @Override
-    public ResponseEntity<ModuleResponse> addMultipleWebsite(List<String> websites) {
+    public ResponseEntity<List<AddWebsiteResponse>> addMultipleWebsite(AddMultipleWebsiteRequest addMultipleWebsiteRequest) {
         return ControllerHelper.loggedResponse(
-                () -> websiteService.addMultipleWebsite(websites),
+                () -> websiteService.addMultipleWebsite(addMultipleWebsiteRequest.getWebsites()),
                 ApiConstants.ADD_WEBSITE,
                 LOGGER
         );
