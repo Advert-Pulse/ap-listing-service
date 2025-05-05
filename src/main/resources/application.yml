@@ -122,3 +122,9 @@ feign-client:
       url: https://ahrefs2.p.rapidapi.com
       host: ahrefs2.p.rapidapi.com
       api-key: 770cdcf629msh8ac0af84d9825b2p1ba4fdjsn3e5df144492e
+  similar-web:
+    analytics:
+      name: similarWebAnalyticsClient
+      url: https://similar-web-api.p.rapidapi.com
+      host: similar-web-api.p.rapidapi.com
+      api-key: 770cdcf629msh8ac0af84d9825b2p1ba4fdjsn3e5df144492e

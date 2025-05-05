@@ -7,8 +7,8 @@ package com.ap.listing.payload.response;
   File: AhrefWebsiteTrafficResponse
  */
 
-import com.ap.listing.payload.AhrefTopCountry;
-import com.ap.listing.payload.AhrefTrafficHistory;
+import com.ap.listing.payload.TopCountry;
+import com.ap.listing.payload.TrafficHistory;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
@@ -30,9 +30,9 @@ public class AhrefWebsiteTrafficResponse {
     private long costMonthlyAvg;
 
     @JsonProperty("traffic_history")
-    private List<AhrefTrafficHistory> trafficHistory;
+    private List<TrafficHistory> trafficHistory;
 
     @JsonProperty("top_countries")
-    private List<AhrefTopCountry> topCountries;
+    private List<TopCountry> topCountries;
 
 }

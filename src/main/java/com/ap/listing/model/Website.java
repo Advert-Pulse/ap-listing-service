@@ -38,9 +38,14 @@ package com.ap.listing.model;
  */
 
 import com.ap.listing.constants.EntityConstants;
+import com.ap.listing.payload.TopCountry;
+import com.ap.listing.payload.TrafficHistory;
+import com.ap.listing.payload.SimilarWebCountryShares;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -108,4 +113,27 @@ public class Website {
     )
     @Builder.Default
     private List<WebsiteCategory> categories = new ArrayList<>();
+
+    private String mozDa;
+    private String majesticTf;
+    private long ahrefOrganicTraffic;
+    private long similarWebTraffic;
+    private String domainRating;
+    private String urlRating;
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = "jsonb")
+    private List<TrafficHistory> ahrefTrafficHistory;
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = "jsonb")
+    private List<TopCountry> ahrefTopCountries;
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = "jsonb")
+    private List<TrafficHistory> similarWebTrafficHistory;
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = "jsonb")
+    private List<TopCountry> similarWebTopCountries;
 }

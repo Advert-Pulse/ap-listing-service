@@ -4,7 +4,7 @@ package com.ap.listing.payload;
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: AhrefTopCountry
+  File: SimilarWebCountryShares
  */
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -17,8 +17,11 @@ import lombok.*;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 @ToString
-public class AhrefTopCountry {
+public class SimilarWebCountryShares {
 
     private String country;
-    private double share;
+    private String countryCode;
+    private String valueinPercentage;
+    private String countryFlag;
+    private String value;
 }

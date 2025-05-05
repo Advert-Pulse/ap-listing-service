@@ -4,10 +4,11 @@ package com.ap.listing.payload;
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: AhrefTrafficHistory
+  File: SimilarWebTrafficHistoryWrapper
  */
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 @Getter
@@ -17,8 +18,8 @@ import lombok.*;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 @ToString
-public class AhrefTrafficHistory {
+public class SimilarWebTrafficHistoryWrapper {
 
-    private String date;
-    private long organic;
+    @JsonProperty("domain_analytics")
+    private SimilarWebTrafficHistory domainAnalytics;
 }

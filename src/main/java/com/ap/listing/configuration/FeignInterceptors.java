@@ -47,22 +47,34 @@ import org.springframework.context.annotation.Configuration;
 @Slf4j
 public class FeignInterceptors {
 
+    public static final String X_RAPIDAPI_HOST = "x-rapidapi-host";
+    public static final String X_RAPIDAPI_KEY = "x-rapidapi-key";
+
     @Value("${feign-client.domain-metrics.host}")
     private String domainMetricsDomain;
 
     @Value("${feign-client.domain-metrics.api-key}")
     private String apiKey;
 
+    @Value("${feign-client.ahref.website-traffic.host}")
+    private String ahrefHost;
+
+    @Value("${feign-client.similar-web.analytics.host}")
+    private String similarWebHost;
+
     @Bean
     public RequestInterceptor requestInterceptor() {
         return requestTemplate -> {
             log.info("Feign Interceptor {}", requestTemplate);
-            if (requestTemplate.url().contains("/traffic")) {
-                requestTemplate.header("x-rapidapi-host", "ahrefs2.p.rapidapi.com");
-                requestTemplate.header("x-rapidapi-key", apiKey);
+            if (requestTemplate.url().contains("/traffic") || requestTemplate.url().contains("/backlinks")) {
+                requestTemplate.header(X_RAPIDAPI_HOST, ahrefHost);
+                requestTemplate.header(X_RAPIDAPI_KEY, apiKey);
+            } else if (requestTemplate.url().contains("/analyticsv1")) {
+                requestTemplate.header(X_RAPIDAPI_HOST, similarWebHost);
+                requestTemplate.header(X_RAPIDAPI_KEY, apiKey);
             } else {
-                requestTemplate.header("x-rapidapi-host", domainMetricsDomain);
-                requestTemplate.header("x-rapidapi-key", apiKey);
+                requestTemplate.header(X_RAPIDAPI_HOST, domainMetricsDomain);
+                requestTemplate.header(X_RAPIDAPI_KEY, apiKey);
             }
         };
     }

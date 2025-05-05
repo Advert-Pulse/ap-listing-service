@@ -50,6 +50,7 @@ import com.ap.listing.model.Website;
 import com.ap.listing.model.WebsitePublisher;
 import com.ap.listing.payload.response.AddWebsiteResponse;
 import com.ap.listing.payload.response.DomainMetricsFeignResponse;
+import com.ap.listing.processor.AddWebsiteRapidApiProcessor;
 import com.ap.listing.processor.UrlAvailabilityWebsiteProcessor;
 import com.ap.listing.processor.WebsiteDefaultPublisherProcessor;
 import com.ap.listing.service.WebsiteService;
@@ -69,6 +70,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 import static com.ap.listing.constants.ServiceConstants.HTTPS;
 
@@ -84,6 +86,7 @@ public class WebsiteServiceImplementation implements WebsiteService {
     private final DomainMetricsRepository domainMetricsRepository;
     private final WebsiteDefaultPublisherProcessor websiteDefaultPublisherProcessor;
     private final UrlAvailabilityWebsiteProcessor urlAvailabilityWebsiteProcessor;
+    private final AddWebsiteRapidApiProcessor addWebsiteRapidApiProcessor;
 
     @Override
     @Transactional
@@ -117,9 +120,7 @@ public class WebsiteServiceImplementation implements WebsiteService {
             Website websiteEntity = websiteTransformer.transform(baseUrl);
             Website websiteResponse = websiteRepository.save(websiteEntity);
             log.info("Website Saved : {}", websiteResponse);
-            DomainMetrics domainMetricsTransform = domainMetricsFeignResponseToDomainMetricsTransformer.transform(domainMetrics, websiteResponse);
-            DomainMetrics domainMetricsResponse = domainMetricsRepository.save(domainMetricsTransform);
-            log.info("Domain Metrics Saved : {}", domainMetricsResponse);
+            CompletableFuture.runAsync(()-> addWebsiteRapidApiProcessor.process(feignUrl, domainMetrics, websiteEntity));
             WebsitePublisher websitePublisher = websiteDefaultPublisherProcessor.process(websiteEntity);
             return AddWebsiteResponseGenerator.generate(websiteResponse, websitePublisher, Boolean.FALSE);
         }

@@ -87,6 +87,6 @@ public class UrlChecker {
         connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Java) UrlChecker");
         int responseCode = connection.getResponseCode();
         log.info("Checked URL: {}, Method: {}, Response: {}", urlString, method, responseCode);
-        return responseCode >= 200 && responseCode < 400;
+        return responseCode >= 200 && responseCode < 500;
     }
 }
