@@ -38,6 +38,8 @@ package com.ap.listing.processor;
  */
 
 import com.ap.listing.dao.repository.WebsiteRepository;
+import com.ap.listing.enums.ErrorData;
+import com.ap.listing.exception.BadRequestException;
 import com.ap.listing.feign.AhrefFeignClient;
 import com.ap.listing.feign.SimilarWebFeignClient;
 import com.ap.listing.model.Website;
@@ -65,7 +67,9 @@ public class AddWebsiteRapidApiProcessor {
     private final WebsiteRepository websiteRepository;
 
     @Async
-    public void process(String website, DomainMetricsFeignResponse domainMetricsFeignResponse, Website websiteEntity) {
+    public void process(String website, DomainMetricsFeignResponse domainMetricsFeignResponse, String websiteEntityId) {
+        Website websiteEntity = websiteRepository.findById(websiteEntityId)
+                .orElseThrow(() -> new BadRequestException(ErrorData.WEBSITE_NOT_FOUND_BY_ID));
         long startTime = System.currentTimeMillis();
         log.info("Add Website Rapid Api Processor: {}", website);
         AhrefWebsiteTrafficResponse ahrefWebsiteTraffic = ahrefFeignClient.getWebsiteTraffic(website);

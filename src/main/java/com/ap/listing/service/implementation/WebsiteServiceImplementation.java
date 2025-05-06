@@ -92,7 +92,6 @@ public class WebsiteServiceImplementation implements WebsiteService {
     private final InitQuery<Website> initQuery;
 
     @Override
-    @Transactional
     public ResponseEntity<AddWebsiteResponse> addWebsite(String website) {
         String domain = website.toLowerCase();
         if (!domain.startsWith(ServiceConstants.HTTP) && !domain.startsWith(HTTPS)) {
@@ -123,8 +122,8 @@ public class WebsiteServiceImplementation implements WebsiteService {
             Website websiteEntity = websiteTransformer.transform(baseUrl);
             Website websiteResponse = websiteRepository.save(websiteEntity);
             log.info("Website Saved : {}", websiteResponse);
-            CompletableFuture.runAsync(()-> addWebsiteRapidApiProcessor.process(feignUrl, domainMetrics, websiteEntity));
             WebsitePublisher websitePublisher = websiteDefaultPublisherProcessor.process(websiteEntity);
+            CompletableFuture.runAsync(()-> addWebsiteRapidApiProcessor.process(feignUrl, domainMetrics, websiteEntity.getWebsiteId()));
             return AddWebsiteResponseGenerator.generate(websiteResponse, websitePublisher, Boolean.FALSE);
         }
     }
