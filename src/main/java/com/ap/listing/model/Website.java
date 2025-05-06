@@ -40,7 +40,6 @@ package com.ap.listing.model;
 import com.ap.listing.constants.EntityConstants;
 import com.ap.listing.payload.TopCountry;
 import com.ap.listing.payload.TrafficHistory;
-import com.ap.listing.payload.SimilarWebCountryShares;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
@@ -115,11 +114,14 @@ public class Website {
     private List<WebsiteCategory> categories = new ArrayList<>();
 
     private String mozDa;
-    private String majesticTf;
+    private Integer majesticTf;
     private long ahrefOrganicTraffic;
     private long similarWebTraffic;
-    private String domainRating;
-    private String urlRating;
+    private Integer domainRating;
+    private Integer urlRating;
+
+    private String countryCode;
+    private String country;
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")

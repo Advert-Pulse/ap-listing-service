@@ -50,4 +50,5 @@ public class ApiConstants {
     public static final String ADD_WEBSITE_CATEGORY = "AddWebsiteCategory";
     public static final String GET_WEBSITE_CATEGORY_LIST = "GetWebsiteCategoryList";
     public static final String MY_PUBLISHED_SITES = "MyPublishedSites";
+    public static final String LIST_WEBSITE = "ListWebsite";
 }

@@ -41,9 +41,10 @@ import com.ap.listing.constants.ApiConstants;
 import com.ap.listing.controller.WebsiteApi;
 import com.ap.listing.payload.request.AddMultipleWebsiteRequest;
 import com.ap.listing.payload.response.AddWebsiteResponse;
+import com.ap.listing.payload.response.ListResponse;
 import com.ap.listing.service.WebsiteService;
-import com.bloggios.provider.payload.ModuleResponse;
 import com.bloggios.provider.utils.ControllerHelper;
+import com.bloggios.query.payload.ListPayload;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,6 +75,15 @@ public class WebsiteApiController implements WebsiteApi {
         return ControllerHelper.loggedResponse(
                 () -> websiteService.addMultipleWebsite(addMultipleWebsiteRequest.getWebsites()),
                 ApiConstants.ADD_WEBSITE,
+                LOGGER
+        );
+    }
+
+    @Override
+    public ResponseEntity<ListResponse> list(ListPayload listPayload) {
+        return ControllerHelper.loggedResponse(
+                () -> websiteService.list(listPayload),
+                ApiConstants.LIST_WEBSITE,
                 LOGGER
         );
     }

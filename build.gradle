@@ -41,6 +41,7 @@ ext {
 	flywayVersion = "11.2.0"
 	elasticClientVersion = "8.17.0"
 	bloggiosProvider = "2.1.0"
+	bloggiosSqlQuery = "1.0.1"
 }
 
 dependencies {
@@ -65,7 +66,7 @@ dependencies {
 	implementation "com.bloggios.provider:bloggios-provider:${bloggiosProvider}"
 	implementation group: "org.jsoup", name: "jsoup", version: "1.17.2"
 	implementation group: "dnsjava", name: "dnsjava", version: "3.6.3"
-	implementation "com.bloggios.query:bloggios-sql-query-provider:1.0.0"
+	implementation "com.bloggios.query:bloggios-sql-query-provider:${bloggiosSqlQuery}"
 }
 
 dependencyManagement {

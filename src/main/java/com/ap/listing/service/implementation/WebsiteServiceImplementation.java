@@ -38,27 +38,29 @@ package com.ap.listing.service.implementation;
  */
 
 import com.ap.listing.constants.ServiceConstants;
-import com.ap.listing.dao.repository.DomainMetricsRepository;
 import com.ap.listing.dao.repository.WebsiteRepository;
 import com.ap.listing.enums.ErrorData;
 import com.ap.listing.exception.BadRequestException;
 import com.ap.listing.exception.BaseException;
 import com.ap.listing.feign.DomainMetricsFeignClient;
 import com.ap.listing.generator.AddWebsiteResponseGenerator;
-import com.ap.listing.model.DomainMetrics;
 import com.ap.listing.model.Website;
 import com.ap.listing.model.WebsitePublisher;
 import com.ap.listing.payload.response.AddWebsiteResponse;
 import com.ap.listing.payload.response.DomainMetricsFeignResponse;
+import com.ap.listing.payload.response.ListResponse;
 import com.ap.listing.processor.AddWebsiteRapidApiProcessor;
 import com.ap.listing.processor.UrlAvailabilityWebsiteProcessor;
 import com.ap.listing.processor.WebsiteDefaultPublisherProcessor;
+import com.ap.listing.properties.WebsiteListProperties;
 import com.ap.listing.service.WebsiteService;
-import com.ap.listing.transformer.DomainMetricsFeignResponseToDomainMetricsTransformer;
 import com.ap.listing.transformer.WebsiteTransformer;
 import com.ap.listing.utils.ExtractBaseUrl;
 import com.ap.listing.utils.UrlChecker;
-import com.bloggios.provider.payload.ModuleResponse;
+import com.bloggios.query.payload.ListPayload;
+import com.bloggios.query.processor.ListProcessor;
+import com.bloggios.query.query.InitQuery;
+import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -82,11 +84,12 @@ public class WebsiteServiceImplementation implements WebsiteService {
     private final DomainMetricsFeignClient domainMetricsFeignClient;
     private final WebsiteTransformer websiteTransformer;
     private final WebsiteRepository websiteRepository;
-    private final DomainMetricsFeignResponseToDomainMetricsTransformer domainMetricsFeignResponseToDomainMetricsTransformer;
-    private final DomainMetricsRepository domainMetricsRepository;
     private final WebsiteDefaultPublisherProcessor websiteDefaultPublisherProcessor;
     private final UrlAvailabilityWebsiteProcessor urlAvailabilityWebsiteProcessor;
     private final AddWebsiteRapidApiProcessor addWebsiteRapidApiProcessor;
+    private final ListProcessor listProcessor;
+    private final WebsiteListProperties websiteListProperties;
+    private final InitQuery<Website> initQuery;
 
     @Override
     @Transactional
@@ -152,5 +155,19 @@ public class WebsiteServiceImplementation implements WebsiteService {
                     }
                 });
         return ResponseEntity.ok(list);
+    }
+
+    @Override
+    public ResponseEntity<ListResponse> list(ListPayload listPayload) {
+        ListPayload transformedListPayload = listProcessor.initProcess(listPayload, websiteListProperties.getData(), "dateUpdated");
+        TypedQuery<Website> build = initQuery.build(transformedListPayload, Website.class);
+        ListResponse listResponse = ListResponse
+                .builder()
+                .object(build.getResultList())
+                .page(listPayload.getPage())
+                .size(listPayload.getSize())
+                .totalRecordsCount(initQuery.getTotalRecords(transformedListPayload, Website.class))
+                .build();
+        return ResponseEntity.ok(listResponse);
     }
 }

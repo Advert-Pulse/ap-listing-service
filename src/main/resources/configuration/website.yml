@@ -1,0 +1,159 @@
+website:
+  data:
+    websiteId:
+      type: STRING
+      filterAndSortField: websiteId
+      searchAllowed: true
+      searchField: websiteId
+      partialSearch: false
+    domain:
+      type: STRING
+      filterAndSortField: domain
+      searchAllowed: true
+      searchField: domain
+      partialSearch: true
+    dateCreated:
+      type: DATE
+      filterAndSortField: dateCreated
+      searchAllowed: false
+      searchField: dateCreated
+      partialSearch: false
+    dateUpdated:
+      type: DATE
+      filterAndSortField: dateUpdated
+      searchAllowed: false
+      searchField: dateUpdated
+      partialSearch: false
+    userId:
+      type: STRING
+      filterAndSortField: userId
+      searchAllowed: true
+      searchField: userId
+      partialSearch: false
+    isAvailable:
+      type: BOOLEAN
+      filterAndSortField: isAvailable
+      searchAllowed: false
+      searchField: isAvailable
+      partialSearch: false
+    minPrice:
+      type: DOUBLE
+      filterAndSortField: minPrice
+      searchAllowed: false
+      searchField: minPrice
+      partialSearch: false
+    maxPrice:
+      type: DOUBLE
+      filterAndSortField: maxPrice
+      searchAllowed: false
+      searchField: maxPrice
+      partialSearch: false
+    isDoFollow:
+      type: BOOLEAN
+      filterAndSortField: isDoFollow
+      searchAllowed: false
+      searchField: isDoFollow
+      partialSearch: false
+    isNoFollow:
+      type: BOOLEAN
+      filterAndSortField: isNoFollow
+      searchAllowed: false
+      searchField: isNoFollow
+      partialSearch: false
+    basicContentSize:
+      type: STRING
+      filterAndSortField: basicContentSize
+      searchAllowed: false
+      searchField: basicContentSize
+      partialSearch: true
+    isOwnerAvailable:
+      type: BOOLEAN
+      filterAndSortField: isOwnerAvailable
+      searchAllowed: false
+      searchField: isOwnerAvailable
+      partialSearch: false
+    tat:
+      type: INTEGER
+      filterAndSortField: tat
+      searchAllowed: false
+      searchField: tat
+      partialSearch: false
+    isExampleOfWork:
+      type: BOOLEAN
+      filterAndSortField: isExampleOfWork
+      searchAllowed: false
+      searchField: isExampleOfWork
+      partialSearch: false
+    isSponsoredContent:
+      type: BOOLEAN
+      filterAndSortField: isSponsoredContent
+      searchAllowed: false
+      searchField: isSponsoredContent
+      partialSearch: false
+    isContentPlacement:
+      type: BOOLEAN
+      filterAndSortField: isContentPlacement
+      searchAllowed: false
+      searchField: isContentPlacement
+      partialSearch: false
+    isWritingPlacement:
+      type: BOOLEAN
+      filterAndSortField: isWritingPlacement
+      searchAllowed: false
+      searchField: isWritingPlacement
+      partialSearch: false
+    category:
+      type: STRING
+      filterAndSortField: category
+      searchAllowed: false
+      searchField: category
+      partialSearch: false
+      nestedPath: categories
+    mozDa:
+      type: STRING
+      filterAndSortField: mozDa
+      searchAllowed: false
+      searchField: mozDa
+      partialSearch: false
+    majesticTf:
+      type: INTEGER
+      filterAndSortField: majesticTf
+      searchAllowed: false
+      searchField: majesticTf
+      partialSearch: false
+    ahrefOrganicTraffic:
+      type: LONG
+      filterAndSortField: ahrefOrganicTraffic
+      searchAllowed: false
+      searchField: ahrefOrganicTraffic
+      partialSearch: false
+    similarWebTraffic:
+      type: LONG
+      filterAndSortField: similarWebTraffic
+      searchAllowed: false
+      searchField: similarWebTraffic
+      partialSearch: false
+    domainRating:
+      type: INTEGER
+      filterAndSortField: domainRating
+      searchAllowed: false
+      searchField: domainRating
+      partialSearch: false
+    urlRating:
+      type: INTEGER
+      filterAndSortField: urlRating
+      searchAllowed: false
+      searchField: urlRating
+      partialSearch: false
+    countryCode:
+      type: STRING
+      filterAndSortField: countryCode
+      searchAllowed: false
+      searchField: countryCode
+      partialSearch: false
+    country:
+      type: STRING
+      filterAndSortField: country
+      searchAllowed: false
+      searchField: country
+      partialSearch: false

@@ -28,28 +28,32 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.payload;
+package com.ap.listing.properties;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: SimilarWebEngagement
+  File: WebsiteListProperties
  */
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
+import com.bloggios.provider.utils.YmlFileMapParserFactory;
+import com.bloggios.query.payload.ListProviderPayload;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@Configuration
+@ConfigurationProperties(prefix = "website")
+@PropertySource(value = "classpath:configuration/website.yml", factory = YmlFileMapParserFactory.class)
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@JsonIgnoreProperties(ignoreUnknown = true)
-@ToString
-public class SimilarWebEngagement {
+public class WebsiteListProperties {
 
-    @JsonProperty("Visits")
-    private long visits;
+    private Map<String, ListProviderPayload> data = new HashMap<>();
 }
