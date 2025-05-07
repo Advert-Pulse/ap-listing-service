@@ -34,26 +34,30 @@ package com.ap.listing.transformer;
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: WesbiteToWebsiteResponseTransformer
+  File: WebsiteToWebsiteResponseTransformer
  */
 
 import com.ap.listing.model.Website;
-import com.ap.listing.payload.response.WebsiteResponse;
+import com.ap.listing.payload.response.WebsiteResponseForPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 @Component
-@Slf4j
 @RequiredArgsConstructor
-public class WebsiteToWebsiteResponseTransformer {
+@Slf4j
+public class WebsiteToWebsiteResponseForPublisherTransformer {
 
-    private final ModelMapper modelMapper;
-
-    public WebsiteResponse transform(Website website) {
-        WebsiteResponse websiteResponse = modelMapper.map(website, WebsiteResponse.class);
-        log.info("Website response: {}", websiteResponse);
-        return websiteResponse;
+    public WebsiteResponseForPublisher transform(Website website) {
+        WebsiteResponseForPublisher websiteResponseForPublisher = WebsiteResponseForPublisher
+                .builder()
+                .domain(website.getDomain())
+                .isAvailable(website.getIsAvailable())
+                .dateCreated(website.getDateCreated())
+                .dateUpdated(website.getDateUpdated())
+                .userId(website.getUserId())
+                .build();
+        log.info("WebsiteToWebsiteResponseTransformer transformed: {}", websiteResponseForPublisher);
+        return websiteResponseForPublisher;
     }
 }

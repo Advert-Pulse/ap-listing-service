@@ -49,11 +49,13 @@ import com.ap.listing.model.WebsitePublisher;
 import com.ap.listing.payload.response.AddWebsiteResponse;
 import com.ap.listing.payload.response.DomainMetricsFeignResponse;
 import com.ap.listing.payload.response.ListResponse;
+import com.ap.listing.payload.response.WebsiteResponse;
 import com.ap.listing.processor.AddWebsiteRapidApiProcessor;
 import com.ap.listing.processor.UrlAvailabilityWebsiteProcessor;
 import com.ap.listing.processor.WebsiteDefaultPublisherProcessor;
 import com.ap.listing.properties.WebsiteListProperties;
 import com.ap.listing.service.WebsiteService;
+import com.ap.listing.transformer.WebsiteToWebsiteResponseTransformer;
 import com.ap.listing.transformer.WebsiteTransformer;
 import com.ap.listing.utils.ExtractBaseUrl;
 import com.ap.listing.utils.UrlChecker;
@@ -90,6 +92,7 @@ public class WebsiteServiceImplementation implements WebsiteService {
     private final ListProcessor listProcessor;
     private final WebsiteListProperties websiteListProperties;
     private final InitQuery<Website> initQuery;
+    private final WebsiteToWebsiteResponseTransformer websiteToWebsiteResponseTransformer;
 
     @Override
     public ResponseEntity<AddWebsiteResponse> addWebsite(String website) {
@@ -160,9 +163,14 @@ public class WebsiteServiceImplementation implements WebsiteService {
     public ResponseEntity<ListResponse> list(ListPayload listPayload) {
         ListPayload transformedListPayload = listProcessor.initProcess(listPayload, websiteListProperties.getData(), "dateUpdated");
         TypedQuery<Website> build = initQuery.build(transformedListPayload, Website.class);
+        List<WebsiteResponse> list = build
+                .getResultList()
+                .stream()
+                .map(websiteToWebsiteResponseTransformer::transform)
+                .toList();
         ListResponse listResponse = ListResponse
                 .builder()
-                .object(build.getResultList())
+                .object(list)
                 .page(listPayload.getPage())
                 .size(listPayload.getSize())
                 .totalRecordsCount(initQuery.getTotalRecords(transformedListPayload, Website.class))

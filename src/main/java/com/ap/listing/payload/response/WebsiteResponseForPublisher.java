@@ -34,16 +34,13 @@ package com.ap.listing.payload.response;
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: PublishWebsiteResponse
+  File: WebsiteResponse
  */
 
-import com.ap.listing.model.WebsiteCategory;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Getter
 @Setter
@@ -52,37 +49,13 @@ import java.util.List;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 @ToString
-public class WebsitePublisherResponse {
+public class WebsiteResponseForPublisher {
 
-    private String websitePublisherId;
-    private String publishingId;
-    private String websitePublishingStatus;
+    private String websiteId;
     private String domain;
-    private String language;
-    private String specialRequirements;
-    private String productSpecialRequirements;
-    private boolean crowdPlacedContent;
-    private boolean isSponsoredContent;
-    private List<WebsiteCategory> categories = new ArrayList<>();
-    private String basicContentSize;
-    private String linkAttribute;
-    private Double contentPlacementPrice;
-    private Double writingAndPlacementPrice;
-    private Double extraSizeContentWriting;
-    private Double specialTopicPricing;
-    private Double extraLinkPricing;
-    private String linksToBePlacedInOneArticle;
-    private Double linkInsertionPrice;
-    private Double linkInsertionSpecialTopicPrice;
-    private List<String> bestArticleLinkForGuestPosting;
-    private List<String> bestArticleLinkForLinkInsertion;
-    private boolean considerPlacingBuyerArticleForFree;
-    private String requirementForSubmittingFreeArticle;
-    private Integer tat;
-    private boolean otherLanguageSupported;
-    private String ownershipType;
-    private String userId;
-    private WebsiteResponseForPublisher website;
     private Date dateCreated;
     private Date dateUpdated;
+    private String userId;
+    private Boolean isAvailable;
+
 }

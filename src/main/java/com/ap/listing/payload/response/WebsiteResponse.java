@@ -37,10 +37,15 @@ package com.ap.listing.payload.response;
   File: WebsiteResponse
  */
 
+import com.ap.listing.model.WebsiteCategory;
+import com.ap.listing.payload.TopCountry;
+import com.ap.listing.payload.TrafficHistory;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -57,5 +62,28 @@ public class WebsiteResponse {
     private Date dateUpdated;
     private String userId;
     private Boolean isAvailable;
-
+    private Double minPrice;
+    private Double maxPrice;
+    private boolean isDoFollow;
+    private boolean isNoFollow;
+    private String basicContentSize;
+    private boolean isOwnerAvailable;
+    private Integer tat;
+    private boolean isExampleOfWork;
+    private boolean isSponsoredContent;
+    private boolean isContentPlacement;
+    private boolean isWritingPlacement;
+    private List<WebsiteCategory> categories = new ArrayList<>();
+    private String mozDa;
+    private Integer majesticTf;
+    private long ahrefOrganicTraffic;
+    private long similarWebTraffic;
+    private Integer domainRating;
+    private Integer urlRating;
+    private String countryCode;
+    private String country;
+    private List<TrafficHistory> ahrefTrafficHistory;
+    private List<TopCountry> ahrefTopCountries;
+    private List<TrafficHistory> similarWebTrafficHistory;
+    private List<TopCountry> similarWebTopCountries;
 }
