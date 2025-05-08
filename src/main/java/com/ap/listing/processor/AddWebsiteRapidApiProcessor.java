@@ -78,7 +78,7 @@ public class AddWebsiteRapidApiProcessor {
         log.info("Ahref Backlink Response: {}", ahrefBacklinkResponse);
         SimilarWebTrafficHistoryWrapper similarWebWebsiteTraffic = similarWebFeignClient.getWebsiteTraffic(website);
         log.info("Similar Web Website Traffic Response: {}", similarWebWebsiteTraffic);
-        websiteEntity.setMozDa(domainMetricsFeignResponse.getMozDA());
+        websiteEntity.setMozDa(Integer.parseInt(domainMetricsFeignResponse.getMozDA()));
         websiteEntity.setMajesticTf(Integer.parseInt(domainMetricsFeignResponse.getMajesticTF()));
         websiteEntity.setAhrefOrganicTraffic(ahrefWebsiteTraffic.getTrafficMonthlyAvg());
         websiteEntity.setSimilarWebTraffic(similarWebWebsiteTraffic.getDomainAnalytics().getEngagements().getVisits());
