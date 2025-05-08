@@ -72,6 +72,8 @@ public class WebsiteResponse {
     private boolean isExampleOfWork;
     private boolean isSponsoredContent;
     private boolean isContentPlacement;
+    private Double contentPlacementPrice;
+    private Double writingAndPlacementPrice;
     private boolean isWritingPlacement;
     private List<WebsiteCategory> categories = new ArrayList<>();
     private String mozDa;
