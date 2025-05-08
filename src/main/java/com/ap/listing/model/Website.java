@@ -115,7 +115,7 @@ public class Website {
     @Builder.Default
     private List<WebsiteCategory> categories = new ArrayList<>();
 
-    private String mozDa;
+    private Integer mozDa;
     private Integer majesticTf;
     private long ahrefOrganicTraffic;
     private long similarWebTraffic;

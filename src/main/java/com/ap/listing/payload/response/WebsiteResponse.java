@@ -76,7 +76,7 @@ public class WebsiteResponse {
     private Double writingAndPlacementPrice;
     private boolean isWritingPlacement;
     private List<WebsiteCategory> categories = new ArrayList<>();
-    private String mozDa;
+    private Integer mozDa;
     private Integer majesticTf;
     private long ahrefOrganicTraffic;
     private long similarWebTraffic;
