@@ -103,6 +103,8 @@ public class Website {
     private boolean isSponsoredContent;
     private boolean isContentPlacement;
     private boolean isWritingPlacement;
+    private Double contentPlacementPrice;
+    private Double writingAndPlacementPrice;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
