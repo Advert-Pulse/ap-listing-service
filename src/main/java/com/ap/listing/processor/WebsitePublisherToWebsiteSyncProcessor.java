@@ -100,7 +100,11 @@ public class WebsitePublisherToWebsiteSyncProcessor {
     private void processContentPlacement(WebsitePublisher websitePublisher, Website website) {
         if (Objects.nonNull(websitePublisher.getContentPlacementPrice()) && websitePublisher.getContentPlacementPrice() > 4) {
             website.setIsContentPlacement("true");
-            website.setContentPlacementPrice(Math.min(websitePublisher.getContentPlacementPrice(), website.getContentPlacementPrice()));
+            if (Objects.isNull(website.getContentPlacementPrice())) {
+                website.setContentPlacementPrice(websitePublisher.getContentPlacementPrice());
+            } else {
+                website.setContentPlacementPrice(Math.min(websitePublisher.getContentPlacementPrice(), website.getContentPlacementPrice()));
+            }
         } else {
             website.setIsContentPlacement("false");
         }
@@ -109,7 +113,11 @@ public class WebsitePublisherToWebsiteSyncProcessor {
     private void processWritingPlacement(WebsitePublisher websitePublisher, Website website) {
         if (Objects.nonNull(websitePublisher.getWritingAndPlacementPrice()) && websitePublisher.getWritingAndPlacementPrice() > 4) {
             website.setIsWritingPlacement("true");
-            website.setWritingAndPlacementPrice(Math.min(website.getWritingAndPlacementPrice(), websitePublisher.getWritingAndPlacementPrice()));
+            if (Objects.isNull(website.getWritingAndPlacementPrice())) {
+                website.setWritingAndPlacementPrice(websitePublisher.getWritingAndPlacementPrice());
+            } else {
+                website.setWritingAndPlacementPrice(Math.min(websitePublisher.getWritingAndPlacementPrice(), website.getWritingAndPlacementPrice()));
+            }
         } else {
             website.setIsWritingPlacement("false");
         }
