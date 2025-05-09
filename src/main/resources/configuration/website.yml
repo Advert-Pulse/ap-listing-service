@@ -110,7 +110,7 @@ website:
       partialSearch: false
       nestedPath: categories
     mozDa:
-      type: STRING
+      type: INTEGER
       filterAndSortField: mozDa
       searchAllowed: false
       searchField: mozDa
