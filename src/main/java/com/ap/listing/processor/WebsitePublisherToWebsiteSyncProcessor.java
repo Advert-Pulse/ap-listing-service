@@ -97,27 +97,37 @@ public class WebsitePublisherToWebsiteSyncProcessor {
         }
     }
 
-    private void processWritingPlacement(WebsitePublisher websitePublisher, Website website) {
+    private void processContentPlacement(WebsitePublisher websitePublisher, Website website) {
         if (Objects.nonNull(websitePublisher.getContentPlacementPrice()) && websitePublisher.getContentPlacementPrice() > 4) {
-            website.setContentPlacement(true);
+            website.setIsContentPlacement("true");
+            website.setContentPlacementPrice(Math.min(websitePublisher.getContentPlacementPrice(), website.getContentPlacementPrice()));
+        } else {
+            website.setIsContentPlacement("false");
         }
     }
 
-    private void processContentPlacement(WebsitePublisher websitePublisher, Website website) {
+    private void processWritingPlacement(WebsitePublisher websitePublisher, Website website) {
         if (Objects.nonNull(websitePublisher.getWritingAndPlacementPrice()) && websitePublisher.getWritingAndPlacementPrice() > 4) {
-            website.setWritingPlacement(true);
+            website.setIsWritingPlacement("true");
+            website.setWritingAndPlacementPrice(Math.min(website.getWritingAndPlacementPrice(), websitePublisher.getWritingAndPlacementPrice()));
+        } else {
+            website.setIsWritingPlacement("false");
         }
     }
 
     private void processSponsoredContent(WebsitePublisher websitePublisher, Website website) {
         if (websitePublisher.isSponsoredContent()) {
-            website.setSponsoredContent(true);
+            website.setIsSponsoredContent("true");
+        } else {
+            website.setIsSponsoredContent("false");
         }
     }
 
     private void processExampleOfWork(WebsitePublisher websitePublisher, Website website) {
         if (Objects.nonNull(websitePublisher.getBestArticleLinkForGuestPosting()) && !CollectionUtils.isEmpty(websitePublisher.getBestArticleLinkForGuestPosting())) {
-            website.setExampleOfWork(true);
+            website.setIsExampleOfWork("true");
+        } else {
+            website.setIsExampleOfWork("false");
         }
     }
 
@@ -136,7 +146,9 @@ public class WebsitePublisherToWebsiteSyncProcessor {
     private void processOwner(WebsitePublisher websitePublisher, Website website) {
         String ownershipType = websitePublisher.getOwnershipType();
         if (ownershipType.equalsIgnoreCase("owner")) {
-            website.setOwnerAvailable(true);
+            website.setIsOwnerAvailable("true");
+        } else {
+            website.setIsOwnerAvailable("false");
         }
     }
 
@@ -161,10 +173,14 @@ public class WebsitePublisherToWebsiteSyncProcessor {
     private void processLinkAttribute(WebsitePublisher websitePublisher, Website website) {
         if (Objects.nonNull(websitePublisher.getLinkAttribute())) {
             if (websitePublisher.getLinkAttribute().equalsIgnoreCase("nofollow")) {
-                website.setNoFollow(true);
+                website.setIsNoFollow("true");
+            } else {
+                website.setIsNoFollow("false");
             }
             if (websitePublisher.getLinkAttribute().equalsIgnoreCase("dofollow")) {
-                website.setDoFollow(true);
+                website.setIsDoFollow("true");
+            } else {
+                website.setIsDoFollow("false");
             }
         }
     }

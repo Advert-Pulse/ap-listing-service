@@ -63,7 +63,6 @@ import com.bloggios.query.payload.ListPayload;
 import com.bloggios.query.processor.ListProcessor;
 import com.bloggios.query.query.InitQuery;
 import jakarta.persistence.TypedQuery;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

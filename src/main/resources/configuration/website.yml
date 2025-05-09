@@ -31,7 +31,7 @@ website:
       searchField: userId
       partialSearch: false
     isAvailable:
-      type: BOOLEAN
+      type: STRING
       filterAndSortField: isAvailable
       searchAllowed: false
       searchField: isAvailable
@@ -49,13 +49,13 @@ website:
       searchField: maxPrice
       partialSearch: false
     isDoFollow:
-      type: BOOLEAN
+      type: STRING
       filterAndSortField: isDoFollow
       searchAllowed: false
       searchField: isDoFollow
       partialSearch: false
     isNoFollow:
-      type: BOOLEAN
+      type: STRING
       filterAndSortField: isNoFollow
       searchAllowed: false
       searchField: isNoFollow
@@ -67,7 +67,7 @@ website:
       searchField: basicContentSize
       partialSearch: true
     isOwnerAvailable:
-      type: BOOLEAN
+      type: STRING
       filterAndSortField: isOwnerAvailable
       searchAllowed: false
       searchField: isOwnerAvailable
@@ -79,25 +79,25 @@ website:
       searchField: tat
       partialSearch: false
     isExampleOfWork:
-      type: BOOLEAN
+      type: STRING
       filterAndSortField: isExampleOfWork
       searchAllowed: false
       searchField: isExampleOfWork
       partialSearch: false
     isSponsoredContent:
-      type: BOOLEAN
+      type: STRING
       filterAndSortField: isSponsoredContent
       searchAllowed: false
       searchField: isSponsoredContent
       partialSearch: false
     isContentPlacement:
-      type: BOOLEAN
+      type: STRING
       filterAndSortField: isContentPlacement
       searchAllowed: false
       searchField: isContentPlacement
       partialSearch: false
     isWritingPlacement:
-      type: BOOLEAN
+      type: STRING
       filterAndSortField: isWritingPlacement
       searchAllowed: false
       searchField: isWritingPlacement

@@ -93,16 +93,16 @@ public class Website {
     private Double minPrice;
     private Double maxPrice;
 
-    private boolean isDoFollow;
-    private boolean isNoFollow;
+    private String isDoFollow;
+    private String isNoFollow;
 
     private String basicContentSize;
-    private boolean isOwnerAvailable;
+    private String isOwnerAvailable;
     private Integer tat;
-    private boolean isExampleOfWork;
-    private boolean isSponsoredContent;
-    private boolean isContentPlacement;
-    private boolean isWritingPlacement;
+    private String isExampleOfWork;
+    private String isSponsoredContent;
+    private String isContentPlacement;
+    private String isWritingPlacement;
     private Double contentPlacementPrice;
     private Double writingAndPlacementPrice;
 
