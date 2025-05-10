@@ -38,12 +38,28 @@ public class OrderArticle {
     private String orderArticleId;
     private String wordCount;
     private String category;
+
+    @Column(length = 4000)
     private String titleSuggestion;
+
+    @Column(length = 4000)
     private String keywords;
+
+    @Column(length = 4000)
     private String contentGoal;
+
+    @Column(length = 4000)
     private String targetAudience;
+
+    @Column(length = 4000)
     private String sampleContent;
+
+    @Column(length = 4000)
     private Integer articlePrice;
+
+    @Lob
+    @Column(length = 70000)
+    private String briefRequirements;
 
 
     @Temporal(TemporalType.TIMESTAMP)
