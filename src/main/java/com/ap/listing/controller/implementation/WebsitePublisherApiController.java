@@ -86,4 +86,13 @@ public class WebsitePublisherApiController implements WebsitePublisherApi {
                 LOGGER
         );
     }
+
+    @Override
+    public ResponseEntity<ListResponse> listPublishWebsite(ListPayload listPayload) {
+        return ControllerHelper.loggedResponse(
+                ()-> websitePublisherService.list(listPayload),
+                ApiConstants.LIST_WEBSITE_PUBLISHERS,
+                LOGGER
+        );
+    }
 }

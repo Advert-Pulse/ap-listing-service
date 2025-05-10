@@ -135,4 +135,23 @@ public class WebsitePublisherServiceImplementation implements WebsitePublisherSe
                 .build();
         return ResponseEntity.ok(listResponse);
     }
+
+    @Override
+    public ResponseEntity<ListResponse> list(ListPayload listPayload) {
+        ListPayload transformedListPayload = listProcessor.initProcess(listPayload, websitePublisherListProperties.getData(), "dateUpdated");
+        TypedQuery<WebsitePublisher> build = initQuery.build(transformedListPayload, WebsitePublisher.class);
+        List<WebsitePublisherResponse> websitePublisherResponses = build
+                .getResultList()
+                .stream()
+                .map(websitePublisherToResponseTransformer::transform)
+                .toList();
+        ListResponse listResponse = ListResponse
+                .builder()
+                .object(websitePublisherResponses)
+                .page(listPayload.getPage())
+                .size(listPayload.getSize())
+                .totalRecordsCount(initQuery.getTotalRecords(transformedListPayload, WebsitePublisher.class))
+                .build();
+        return ResponseEntity.ok(listResponse);
+    }
 }

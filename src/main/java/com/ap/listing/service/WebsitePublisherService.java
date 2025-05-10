@@ -49,4 +49,5 @@ public interface WebsitePublisherService {
     ResponseEntity<ModuleResponse> publishSite(PublishWebsiteRequest publishWebsiteRequest, String websitePublisherId);
     ResponseEntity<WebsitePublisherResponse> getPublishWebsite(String publishingId);
     ResponseEntity<ListResponse> myPublishedWebsites(ListPayload listPayload);
+    ResponseEntity<ListResponse> list(ListPayload listPayload);
 }

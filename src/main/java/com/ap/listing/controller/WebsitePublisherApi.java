@@ -109,4 +109,23 @@ public interface WebsitePublisherApi {
     )
     @PostMapping("/my-list")
     ResponseEntity<ListResponse> myPublishedWebsites(@RequestBody ListPayload listPayload);
+
+    @Operation(
+            responses = {
+                    @ApiResponse(description = "SUCCESS", responseCode = "200", content = @Content(
+                            mediaType = "application/json", schema = @Schema(implementation = ListResponse.class)
+                    )),
+                    @ApiResponse(description = "No Content", responseCode = "401", content = {
+                            @Content(schema = @Schema())
+                    }),
+                    @ApiResponse(description = "FORBIDDEN", responseCode = "403", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))
+                    }),
+                    @ApiResponse(description = "BAD REQUEST", responseCode = "400", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = ExceptionResponse.class))
+                    })
+            }
+    )
+    @PostMapping("/list")
+    ResponseEntity<ListResponse> listPublishWebsite(@RequestBody ListPayload listPayload);
 }
