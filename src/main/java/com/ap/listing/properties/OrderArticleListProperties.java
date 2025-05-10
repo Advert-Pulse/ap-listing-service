@@ -28,17 +28,32 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.dao.repository;
+package com.ap.listing.properties;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: OrderArticleRepository
+  File: OrderArticleListProperties
  */
 
-import com.ap.listing.model.OrderArticle;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.bloggios.provider.utils.YmlFileMapParserFactory;
+import com.bloggios.query.payload.ListProviderPayload;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
-public interface OrderArticleRepository extends JpaRepository<OrderArticle, String> {
+import java.util.HashMap;
+import java.util.Map;
+
+@Configuration
+@ConfigurationProperties(prefix = "order-article")
+@PropertySource(value = "classpath:configuration/order-article.yml", factory = YmlFileMapParserFactory.class)
+@Getter
+@Setter
+public class OrderArticleListProperties {
+
+    private Map<String, ListProviderPayload> data = new HashMap<>();
 }

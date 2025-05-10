@@ -1,0 +1,80 @@
+order-article:
+  data:
+    orderArticleId:
+      type: STRING
+      filterAndSortField: orderArticleId
+      searchAllowed: true
+      searchField: orderArticleId
+      partialSearch: false
+    wordCount:
+      type: STRING
+      filterAndSortField: wordCount
+      searchAllowed: false
+      searchField: wordCount
+      partialSearch: false
+    category:
+      type: STRING
+      filterAndSortField: category
+      searchAllowed: true
+      searchField: category
+      partialSearch: true
+    titleSuggestion:
+      type: STRING
+      filterAndSortField: titleSuggestion
+      searchAllowed: false
+      searchField: titleSuggestion
+      partialSearch: true
+    keywords:
+      type: STRING
+      filterAndSortField: keywords
+      searchAllowed: false
+      searchField: keywords
+      partialSearch: true
+    contentGoal:
+      type: STRING
+      filterAndSortField: contentGoal
+      searchAllowed: false
+      searchField: contentGoal
+      partialSearch: true
+    targetAudience:
+      type: STRING
+      filterAndSortField: targetAudience
+      searchAllowed: false
+      searchField: targetAudience
+      partialSearch: true
+    sampleContent:
+      type: STRING
+      filterAndSortField: sampleContent
+      searchAllowed: false
+      searchField: sampleContent
+      partialSearch: true
+    articlePrice:
+      type: INTEGER
+      filterAndSortField: articlePrice
+      searchAllowed: false
+      searchField: articlePrice
+      partialSearch: false
+    briefRequirements:
+      type: STRING
+      filterAndSortField: briefRequirements
+      searchAllowed: false
+      searchField: briefRequirements
+      partialSearch: true
+    dateCreated:
+      type: DATE_TIME
+      filterAndSortField: dateCreated
+      searchAllowed: false
+      searchField: dateCreated
+      partialSearch: false
+    dateUpdated:
+      type: DATE_TIME
+      filterAndSortField: dateUpdated
+      searchAllowed: false
+      searchField: dateUpdated
+      partialSearch: false
+    userId:
+      type: STRING
+      filterAndSortField: userId
+      searchAllowed: true
+      searchField: userId
+      partialSearch: false

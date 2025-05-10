@@ -28,17 +28,32 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.dao.repository;
+package com.ap.listing.transformer;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: OrderArticleRepository
+  File: OrderArticleToOrderArticleResponseTransformer
  */
 
 import com.ap.listing.model.OrderArticle;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.ap.listing.payload.response.OrderArticleResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Component;
 
-public interface OrderArticleRepository extends JpaRepository<OrderArticle, String> {
+@Component
+@RequiredArgsConstructor
+@Slf4j
+public class OrderArticleToOrderArticleResponseTransformer {
+
+    private final ModelMapper modelMapper;
+
+    public OrderArticleResponse transform(OrderArticle orderArticle) {
+        OrderArticleResponse orderArticleResponse = modelMapper.map(orderArticle, OrderArticleResponse.class);
+        log.info("Order Article Transformed to Order Article Response : {}", orderArticleResponse);
+        return orderArticleResponse;
+    }
 }

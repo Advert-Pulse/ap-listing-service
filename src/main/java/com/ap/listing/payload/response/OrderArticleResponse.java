@@ -28,17 +28,33 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.dao.repository;
+package com.ap.listing.payload.response;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: OrderArticleRepository
+  File: OrderArticleResponse
  */
 
-import com.ap.listing.model.OrderArticle;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
 
-public interface OrderArticleRepository extends JpaRepository<OrderArticle, String> {
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
+@ToString
+public class OrderArticleResponse {
+
+    private String wordCount;
+    private String category;
+    private String titleSuggestion;
+    private String keywords;
+    private String contentGoal;
+    private String targetAudience;
+    private String sampleContent;
+    private Integer articlePrice;
 }
