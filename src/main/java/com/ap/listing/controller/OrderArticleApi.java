@@ -89,6 +89,6 @@ public interface OrderArticleApi {
                     })
             }
     )
-    @PostMapping
+    @PostMapping("/list")
     ResponseEntity<ListResponse> myList(@RequestBody ListPayload listPayload);
 }

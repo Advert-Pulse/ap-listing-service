@@ -53,13 +53,7 @@ import java.util.Date;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Table(
         name = EntityConstants.ORDER_ARTICLE,
-        schema = EntityConstants.LISTING_SCHEMA,
-        indexes = {
-                @Index(
-                        name = "index_website_website",
-                        columnList = "websiteId"
-                )
-        }
+        schema = EntityConstants.LISTING_SCHEMA
 )
 public class OrderArticle {
 
