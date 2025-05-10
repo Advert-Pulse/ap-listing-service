@@ -52,7 +52,7 @@ import java.util.Date;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Table(
         name = EntityConstants.SOCIAL_MEDIA,
-        schema = EntityConstants.SOCIAL_MEDIA
+        schema = EntityConstants.LISTING_SCHEMA
 )
 public class SocialMedia {
 

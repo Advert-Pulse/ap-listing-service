@@ -54,4 +54,5 @@ public class ApiConstants {
     public static final String ADD_SOCIAL_MEDIA = "AddSocialMedia";
     public static final String SOCIAL_MEDIA_MY_LIST = "SocialMediaMyList";
     public static final String UPDATE_SOCIAL_MEDIA = "UpdateSocialMedia";
+    public static final String ADD_ORDER_ARTICLE = "AddOrderArticle";
 }
