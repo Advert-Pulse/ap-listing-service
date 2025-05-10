@@ -47,7 +47,7 @@ import java.util.Objects;
 
 @Component
 @Slf4j
-public class MyPublishedWebsiteListValidator {
+public class NoUserIdInFilterValidator {
 
     public void validate(ListPayload listPayload) {
         if (Objects.nonNull(listPayload) && Objects.nonNull(listPayload.getFilters())) {

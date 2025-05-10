@@ -75,7 +75,9 @@ public enum ErrorData {
     MY_PUBLISHED_SITE_USER_ID_FILTER("AP__ERROR--3302", "User Id is not allowed in Filter for my published site" ),
     NO_LIST_ADDED("AP__ERROR--3303", "Please add a list of websites" ),
     ONLY_ONE_WEBSITE_ADDED("AP__ERROR--3304", "Only one website added" ),
-    WEBSITE_MAX_SIZE("AP__ERROR--3305", "Maximum number of websites allowed is 5" ),;
+    WEBSITE_MAX_SIZE("AP__ERROR--3305", "Maximum number of websites allowed is 5" ),
+    SOCIAL_MEDIA_ID_INVALID("AP__ERROR--3306", "Invalid social media id" ),
+    SOCIAL_MEDIA_NOT_FOUND("AP__ERROR--3307", "Social media not found by Id" ),;
 
     private final String code;
     private final String message;

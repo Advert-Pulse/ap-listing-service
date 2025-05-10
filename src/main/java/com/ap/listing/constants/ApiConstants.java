@@ -51,4 +51,7 @@ public class ApiConstants {
     public static final String GET_WEBSITE_CATEGORY_LIST = "GetWebsiteCategoryList";
     public static final String MY_PUBLISHED_SITES = "MyPublishedSites";
     public static final String LIST_WEBSITE = "ListWebsite";
+    public static final String ADD_SOCIAL_MEDIA = "AddSocialMedia";
+    public static final String SOCIAL_MEDIA_MY_LIST = "SocialMediaMyList";
+    public static final String UPDATE_SOCIAL_MEDIA = "UpdateSocialMedia";
 }

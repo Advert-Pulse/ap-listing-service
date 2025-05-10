@@ -28,27 +28,17 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.payload.response;
+package com.ap.listing.dao.repository;
 
 /*
-  Developer: Sudhanshu Nautiyal
+  Developer: Rohit Parihar
   Project: ap-listing-service
-  File: SocialMediaResponse
+  GitHub: github.com/rohit-zip
+  File: SocialMediaRepository
  */
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.*;
+import com.ap.listing.model.SocialMedia;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@JsonIgnoreProperties(ignoreUnknown = true)
-@ToString
-public class SocialMediaResponse {
-
-    private String url;
-    private String associatedSite;
-    private Double price;
+public interface SocialMediaRepository extends JpaRepository<SocialMedia, String> {
 }

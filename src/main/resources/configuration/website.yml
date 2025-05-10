@@ -13,13 +13,13 @@ website:
       searchField: domain
       partialSearch: true
     dateCreated:
-      type: DATE
+      type: DATE_TIME
       filterAndSortField: dateCreated
       searchAllowed: false
       searchField: dateCreated
       partialSearch: false
     dateUpdated:
-      type: DATE
+      type: DATE_TIME
       filterAndSortField: dateUpdated
       searchAllowed: false
       searchField: dateUpdated

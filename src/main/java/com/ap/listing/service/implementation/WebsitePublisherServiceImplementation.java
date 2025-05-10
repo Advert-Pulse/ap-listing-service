@@ -45,7 +45,7 @@ import com.ap.listing.model.WebsitePublisher;
 import com.ap.listing.payload.request.PublishWebsiteRequest;
 import com.ap.listing.payload.response.ListResponse;
 import com.ap.listing.payload.response.WebsitePublisherResponse;
-import com.ap.listing.processor.MyPublishedWebsiteUserIdFilterProcessor;
+import com.ap.listing.processor.UserIdAdditionInFilter;
 import com.ap.listing.processor.WebsitePublisherToWebsiteSyncProcessor;
 import com.ap.listing.processor.WebsitePublishingStatusAnalyser;
 import com.ap.listing.properties.WebsitePublisherListProperties;
@@ -53,7 +53,7 @@ import com.ap.listing.service.WebsitePublisherService;
 import com.ap.listing.transformer.PublishWebsiteRequestToWebsitePublisherTransformer;
 import com.ap.listing.transformer.WebsitePublisherToResponseTransformer;
 import com.ap.listing.utils.SecurityContextUtil;
-import com.ap.listing.validator.MyPublishedWebsiteListValidator;
+import com.ap.listing.validator.NoUserIdInFilterValidator;
 import com.ap.listing.validator.PublishWebsiteRequestValidator;
 import com.bloggios.provider.payload.ModuleResponse;
 import com.bloggios.query.payload.ListPayload;
@@ -81,8 +81,8 @@ public class WebsitePublisherServiceImplementation implements WebsitePublisherSe
     private final ListProcessor listProcessor;
     private final WebsitePublisherListProperties websitePublisherListProperties;
     private final InitQuery<WebsitePublisher> initQuery;
-    private final MyPublishedWebsiteListValidator myPublishedWebsiteListValidator;
-    private final MyPublishedWebsiteUserIdFilterProcessor myPublishedWebsiteUserIdFilterProcessor;
+    private final NoUserIdInFilterValidator noUserIdInFilterValidator;
+    private final UserIdAdditionInFilter userIdAdditionInFilter;
     private final WebsitePublishingStatusAnalyser websitePublishingStatusAnalyser;
     private final WebsitePublisherToWebsiteSyncProcessor websitePublisherToWebsiteSyncProcessor;
 
@@ -117,8 +117,8 @@ public class WebsitePublisherServiceImplementation implements WebsitePublisherSe
 
     @Override
     public ResponseEntity<ListResponse> myPublishedWebsites(ListPayload listPayload) {
-        myPublishedWebsiteListValidator.validate(listPayload);
-        ListPayload processedListPayload = myPublishedWebsiteUserIdFilterProcessor.process(listPayload);
+        noUserIdInFilterValidator.validate(listPayload);
+        ListPayload processedListPayload = userIdAdditionInFilter.process(listPayload);
         ListPayload transformedListPayload = listProcessor.initProcess(processedListPayload, websitePublisherListProperties.getData(), "dateUpdated");
         TypedQuery<WebsitePublisher> build = initQuery.build(transformedListPayload, WebsitePublisher.class);
         List<WebsitePublisherResponse> websitePublisherResponses = build

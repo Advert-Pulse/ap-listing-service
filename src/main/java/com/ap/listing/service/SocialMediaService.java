@@ -28,27 +28,25 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.payload.response;
+package com.ap.listing.service;
 
 /*
-  Developer: Sudhanshu Nautiyal
+  Developer: Rohit Parihar
   Project: ap-listing-service
-  File: SocialMediaResponse
+  GitHub: github.com/rohit-zip
+  File: SocialMediaService
  */
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.*;
+import com.ap.listing.payload.request.SocialMediaRequest;
+import com.ap.listing.payload.response.ListResponse;
+import com.ap.listing.payload.response.SocialMediaResponse;
+import com.bloggios.query.payload.ListPayload;
+import org.springframework.http.ResponseEntity;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@JsonIgnoreProperties(ignoreUnknown = true)
-@ToString
-public class SocialMediaResponse {
+public interface SocialMediaService {
 
-    private String url;
-    private String associatedSite;
-    private Double price;
+    ResponseEntity<SocialMediaResponse> addSocialMedia(SocialMediaRequest socialMediaRequest);
+    ResponseEntity<ListResponse> myList(ListPayload listPayload);
+    ResponseEntity<SocialMediaResponse> updateSocialMedia(SocialMediaRequest socialMediaRequest, String socialMediaId);
+
 }

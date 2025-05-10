@@ -28,27 +28,42 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.payload.response;
+package com.ap.listing.processor;
 
 /*
-  Developer: Sudhanshu Nautiyal
+  Developer: Rohit Parihar
   Project: ap-listing-service
-  File: SocialMediaResponse
+  GitHub: github.com/rohit-zip
+  File: MyPublishedWebsiteUserIdFilterProcessor
  */
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.*;
+import com.ap.listing.utils.SecurityContextUtil;
+import com.bloggios.query.payload.Filter;
+import com.bloggios.query.payload.ListPayload;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@JsonIgnoreProperties(ignoreUnknown = true)
-@ToString
-public class SocialMediaResponse {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
-    private String url;
-    private String associatedSite;
-    private Double price;
+@Component
+@Slf4j
+public class UserIdAdditionInFilter {
+
+    public ListPayload process(ListPayload listPayload) {
+        List<Filter> filters = Optional.ofNullable(listPayload.getFilters())
+                .filter(f -> !f.isEmpty())
+                .orElse(new ArrayList<>());
+
+        Filter userFilter = Filter.builder()
+                .filterKey("userId")
+                .selections(List.of(SecurityContextUtil.getLoggedInUserOrThrow().getUserId()))
+                .build();
+
+        filters.add(userFilter);
+        listPayload.setFilters(filters);
+
+        return listPayload;
+    }
 }

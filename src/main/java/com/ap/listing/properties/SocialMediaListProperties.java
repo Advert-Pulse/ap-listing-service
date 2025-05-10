@@ -28,42 +28,32 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.processor;
+package com.ap.listing.properties;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: MyPublishedWebsiteUserIdFilterProcessor
+  File: SocialMediaListProperties
  */
 
-import com.ap.listing.utils.SecurityContextUtil;
-import com.bloggios.query.payload.Filter;
-import com.bloggios.query.payload.ListPayload;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
+import com.bloggios.provider.utils.YmlFileMapParserFactory;
+import com.bloggios.query.payload.ListProviderPayload;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
 
-@Component
-@Slf4j
-public class MyPublishedWebsiteUserIdFilterProcessor {
+@Configuration
+@ConfigurationProperties(prefix = "social-media")
+@PropertySource(value = "classpath:configuration/social-media.yml", factory = YmlFileMapParserFactory.class)
+@Getter
+@Setter
+public class SocialMediaListProperties {
 
-    public ListPayload process(ListPayload listPayload) {
-        List<Filter> filters = Optional.ofNullable(listPayload.getFilters())
-                .filter(f -> !f.isEmpty())
-                .orElse(new ArrayList<>());
-
-        Filter userFilter = Filter.builder()
-                .filterKey("userId")
-                .selections(List.of(SecurityContextUtil.getLoggedInUserOrThrow().getUserId()))
-                .build();
-
-        filters.add(userFilter);
-        listPayload.setFilters(filters);
-
-        return listPayload;
-    }
+    private Map<String, ListProviderPayload> data = new HashMap<>();
 }

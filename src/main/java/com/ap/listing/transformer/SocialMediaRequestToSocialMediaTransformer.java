@@ -28,27 +28,34 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.payload.response;
+package com.ap.listing.transformer;
 
 /*
-  Developer: Sudhanshu Nautiyal
+  Developer: Rohit Parihar
   Project: ap-listing-service
-  File: SocialMediaResponse
+  GitHub: github.com/rohit-zip
+  File: SocialMediaRequestToSocialMediaTransformer
  */
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.*;
+import com.ap.listing.model.SocialMedia;
+import com.ap.listing.payload.request.SocialMediaRequest;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@JsonIgnoreProperties(ignoreUnknown = true)
-@ToString
-public class SocialMediaResponse {
+@Component
+@RequiredArgsConstructor
+@Slf4j
+public class SocialMediaRequestToSocialMediaTransformer {
 
-    private String url;
-    private String associatedSite;
-    private Double price;
+    public SocialMedia transform(SocialMediaRequest socialMediaRequest) {
+        SocialMedia socialMedia = SocialMedia
+                .builder()
+                .url(socialMediaRequest.getUrl())
+                .price(socialMediaRequest.getPrice())
+                .associatedSite(socialMediaRequest.getAssociatedSite())
+                .build();
+        log.info("Transformed social media: {}", socialMedia);
+        return socialMedia;
+    }
 }

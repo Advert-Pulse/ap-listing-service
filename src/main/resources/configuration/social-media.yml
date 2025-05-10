@@ -1,0 +1,44 @@
+social-media:
+  data:
+    socialId:
+      type: STRING
+      filterAndSortField: socialId
+      searchAllowed: true
+      searchField: socialId
+      partialSearch: false
+    url:
+      type: STRING
+      filterAndSortField: url
+      searchAllowed: true
+      searchField: url
+      partialSearch: false
+    associatedSite:
+      type: STRING
+      filterAndSortField: associatedSite
+      searchAllowed: true
+      searchField: associatedSite
+      partialSearch: false
+    price:
+      type: DOUBLE
+      filterAndSortField: price
+      searchAllowed: true
+      searchField: price
+      partialSearch: false
+    dateCreated:
+      type: DATE_TIME
+      filterAndSortField: dateCreated
+      searchAllowed: false
+      searchField: dateCreated
+      partialSearch: false
+    dateUpdated:
+      type: DATE_TIME
+      filterAndSortField: dateUpdated
+      searchAllowed: false
+      searchField: dateUpdated
+      partialSearch: false
+    userId:
+      type: STRING
+      filterAndSortField: userId
+      searchAllowed: true
+      searchField: userId
+      partialSearch: false
