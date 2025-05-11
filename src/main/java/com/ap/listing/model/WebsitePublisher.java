@@ -140,7 +140,7 @@ public class WebsitePublisher {
     private String userId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Website website;
+    private WebsiteData websiteData;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateCreated;

@@ -37,8 +37,5 @@ package com.ap.listing.dao.repository;
   File: DomainMetricsRepository
  */
 
-import com.ap.listing.model.DomainMetrics;
-import org.springframework.data.jpa.repository.JpaRepository;
-
-public interface DomainMetricsRepository extends JpaRepository<DomainMetrics, String> {
-}
+//public interface DomainMetricsRepository extends JpaRepository<DomainMetrics, String> {
+//}

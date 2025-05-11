@@ -40,7 +40,7 @@ package com.ap.listing.processor;
 import com.ap.listing.dao.repository.WebsiteRepository;
 import com.ap.listing.enums.ErrorData;
 import com.ap.listing.exception.BadRequestException;
-import com.ap.listing.model.Website;
+import com.ap.listing.model.WebsiteData;
 import com.ap.listing.transformer.WebsiteTransformer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -54,17 +54,17 @@ public class UrlAvailabilityWebsiteProcessor {
     private final WebsiteTransformer websiteTransformer;
     private final WebsiteRepository websiteRepository;
 
-    public void process(Website website, boolean isUrlAvailable) {
-        Boolean isAvailable = website.getIsAvailable();
+    public void process(WebsiteData websiteData, boolean isUrlAvailable) {
+        Boolean isAvailable = websiteData.getIsAvailable();
         if (!isUrlAvailable && Boolean.TRUE.equals(isAvailable)) {
-            Website websiteEntity = websiteTransformer.transformWebsiteWithAvailability(website, Boolean.FALSE);
-            Website websiteResponse = websiteRepository.save(websiteEntity);
-            log.info("Website updated for availability: {}", websiteResponse);
+            WebsiteData websiteDataEntity = websiteTransformer.transformWebsiteWithAvailability(websiteData, Boolean.FALSE);
+            WebsiteData websiteDataResponse = websiteRepository.save(websiteDataEntity);
+            log.info("Website updated for availability: {}", websiteDataResponse);
             throw new BadRequestException(ErrorData.WEBSITE_IRRESPONSIVE, "website");
         } else if (isUrlAvailable && Boolean.FALSE.equals(isAvailable)) {
-            Website websiteEntity = websiteTransformer.transformWebsiteWithAvailability(website, Boolean.TRUE);
-            Website websiteResponse = websiteRepository.save(websiteEntity);
-            log.info("Website updated for availability: {}", websiteResponse);
+            WebsiteData websiteDataEntity = websiteTransformer.transformWebsiteWithAvailability(websiteData, Boolean.TRUE);
+            WebsiteData websiteDataResponse = websiteRepository.save(websiteDataEntity);
+            log.info("Website updated for availability: {}", websiteDataResponse);
         }
     }
 }

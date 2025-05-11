@@ -37,7 +37,7 @@ package com.ap.listing.transformer;
   File: WebsiteToWebsiteResponseTransformer
  */
 
-import com.ap.listing.model.Website;
+import com.ap.listing.model.WebsiteData;
 import com.ap.listing.payload.response.WebsiteResponseForPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,14 +48,14 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class WebsiteToWebsiteResponseForPublisherTransformer {
 
-    public WebsiteResponseForPublisher transform(Website website) {
+    public WebsiteResponseForPublisher transform(WebsiteData websiteData) {
         WebsiteResponseForPublisher websiteResponseForPublisher = WebsiteResponseForPublisher
                 .builder()
-                .domain(website.getDomain())
-                .isAvailable(website.getIsAvailable())
-                .dateCreated(website.getDateCreated())
-                .dateUpdated(website.getDateUpdated())
-                .userId(website.getUserId())
+                .domain(websiteData.getDomain())
+                .isAvailable(websiteData.getIsAvailable())
+                .dateCreated(websiteData.getDateCreated())
+                .dateUpdated(websiteData.getDateUpdated())
+                .userId(websiteData.getUserId())
                 .build();
         log.info("WebsiteToWebsiteResponseTransformer transformed: {}", websiteResponseForPublisher);
         return websiteResponseForPublisher;

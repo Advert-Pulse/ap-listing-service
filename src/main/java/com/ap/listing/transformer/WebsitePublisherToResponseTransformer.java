@@ -95,7 +95,7 @@ public class WebsitePublisherToResponseTransformer {
         response.setOtherLanguageSupported(publisher.isOtherLanguageSupported());
         response.setOwnershipType(publisher.getOwnershipType());
         response.setUserId(publisher.getUserId());
-        response.setWebsite(websiteToWebsiteResponseForPublisherTransformer.transform(publisher.getWebsite()));
+        response.setWebsite(websiteToWebsiteResponseForPublisherTransformer.transform(publisher.getWebsiteData()));
         response.setDateCreated(publisher.getDateCreated());
         response.setDateUpdated(publisher.getDateUpdated());
         log.info("Website publisher transformed response: {}", response.toString());

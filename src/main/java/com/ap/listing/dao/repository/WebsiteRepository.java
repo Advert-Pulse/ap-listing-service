@@ -37,11 +37,11 @@ package com.ap.listing.dao.repository;
   File: WebsiteRepository
  */
 
-import com.ap.listing.model.Website;
+import com.ap.listing.model.WebsiteData;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface WebsiteRepository extends JpaRepository<Website, String> {
-    Optional<Website> findByDomain(String domain);
+public interface WebsiteRepository extends JpaRepository<WebsiteData, String> {
+    Optional<WebsiteData> findByDomain(String domain);
 }

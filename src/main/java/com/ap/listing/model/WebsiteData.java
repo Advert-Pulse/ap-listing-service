@@ -67,7 +67,7 @@ import java.util.List;
                 )
         }
 )
-public class Website {
+public class WebsiteData {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -87,7 +87,7 @@ public class Website {
 
     private Boolean isAvailable;
 
-    @OneToMany(mappedBy = "website", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "websiteData", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<WebsitePublisher> publishers = new ArrayList<>();
 
     private Double minPrice;
@@ -109,7 +109,7 @@ public class Website {
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             schema = "listing",
-            joinColumns = @JoinColumn(name = "Website", referencedColumnName = "websiteId"),
+            joinColumns = @JoinColumn(name = "WebsiteData", referencedColumnName = "websiteId"),
             inverseJoinColumns = @JoinColumn(name = "WebsiteCategory", referencedColumnName = "websiteCategoryId")
     )
     @Builder.Default

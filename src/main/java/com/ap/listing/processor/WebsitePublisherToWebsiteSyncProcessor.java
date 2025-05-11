@@ -40,8 +40,8 @@ package com.ap.listing.processor;
 import com.ap.listing.dao.repository.WebsiteRepository;
 import com.ap.listing.enums.ErrorData;
 import com.ap.listing.exception.BadRequestException;
-import com.ap.listing.model.Website;
 import com.ap.listing.model.WebsiteCategory;
+import com.ap.listing.model.WebsiteData;
 import com.ap.listing.model.WebsitePublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -62,29 +62,29 @@ public class WebsitePublisherToWebsiteSyncProcessor {
     private final WebsiteRepository websiteRepository;
 
     public void doSync(WebsitePublisher websitePublisher) {
-        Website website = websiteRepository.findById(websitePublisher.getWebsite().getWebsiteId())
+        WebsiteData websiteData = websiteRepository.findById(websitePublisher.getWebsiteData().getWebsiteId())
                 .orElseThrow(() -> new BadRequestException(ErrorData.WEBSITE_NOT_FOUND_BY_ID));
-        processPrices(websitePublisher, website);
-        processLinkAttribute(websitePublisher, website);
-        String requiredContentSize = updateMinContentSize(websitePublisher.getBasicContentSize(), website.getBasicContentSize());
-        website.setBasicContentSize(requiredContentSize);
-        processOwner(websitePublisher, website);
-        processTat(websitePublisher, website);
-        processExampleOfWork(websitePublisher, website);
-        processSponsoredContent(websitePublisher, website);
-        processContentPlacement(websitePublisher, website);
-        processWritingPlacement(websitePublisher, website);
-        processCategories(websitePublisher, website);
-        log.info("WebsitePublisherToWebsiteSyncProcessor >> Update website : {}", website);
-        Website websiteResponse = websiteRepository.save(website);
-        log.info("WebsitePublisherToWebsiteSyncProcessor saved successfully: {}", websiteResponse);
+        processPrices(websitePublisher, websiteData);
+        processLinkAttribute(websitePublisher, websiteData);
+        String requiredContentSize = updateMinContentSize(websitePublisher.getBasicContentSize(), websiteData.getBasicContentSize());
+        websiteData.setBasicContentSize(requiredContentSize);
+        processOwner(websitePublisher, websiteData);
+        processTat(websitePublisher, websiteData);
+        processExampleOfWork(websitePublisher, websiteData);
+        processSponsoredContent(websitePublisher, websiteData);
+        processContentPlacement(websitePublisher, websiteData);
+        processWritingPlacement(websitePublisher, websiteData);
+        processCategories(websitePublisher, websiteData);
+        log.info("WebsitePublisherToWebsiteSyncProcessor >> Update website : {}", websiteData);
+        WebsiteData websiteDataResponse = websiteRepository.save(websiteData);
+        log.info("WebsitePublisherToWebsiteSyncProcessor saved successfully: {}", websiteDataResponse);
     }
 
-    private void processCategories(WebsitePublisher websitePublisher, Website website) {
-        if (Objects.isNull(website.getCategories())) {
-            website.setCategories(websitePublisher.getCategories());
+    private void processCategories(WebsitePublisher websitePublisher, WebsiteData websiteData) {
+        if (Objects.isNull(websiteData.getCategories())) {
+            websiteData.setCategories(websitePublisher.getCategories());
         } else {
-            List<WebsiteCategory> categories = website.getCategories();
+            List<WebsiteCategory> categories = websiteData.getCategories();
             if (Objects.nonNull(websitePublisher.getCategories()) && !CollectionUtils.isEmpty(categories)) {
                 List<WebsiteCategory> websiteCategories = Stream.concat(
                                 categories.stream(),
@@ -92,71 +92,71 @@ public class WebsitePublisherToWebsiteSyncProcessor {
                         )
                         .distinct()
                         .toList();
-                website.setCategories(websiteCategories);
+                websiteData.setCategories(websiteCategories);
             }
         }
     }
 
-    private void processContentPlacement(WebsitePublisher websitePublisher, Website website) {
+    private void processContentPlacement(WebsitePublisher websitePublisher, WebsiteData websiteData) {
         if (Objects.nonNull(websitePublisher.getContentPlacementPrice()) && websitePublisher.getContentPlacementPrice() > 4) {
-            website.setIsContentPlacement("true");
-            if (Objects.isNull(website.getContentPlacementPrice())) {
-                website.setContentPlacementPrice(websitePublisher.getContentPlacementPrice());
+            websiteData.setIsContentPlacement("true");
+            if (Objects.isNull(websiteData.getContentPlacementPrice())) {
+                websiteData.setContentPlacementPrice(websitePublisher.getContentPlacementPrice());
             } else {
-                website.setContentPlacementPrice(Math.min(websitePublisher.getContentPlacementPrice(), website.getContentPlacementPrice()));
+                websiteData.setContentPlacementPrice(Math.min(websitePublisher.getContentPlacementPrice(), websiteData.getContentPlacementPrice()));
             }
         } else {
-            website.setIsContentPlacement("false");
+            websiteData.setIsContentPlacement("false");
         }
     }
 
-    private void processWritingPlacement(WebsitePublisher websitePublisher, Website website) {
+    private void processWritingPlacement(WebsitePublisher websitePublisher, WebsiteData websiteData) {
         if (Objects.nonNull(websitePublisher.getWritingAndPlacementPrice()) && websitePublisher.getWritingAndPlacementPrice() > 4) {
-            website.setIsWritingPlacement("true");
-            if (Objects.isNull(website.getWritingAndPlacementPrice())) {
-                website.setWritingAndPlacementPrice(websitePublisher.getWritingAndPlacementPrice());
+            websiteData.setIsWritingPlacement("true");
+            if (Objects.isNull(websiteData.getWritingAndPlacementPrice())) {
+                websiteData.setWritingAndPlacementPrice(websitePublisher.getWritingAndPlacementPrice());
             } else {
-                website.setWritingAndPlacementPrice(Math.min(websitePublisher.getWritingAndPlacementPrice(), website.getWritingAndPlacementPrice()));
+                websiteData.setWritingAndPlacementPrice(Math.min(websitePublisher.getWritingAndPlacementPrice(), websiteData.getWritingAndPlacementPrice()));
             }
         } else {
-            website.setIsWritingPlacement("false");
+            websiteData.setIsWritingPlacement("false");
         }
     }
 
-    private void processSponsoredContent(WebsitePublisher websitePublisher, Website website) {
+    private void processSponsoredContent(WebsitePublisher websitePublisher, WebsiteData websiteData) {
         if (websitePublisher.isSponsoredContent()) {
-            website.setIsSponsoredContent("true");
+            websiteData.setIsSponsoredContent("true");
         } else {
-            website.setIsSponsoredContent("false");
+            websiteData.setIsSponsoredContent("false");
         }
     }
 
-    private void processExampleOfWork(WebsitePublisher websitePublisher, Website website) {
+    private void processExampleOfWork(WebsitePublisher websitePublisher, WebsiteData websiteData) {
         if (Objects.nonNull(websitePublisher.getBestArticleLinkForGuestPosting()) && !CollectionUtils.isEmpty(websitePublisher.getBestArticleLinkForGuestPosting())) {
-            website.setIsExampleOfWork("true");
+            websiteData.setIsExampleOfWork("true");
         } else {
-            website.setIsExampleOfWork("false");
+            websiteData.setIsExampleOfWork("false");
         }
     }
 
-    private void processTat(WebsitePublisher websitePublisher, Website website) {
+    private void processTat(WebsitePublisher websitePublisher, WebsiteData websiteData) {
         Integer tat = websitePublisher.getTat();
         if (tat != null) {
-            if (Objects.nonNull(website.getTat())) {
-                Integer min = Math.min(website.getTat(), tat);
-                website.setTat(min);
+            if (Objects.nonNull(websiteData.getTat())) {
+                Integer min = Math.min(websiteData.getTat(), tat);
+                websiteData.setTat(min);
             } else {
-                website.setTat(tat);
+                websiteData.setTat(tat);
             }
         }
     }
 
-    private void processOwner(WebsitePublisher websitePublisher, Website website) {
+    private void processOwner(WebsitePublisher websitePublisher, WebsiteData websiteData) {
         String ownershipType = websitePublisher.getOwnershipType();
         if (ownershipType.equalsIgnoreCase("owner")) {
-            website.setIsOwnerAvailable("true");
+            websiteData.setIsOwnerAvailable("true");
         } else {
-            website.setIsOwnerAvailable("false");
+            websiteData.setIsOwnerAvailable("false");
         }
     }
 
@@ -178,40 +178,40 @@ public class WebsitePublisherToWebsiteSyncProcessor {
         return index != -1 ? index : Integer.MAX_VALUE;
     }
 
-    private void processLinkAttribute(WebsitePublisher websitePublisher, Website website) {
+    private void processLinkAttribute(WebsitePublisher websitePublisher, WebsiteData websiteData) {
         if (Objects.nonNull(websitePublisher.getLinkAttribute())) {
             if (websitePublisher.getLinkAttribute().equalsIgnoreCase("nofollow")) {
-                website.setIsNoFollow("true");
+                websiteData.setIsNoFollow("true");
             } else {
-                website.setIsNoFollow("false");
+                websiteData.setIsNoFollow("false");
             }
             if (websitePublisher.getLinkAttribute().equalsIgnoreCase("dofollow")) {
-                website.setIsDoFollow("true");
+                websiteData.setIsDoFollow("true");
             } else {
-                website.setIsDoFollow("false");
+                websiteData.setIsDoFollow("false");
             }
         }
     }
 
-    private void processPrices(WebsitePublisher websitePublisher, Website website) {
+    private void processPrices(WebsitePublisher websitePublisher, WebsiteData websiteData) {
         Double publisherMin = websitePublisher.getMinPrice();
         Double publisherMax = websitePublisher.getMaxPrice();
 
         if (publisherMin != null) {
-            if (website.getMinPrice() != null) {
-                Double min = Math.min(website.getMinPrice(), publisherMin);
-                website.setMinPrice(min);
+            if (websiteData.getMinPrice() != null) {
+                Double min = Math.min(websiteData.getMinPrice(), publisherMin);
+                websiteData.setMinPrice(min);
             } else {
-                website.setMinPrice(publisherMin);
+                websiteData.setMinPrice(publisherMin);
             }
         }
 
         if (publisherMax != null) {
-            if (website.getMaxPrice() != null) {
-                Double max = Math.max(website.getMaxPrice(), publisherMax);
-                website.setMaxPrice(max);
+            if (websiteData.getMaxPrice() != null) {
+                Double max = Math.max(websiteData.getMaxPrice(), publisherMax);
+                websiteData.setMaxPrice(max);
             } else {
-                website.setMaxPrice(publisherMax);
+                websiteData.setMaxPrice(publisherMax);
             }
         }
     }

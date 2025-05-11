@@ -44,7 +44,7 @@ import com.ap.listing.exception.BadRequestException;
 import com.ap.listing.exception.BaseException;
 import com.ap.listing.feign.DomainMetricsFeignClient;
 import com.ap.listing.generator.AddWebsiteResponseGenerator;
-import com.ap.listing.model.Website;
+import com.ap.listing.model.WebsiteData;
 import com.ap.listing.model.WebsitePublisher;
 import com.ap.listing.payload.response.AddWebsiteResponse;
 import com.ap.listing.payload.response.DomainMetricsFeignResponse;
@@ -90,7 +90,7 @@ public class WebsiteServiceImplementation implements WebsiteService {
     private final AddWebsiteRapidApiProcessor addWebsiteRapidApiProcessor;
     private final ListProcessor listProcessor;
     private final WebsiteListProperties websiteListProperties;
-    private final InitQuery<Website> initQuery;
+    private final InitQuery<WebsiteData> initQuery;
     private final WebsiteToWebsiteResponseTransformer websiteToWebsiteResponseTransformer;
 
     @Override
@@ -100,7 +100,7 @@ public class WebsiteServiceImplementation implements WebsiteService {
             domain = HTTPS + domain;
         }
         String baseUrl = ExtractBaseUrl.extractBaseUrl(domain);
-        Optional<Website> byDomain = websiteRepository.findByDomain(domain);
+        Optional<WebsiteData> byDomain = websiteRepository.findByDomain(domain);
         boolean urlAvailable = UrlChecker.isUrlAvailable(baseUrl);
         if (byDomain.isPresent()) {
             urlAvailabilityWebsiteProcessor.process(byDomain.get(), urlAvailable);
@@ -121,12 +121,12 @@ public class WebsiteServiceImplementation implements WebsiteService {
             if (domainMetrics.getDomain() == null) {
                 throw new BadRequestException(ErrorData.WEBSITE_IRRESPONSIVE, "website");
             }
-            Website websiteEntity = websiteTransformer.transform(baseUrl);
-            Website websiteResponse = websiteRepository.save(websiteEntity);
-            log.info("Website Saved : {}", websiteResponse);
-            WebsitePublisher websitePublisher = websiteDefaultPublisherProcessor.process(websiteEntity);
-            CompletableFuture.runAsync(()-> addWebsiteRapidApiProcessor.process(feignUrl, domainMetrics, websiteEntity.getWebsiteId()));
-            return AddWebsiteResponseGenerator.generate(websiteResponse, websitePublisher, Boolean.FALSE);
+            WebsiteData websiteDataEntity = websiteTransformer.transform(baseUrl);
+            WebsiteData websiteDataResponse = websiteRepository.save(websiteDataEntity);
+            log.info("Website Saved : {}", websiteDataResponse);
+            WebsitePublisher websitePublisher = websiteDefaultPublisherProcessor.process(websiteDataEntity);
+            CompletableFuture.runAsync(()-> addWebsiteRapidApiProcessor.process(feignUrl, domainMetrics, websiteDataEntity.getWebsiteId()));
+            return AddWebsiteResponseGenerator.generate(websiteDataResponse, websitePublisher, Boolean.FALSE);
         }
     }
 
@@ -161,7 +161,7 @@ public class WebsiteServiceImplementation implements WebsiteService {
     @Override
     public ResponseEntity<ListResponse> list(ListPayload listPayload) {
         ListPayload transformedListPayload = listProcessor.initProcess(listPayload, websiteListProperties.getData(), "dateUpdated");
-        TypedQuery<Website> build = initQuery.build(transformedListPayload, Website.class);
+        TypedQuery<WebsiteData> build = initQuery.build(transformedListPayload, WebsiteData.class);
         List<WebsiteResponse> list = build
                 .getResultList()
                 .stream()
@@ -172,7 +172,7 @@ public class WebsiteServiceImplementation implements WebsiteService {
                 .object(list)
                 .page(listPayload.getPage())
                 .size(listPayload.getSize())
-                .totalRecordsCount(initQuery.getTotalRecords(transformedListPayload, Website.class))
+                .totalRecordsCount(initQuery.getTotalRecords(transformedListPayload, WebsiteData.class))
                 .build();
         return ResponseEntity.ok(listResponse);
     }

@@ -37,7 +37,7 @@ package com.ap.listing.generator;
   File: AddWebsiteResponseGenerator
  */
 
-import com.ap.listing.model.Website;
+import com.ap.listing.model.WebsiteData;
 import com.ap.listing.model.WebsitePublisher;
 import com.ap.listing.payload.response.AddWebsiteResponse;
 import lombok.experimental.UtilityClass;
@@ -48,12 +48,12 @@ import org.springframework.http.ResponseEntity;
 @Slf4j
 public class AddWebsiteResponseGenerator {
 
-    public static ResponseEntity<AddWebsiteResponse> generate(Website website, WebsitePublisher websitePublisher, boolean isNewDomain) {
+    public static ResponseEntity<AddWebsiteResponse> generate(WebsiteData websiteData, WebsitePublisher websitePublisher, boolean isNewDomain) {
         AddWebsiteResponse addWebsiteResponse = AddWebsiteResponse
                 .builder()
-                .websiteId(website.getWebsiteId())
-                .domain(website.getDomain())
-                .isAvailable(website.getIsAvailable())
+                .websiteId(websiteData.getWebsiteId())
+                .domain(websiteData.getDomain())
+                .isAvailable(websiteData.getIsAvailable())
                 .websitePublisherId(websitePublisher.getWebsitePublisherId())
                 .isNewDomain(isNewDomain)
                 .publisherId(websitePublisher.getPublishingId())

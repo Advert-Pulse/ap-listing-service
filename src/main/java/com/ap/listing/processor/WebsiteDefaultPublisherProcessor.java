@@ -40,7 +40,7 @@ package com.ap.listing.processor;
 import com.ap.listing.dao.repository.WebsitePublisherRepository;
 import com.ap.listing.enums.ErrorData;
 import com.ap.listing.exception.BadRequestException;
-import com.ap.listing.model.Website;
+import com.ap.listing.model.WebsiteData;
 import com.ap.listing.model.WebsitePublisher;
 import com.ap.listing.transformer.DefaultWebsitePublisherTransformer;
 import com.ap.listing.utils.SecurityContextUtil;
@@ -58,11 +58,11 @@ public class WebsiteDefaultPublisherProcessor {
     private final WebsitePublisherRepository websitePublisherRepository;
     private final DefaultWebsitePublisherTransformer defaultWebsitePublisherTransformer;
 
-    public WebsitePublisher process(Website website) {
+    public WebsitePublisher process(WebsiteData websiteData) {
         String userId = SecurityContextUtil.getLoggedInUserOrThrow().getUserId();
-        Optional<WebsitePublisher> byWebsiteAndUserId = websitePublisherRepository.findByWebsiteAndUserId(website, userId);
+        Optional<WebsitePublisher> byWebsiteAndUserId = websitePublisherRepository.findByWebsiteDataAndUserId(websiteData, userId);
         if (byWebsiteAndUserId.isEmpty()) {
-            WebsitePublisher websitePublisher = defaultWebsitePublisherTransformer.transform(website);
+            WebsitePublisher websitePublisher = defaultWebsitePublisherTransformer.transform(websiteData);
             WebsitePublisher websitePublisherResponse = websitePublisherRepository.save(websitePublisher);
             log.info("Website Publisher saved: {}", websitePublisherResponse);
             return websitePublisherResponse;

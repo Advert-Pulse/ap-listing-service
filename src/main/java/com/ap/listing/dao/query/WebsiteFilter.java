@@ -37,8 +37,8 @@ package com.ap.listing.dao.query;
   File: WebsiteFilter
  */
 
-import com.ap.listing.model.Website;
 import com.ap.listing.model.WebsiteCategory;
+import com.ap.listing.model.WebsiteData;
 import com.bloggios.query.payload.Filter;
 import com.bloggios.query.payload.ListPayload;
 import com.bloggios.query.query.InitQuery;
@@ -53,10 +53,10 @@ import java.util.List;
 import java.util.Objects;
 
 @Component
-public class WebsiteFilter extends InitQuery<Website> {
+public class WebsiteFilter extends InitQuery<WebsiteData> {
 
     @Override
-    public List<Predicate> initFilter(ListPayload listPayload, Root<Website> root) {
+    public List<Predicate> initFilter(ListPayload listPayload, Root<WebsiteData> root) {
         List<Predicate> filterPredicates = new ArrayList<>();
         if (!ObjectUtils.isEmpty(listPayload.getFilters())) {
             listPayload
@@ -64,7 +64,7 @@ public class WebsiteFilter extends InitQuery<Website> {
                     .forEach(filter -> {
                         List<Predicate> selectionPredicates = new ArrayList<>();
                         if (Objects.nonNull(filter.getNestedPath())) {
-                            Join<Website, WebsiteCategory> roleJoin = root.join(filter.getNestedPath());
+                            Join<WebsiteData, WebsiteCategory> roleJoin = root.join(filter.getNestedPath());
                             if (filter.isPartialSearch()) {
                                 filter.getSelections().forEach(selection ->
                                         selectionPredicates.add(this.getCriteriaBuilder().like(
@@ -84,7 +84,7 @@ public class WebsiteFilter extends InitQuery<Website> {
         return filterPredicates;
     }
 
-    private void normalFilter(Root<Website> root, Filter filter, List<Predicate> selectionPredicates, List<Predicate> filterPredicates) {
+    private void normalFilter(Root<WebsiteData> root, Filter filter, List<Predicate> selectionPredicates, List<Predicate> filterPredicates) {
         if (filter.isPartialSearch()) {
             filter
                     .getSelections()

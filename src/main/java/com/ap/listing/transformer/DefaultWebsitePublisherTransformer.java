@@ -39,7 +39,7 @@ package com.ap.listing.transformer;
 
 import com.ap.listing.enums.OwnershipType;
 import com.ap.listing.enums.WebsitePublishingStatus;
-import com.ap.listing.model.Website;
+import com.ap.listing.model.WebsiteData;
 import com.ap.listing.model.WebsitePublisher;
 import com.ap.listing.utils.PublishingIdGenerator;
 import com.ap.listing.utils.SecurityContextUtil;
@@ -57,12 +57,12 @@ public class DefaultWebsitePublisherTransformer {
 
     private final PublishingIdGenerator publishingIdGenerator;
 
-    public WebsitePublisher transform(Website website) {
+    public WebsitePublisher transform(WebsiteData websiteData) {
         Date now = new Date();
         WebsitePublisher websitePublisher = WebsitePublisher
                 .builder()
-                .website(website)
-                .domain(website.getDomain())
+                .websiteData(websiteData)
+                .domain(websiteData.getDomain())
                 .publishingId(publishingIdGenerator.generate())
                 .websitePublishingStatus(WebsitePublishingStatus.PENDING_SPECIFICATION.name())
                 .ownershipType(OwnershipType.CONTRIBUTOR.name())

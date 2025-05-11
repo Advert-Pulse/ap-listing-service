@@ -37,7 +37,7 @@ package com.ap.listing.transformer;
   File: WebsiteTransformer
  */
 
-import com.ap.listing.model.Website;
+import com.ap.listing.model.WebsiteData;
 import com.ap.listing.utils.SecurityContextUtil;
 import org.springframework.stereotype.Component;
 
@@ -46,9 +46,9 @@ import java.util.Date;
 @Component
 public class WebsiteTransformer {
 
-    public Website transform(String website) {
+    public WebsiteData transform(String website) {
         Date now = new Date();
-        return Website
+        return WebsiteData
                 .builder()
                 .domain(website)
                 .isAvailable(Boolean.TRUE)
@@ -58,9 +58,9 @@ public class WebsiteTransformer {
                 .build();
     }
 
-    public Website transformWebsiteWithAvailability(Website website, Boolean availability) {
-        website.setIsAvailable(availability);
-        website.setDateUpdated(new Date());
-        return website;
+    public WebsiteData transformWebsiteWithAvailability(WebsiteData websiteData, Boolean availability) {
+        websiteData.setIsAvailable(availability);
+        websiteData.setDateUpdated(new Date());
+        return websiteData;
     }
 }

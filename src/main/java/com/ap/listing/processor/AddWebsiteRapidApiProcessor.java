@@ -42,7 +42,7 @@ import com.ap.listing.enums.ErrorData;
 import com.ap.listing.exception.BadRequestException;
 import com.ap.listing.feign.AhrefFeignClient;
 import com.ap.listing.feign.SimilarWebFeignClient;
-import com.ap.listing.model.Website;
+import com.ap.listing.model.WebsiteData;
 import com.ap.listing.payload.*;
 import com.ap.listing.payload.response.AhrefWebsiteTrafficResponse;
 import com.ap.listing.payload.response.DomainMetricsFeignResponse;
@@ -68,7 +68,7 @@ public class AddWebsiteRapidApiProcessor {
 
     @Async
     public void process(String website, DomainMetricsFeignResponse domainMetricsFeignResponse, String websiteEntityId) {
-        Website websiteEntity = websiteRepository.findById(websiteEntityId)
+        WebsiteData websiteDataEntity = websiteRepository.findById(websiteEntityId)
                 .orElseThrow(() -> new BadRequestException(ErrorData.WEBSITE_NOT_FOUND_BY_ID));
         long startTime = System.currentTimeMillis();
         log.info("Add Website Rapid Api Processor: {}", website);
@@ -78,20 +78,20 @@ public class AddWebsiteRapidApiProcessor {
         log.info("Ahref Backlink Response: {}", ahrefBacklinkResponse);
         SimilarWebTrafficHistoryWrapper similarWebWebsiteTraffic = similarWebFeignClient.getWebsiteTraffic(website);
         log.info("Similar Web Website Traffic Response: {}", similarWebWebsiteTraffic);
-        websiteEntity.setMozDa(Integer.parseInt(domainMetricsFeignResponse.getMozDA()));
-        websiteEntity.setMajesticTf(Integer.parseInt(domainMetricsFeignResponse.getMajesticTF()));
-        websiteEntity.setAhrefOrganicTraffic(ahrefWebsiteTraffic.getTrafficMonthlyAvg());
-        websiteEntity.setSimilarWebTraffic(similarWebWebsiteTraffic.getDomainAnalytics().getEngagements().getVisits());
-        websiteEntity.setDomainRating(Integer.parseInt(ahrefBacklinkResponse.getDomainRating()));
-        websiteEntity.setUrlRating(Integer.parseInt(ahrefBacklinkResponse.getUrlRating()));
-        websiteEntity.setCountryCode(similarWebWebsiteTraffic.getDomainAnalytics().getCountryRank().getCountryCode());
-        websiteEntity.setCountry(CountryNameUtil.getCountryName(similarWebWebsiteTraffic.getDomainAnalytics().getCountryRank().getCountryCode()));
-        websiteEntity.setAhrefTrafficHistory(ahrefWebsiteTraffic.getTrafficHistory());
-        websiteEntity.setAhrefTopCountries(ahrefWebsiteTraffic.getTopCountries());
-        websiteEntity.setSimilarWebTrafficHistory(processSimilarWebTraffic(similarWebWebsiteTraffic));
-        websiteEntity.setSimilarWebTopCountries(processTopCountry(similarWebWebsiteTraffic));
-        Website websiteEntityResponse = websiteRepository.save(websiteEntity);
-        log.info("Website Entity Response: {}", websiteEntityResponse);
+        websiteDataEntity.setMozDa(Integer.parseInt(domainMetricsFeignResponse.getMozDA()));
+        websiteDataEntity.setMajesticTf(Integer.parseInt(domainMetricsFeignResponse.getMajesticTF()));
+        websiteDataEntity.setAhrefOrganicTraffic(ahrefWebsiteTraffic.getTrafficMonthlyAvg());
+        websiteDataEntity.setSimilarWebTraffic(similarWebWebsiteTraffic.getDomainAnalytics().getEngagements().getVisits());
+        websiteDataEntity.setDomainRating(Integer.parseInt(ahrefBacklinkResponse.getDomainRating()));
+        websiteDataEntity.setUrlRating(Integer.parseInt(ahrefBacklinkResponse.getUrlRating()));
+        websiteDataEntity.setCountryCode(similarWebWebsiteTraffic.getDomainAnalytics().getCountryRank().getCountryCode());
+        websiteDataEntity.setCountry(CountryNameUtil.getCountryName(similarWebWebsiteTraffic.getDomainAnalytics().getCountryRank().getCountryCode()));
+        websiteDataEntity.setAhrefTrafficHistory(ahrefWebsiteTraffic.getTrafficHistory());
+        websiteDataEntity.setAhrefTopCountries(ahrefWebsiteTraffic.getTopCountries());
+        websiteDataEntity.setSimilarWebTrafficHistory(processSimilarWebTraffic(similarWebWebsiteTraffic));
+        websiteDataEntity.setSimilarWebTopCountries(processTopCountry(similarWebWebsiteTraffic));
+        WebsiteData websiteDataEntityResponse = websiteRepository.save(websiteDataEntity);
+        log.info("Website Entity Response: {}", websiteDataEntityResponse);
         log.info("Commiting changes for adding the website in {}ms", System.currentTimeMillis() - startTime);
     }
 

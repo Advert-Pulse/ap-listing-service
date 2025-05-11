@@ -37,7 +37,7 @@ package com.ap.listing.transformer;
   File: WesbiteToWebsiteResponseTransformer
  */
 
-import com.ap.listing.model.Website;
+import com.ap.listing.model.WebsiteData;
 import com.ap.listing.payload.response.WebsiteResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,8 +51,8 @@ public class WebsiteToWebsiteResponseTransformer {
 
     private final ModelMapper modelMapper;
 
-    public WebsiteResponse transform(Website website) {
-        WebsiteResponse websiteResponse = modelMapper.map(website, WebsiteResponse.class);
+    public WebsiteResponse transform(WebsiteData websiteData) {
+        WebsiteResponse websiteResponse = modelMapper.map(websiteData, WebsiteResponse.class);
         log.info("Website response: {}", websiteResponse);
         return websiteResponse;
     }
