@@ -39,6 +39,7 @@ package com.ap.listing.transformer;
 
 import com.ap.listing.model.SocialMedia;
 import com.ap.listing.payload.request.SocialMediaRequest;
+import com.ap.listing.utils.SecurityContextUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -54,6 +55,7 @@ public class SocialMediaRequestToSocialMediaTransformer {
                 .url(socialMediaRequest.getUrl())
                 .price(socialMediaRequest.getPrice())
                 .associatedSite(socialMediaRequest.getAssociatedSite())
+                .userId(SecurityContextUtil.getLoggedInUserOrThrow().getUserId())
                 .build();
         log.info("Transformed social media: {}", socialMedia);
         return socialMedia;
