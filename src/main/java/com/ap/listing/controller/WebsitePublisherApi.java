@@ -37,6 +37,7 @@ package com.ap.listing.controller;
   File: WebsitePublisherApi
  */
 
+import com.ap.listing.payload.request.ManagePublisherRequest;
 import com.ap.listing.payload.request.PublishWebsiteRequest;
 import com.ap.listing.payload.response.ListResponse;
 import com.ap.listing.payload.response.WebsitePublisherResponse;
@@ -48,6 +49,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/v1/website-publisher")
@@ -128,4 +130,24 @@ public interface WebsitePublisherApi {
     )
     @PostMapping("/list")
     ResponseEntity<ListResponse> listPublishWebsite(@RequestBody ListPayload listPayload);
+
+    @Operation(
+            responses = {
+                    @ApiResponse(description = "SUCCESS", responseCode = "200", content = @Content(
+                            mediaType = "application/json", schema = @Schema(implementation = ModuleResponse.class)
+                    )),
+                    @ApiResponse(description = "No Content", responseCode = "401", content = {
+                            @Content(schema = @Schema())
+                    }),
+                    @ApiResponse(description = "FORBIDDEN", responseCode = "403", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))
+                    }),
+                    @ApiResponse(description = "BAD REQUEST", responseCode = "400", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = ExceptionResponse.class))
+                    })
+            }
+    )
+    @PostMapping("/manage-publisher")
+    @PreAuthorize("hasAuthority('user.manager')")
+    ResponseEntity<ModuleResponse> managePublisher(@RequestBody ManagePublisherRequest managePublisherRequest);
 }

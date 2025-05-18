@@ -77,7 +77,10 @@ public enum ErrorData {
     ONLY_ONE_WEBSITE_ADDED("AP__ERROR--3304", "Only one website added" ),
     WEBSITE_MAX_SIZE("AP__ERROR--3305", "Maximum number of websites allowed is 5" ),
     SOCIAL_MEDIA_ID_INVALID("AP__ERROR--3306", "Invalid social media id" ),
-    SOCIAL_MEDIA_NOT_FOUND("AP__ERROR--3307", "Social media not found by Id" ),;
+    SOCIAL_MEDIA_NOT_FOUND("AP__ERROR--3307", "Social media not found by Id" ),
+    INVALID_WEBSITE_PUBLISHER_ID("AP__ERROR--3308", "Invalid website publisher id" ),
+    WEBSITE_PUBLISHER_CANNOT_BE_DELETED("AP__ERROR--3309", "Website publisher cannot be deleted. Please use delete API to delete the data" ),
+    WEBSITE_PUBLISHING_STATUS_NOT_MODERATION("AP__ERROR--3310", "Website publishing status should be in Pending Moderation or On Hold Status" ),;
 
     private final String code;
     private final String message;

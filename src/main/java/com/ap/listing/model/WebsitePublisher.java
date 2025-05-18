@@ -150,4 +150,7 @@ public class WebsitePublisher {
 
     private Double minPrice;
     private Double maxPrice;
+
+    private String message;
+    private String publishingManager;
 }

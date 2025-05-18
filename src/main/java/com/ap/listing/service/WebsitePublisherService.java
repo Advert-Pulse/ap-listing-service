@@ -37,6 +37,7 @@ package com.ap.listing.service;
   File: WebsitePublisherService
  */
 
+import com.ap.listing.payload.request.ManagePublisherRequest;
 import com.ap.listing.payload.request.PublishWebsiteRequest;
 import com.ap.listing.payload.response.ListResponse;
 import com.ap.listing.payload.response.WebsitePublisherResponse;
@@ -50,4 +51,5 @@ public interface WebsitePublisherService {
     ResponseEntity<WebsitePublisherResponse> getPublishWebsite(String publishingId);
     ResponseEntity<ListResponse> myPublishedWebsites(ListPayload listPayload);
     ResponseEntity<ListResponse> list(ListPayload listPayload);
+    ResponseEntity<ModuleResponse> managePublisher(ManagePublisherRequest managePublisherRequest);
 }

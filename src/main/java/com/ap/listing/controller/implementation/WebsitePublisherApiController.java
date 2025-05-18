@@ -39,6 +39,7 @@ package com.ap.listing.controller.implementation;
 
 import com.ap.listing.constants.ApiConstants;
 import com.ap.listing.controller.WebsitePublisherApi;
+import com.ap.listing.payload.request.ManagePublisherRequest;
 import com.ap.listing.payload.request.PublishWebsiteRequest;
 import com.ap.listing.payload.response.ListResponse;
 import com.ap.listing.payload.response.WebsitePublisherResponse;
@@ -92,6 +93,15 @@ public class WebsitePublisherApiController implements WebsitePublisherApi {
         return ControllerHelper.loggedResponse(
                 ()-> websitePublisherService.list(listPayload),
                 ApiConstants.LIST_WEBSITE_PUBLISHERS,
+                LOGGER
+        );
+    }
+
+    @Override
+    public ResponseEntity<ModuleResponse> managePublisher(ManagePublisherRequest managePublisherRequest) {
+        return ControllerHelper.loggedResponse(
+                ()-> websitePublisherService.managePublisher(managePublisherRequest),
+                ApiConstants.MANAGE_PUBLISHER,
                 LOGGER
         );
     }
