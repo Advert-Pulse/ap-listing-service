@@ -74,10 +74,24 @@ public class WebsitePublisherToWebsiteSyncProcessor {
         processSponsoredContent(websitePublisher, websiteData);
         processContentPlacement(websitePublisher, websiteData);
         processWritingPlacement(websitePublisher, websiteData);
+        processLinkInsertion(websitePublisher, websiteData);
         processCategories(websitePublisher, websiteData);
         log.info("WebsitePublisherToWebsiteSyncProcessor >> Update website : {}", websiteData);
         WebsiteData websiteDataResponse = websiteRepository.save(websiteData);
         log.info("WebsitePublisherToWebsiteSyncProcessor saved successfully: {}", websiteDataResponse);
+    }
+
+    private void processLinkInsertion(WebsitePublisher websitePublisher, WebsiteData websiteData) {
+        if (Objects.nonNull(websitePublisher.getLinkInsertionPrice()) && websitePublisher.getLinkInsertionPrice() > 4) {
+            websiteData.setIsLinkInsertion("true");
+            if (Objects.isNull(websiteData.getLinkInsertionPrice())) {
+                websiteData.setLinkInsertionPrice(websitePublisher.getLinkInsertionPrice());
+            } else {
+                websiteData.setLinkInsertionPrice(Math.min(websitePublisher.getLinkInsertionPrice(), websiteData.getLinkInsertionPrice()));
+            }
+        } else {
+            websiteData.setIsLinkInsertion("false");
+        }
     }
 
     private void processCategories(WebsitePublisher websitePublisher, WebsiteData websiteData) {

@@ -1,7 +1,7 @@
 /**
  * Proprietary License Agreement
  * <p>
- * Copyright (c) 2025 Advert Pulse
+ * Copyright (c) 2025 Adsy
  * <p>
  * This software is the confidential and proprietary property of Advert Pulse
  * and is licensed, not sold. The application owner is Advert Pulse, and the

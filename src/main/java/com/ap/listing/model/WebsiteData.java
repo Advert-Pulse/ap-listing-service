@@ -103,8 +103,10 @@ public class WebsiteData {
     private String isSponsoredContent;
     private String isContentPlacement;
     private String isWritingPlacement;
+    private String isLinkInsertion;
     private Double contentPlacementPrice;
     private Double writingAndPlacementPrice;
+    private Double linkInsertionPrice;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
