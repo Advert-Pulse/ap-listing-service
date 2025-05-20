@@ -28,35 +28,27 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.constants;
+package com.ap.listing.payload;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: ApiConstants
+  File: UrlAnchorTextPayload
  */
 
-import lombok.experimental.UtilityClass;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
 
-@UtilityClass
-public class ApiConstants {
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
+@ToString
+public class UrlAnchorTextPayload {
 
-    public static final String ADD_PREFERENCE = "AddPreference";
-    public static final String GET_PREFERENCE = "GetPreference";
-    public static final String ADD_WEBSITE = "AddWebsite";
-    public static final String PUBLISH_SITE = "PublishSite";
-    public static final String GET_PUBLISH_WEBSITE = "GetPublishWebsite";
-    public static final String ADD_WEBSITE_CATEGORY = "AddWebsiteCategory";
-    public static final String GET_WEBSITE_CATEGORY_LIST = "GetWebsiteCategoryList";
-    public static final String MY_PUBLISHED_SITES = "MyPublishedSites";
-    public static final String LIST_WEBSITE = "ListWebsite";
-    public static final String ADD_SOCIAL_MEDIA = "AddSocialMedia";
-    public static final String SOCIAL_MEDIA_MY_LIST = "SocialMediaMyList";
-    public static final String UPDATE_SOCIAL_MEDIA = "UpdateSocialMedia";
-    public static final String ADD_ORDER_ARTICLE = "AddOrderArticle";
-    public static final String ORDER_ARTICLE_MY_LIST = "OrderArticleMyList";
-    public static final String LIST_WEBSITE_PUBLISHERS = "ListWebsitePublishers";
-    public static final String MANAGE_PUBLISHER = "ManagePublisher";
-    public static final String BUY_CONTENT_PLACEMENT = "BuyContentPlacement";
+    private String url;
+    private String anchorText;
 }
