@@ -29,6 +29,7 @@ spring:
       mode: always
       schema-locations:
         - classpath:scripts/001_listing-schema.sql
+        - classpath:scripts/002_create-task-sequence.sql
 
 application:
   profile: ${ACTIVE_PROFILE:local}
