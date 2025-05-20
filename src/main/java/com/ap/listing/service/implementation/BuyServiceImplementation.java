@@ -37,13 +37,33 @@ package com.ap.listing.service.implementation;
   File: BuyServiceImplementation
  */
 
+import com.ap.listing.dao.repository.WebsitePublisherRepository;
+import com.ap.listing.enums.ErrorData;
+import com.ap.listing.exception.BadRequestException;
+import com.ap.listing.model.WebsitePublisher;
+import com.ap.listing.payload.request.BuyContentPlacementRequest;
+import com.ap.listing.payload.response.ListResponse;
 import com.ap.listing.service.BuyService;
+import com.ap.listing.validator.BuyContentPlacementRequestValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class BuyServiceImplementation implements BuyService {
+
+    private final WebsitePublisherRepository websitePublisherRepository;
+    private final BuyContentPlacementRequestValidator buyContentPlacementRequestValidator;
+
+    @Override
+    public ResponseEntity<ListResponse> buyContentPlacement(BuyContentPlacementRequest buyContentPlacementRequest, String publishingId) {
+        WebsitePublisher websitePublisher = websitePublisherRepository.findByPublishingId(publishingId)
+                .orElseThrow(() -> new BadRequestException(ErrorData.WEBSITE_PUBLISHER_NOT_FOUND));
+        buyContentPlacementRequestValidator.validate(buyContentPlacementRequest, websitePublisher);
+
+        return null;
+    }
 }

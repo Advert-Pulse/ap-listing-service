@@ -80,7 +80,12 @@ public enum ErrorData {
     SOCIAL_MEDIA_NOT_FOUND("AP__ERROR--3307", "Social media not found by Id" ),
     INVALID_WEBSITE_PUBLISHER_ID("AP__ERROR--3308", "Invalid website publisher id" ),
     WEBSITE_PUBLISHER_CANNOT_BE_DELETED("AP__ERROR--3309", "Website publisher cannot be deleted. Please use delete API to delete the data" ),
-    WEBSITE_PUBLISHING_STATUS_NOT_MODERATION("AP__ERROR--3310", "Website publishing status should be in Pending Moderation or On Hold Status" ),;
+    WEBSITE_PUBLISHING_STATUS_NOT_MODERATION("AP__ERROR--3310", "Website publishing status should be in Pending Moderation or On Hold Status" ), 
+    ONE_URL_ANCHOR_TEXT_NEEDED("AP__ERROR--3311", "Atleast one URL with Anchor Text is needed"), 
+    ONLY_THREE_URL_ANCHOR_TEXT_ALLOWED("AP__ERROR--3312", "Only three URL with Anchor Text is allowed" ),
+    URL_MANDATORY_FOR_URL_ANCHOR_TEXT("AP__ERROR--3313", "Url mandatory for URL with Anchor text" ),
+    ANCHOR_TEXT_MANDATORY_FOR_URL_ANCHOR_TEXT("AP__ERROR--3314", "Anchor Text mandatory for URL with Anchor text" ),
+    NO_EXTRA_LINKS_ALLOWED("AP__ERROR--3315", "No extra links allowed" ),;
 
     private final String code;
     private final String message;

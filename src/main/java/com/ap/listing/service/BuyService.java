@@ -42,5 +42,5 @@ import com.ap.listing.payload.response.ListResponse;
 import org.springframework.http.ResponseEntity;
 
 public interface BuyService {
-    ResponseEntity<ListResponse> buyContentPlacement(BuyContentPlacementRequest buyContentPlacementRequest);
+    ResponseEntity<ListResponse> buyContentPlacement(BuyContentPlacementRequest buyContentPlacementRequest, String publishingId);
 }

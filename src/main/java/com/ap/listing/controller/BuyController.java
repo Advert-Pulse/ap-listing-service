@@ -82,7 +82,7 @@ public class BuyController {
     @PostMapping("/content-placement/{publishingId}")
     ResponseEntity<ListResponse> buyContentPlacement(@RequestBody BuyContentPlacementRequest buyContentPlacementRequest, @PathVariable String publishingId) {
         return ControllerHelper.loggedResponse(
-                ()-> buyService.buyContentPlacement(buyContentPlacementRequest),
+                ()-> buyService.buyContentPlacement(buyContentPlacementRequest, publishingId),
                 ApiConstants.BUY_CONTENT_PLACEMENT,
                 LOGGER
         );

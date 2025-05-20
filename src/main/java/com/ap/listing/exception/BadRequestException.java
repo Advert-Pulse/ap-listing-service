@@ -67,4 +67,15 @@ public class BadRequestException extends BaseException {
     this.setClassName(super.getClass().getSimpleName());
     this.setHttpStatus(HttpStatus.BAD_REQUEST);
   }
+
+  public BadRequestException(ErrorData errorData, String field, String message) {
+    this.setErrorData(errorData);
+    this.setMessage(message);
+    this.setField(field);
+    this.setErrorCode(errorData.getCode());
+    this.setCause(super.getCause());
+    this.setLocalizedMessage(super.getLocalizedMessage());
+    this.setClassName(super.getClass().getSimpleName());
+    this.setHttpStatus(HttpStatus.BAD_REQUEST);
+  }
 }
