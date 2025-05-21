@@ -28,18 +28,30 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.enums;
+package com.ap.listing.payload;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: ProductType
+  File: TaskStatusPayload
  */
 
-public enum ProductType {
+import com.ap.listing.enums.PublisherTaskStatus;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
 
-    WRITING_PLACEMENT,
-    CONTENT_PLACEMENT,
-    LINK_INSERTION
+import java.util.Date;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
+@ToString
+public class PublisherTaskStatusPayload {
+
+    private Date date;
+    private PublisherTaskStatus status;
 }

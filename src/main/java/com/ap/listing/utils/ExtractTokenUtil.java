@@ -28,18 +28,29 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.enums;
+package com.ap.listing.utils;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: ProductType
+  File: ExtractTokenUtil
  */
 
-public enum ProductType {
+import com.ap.listing.constants.ServiceConstants;
+import com.ap.listing.enums.ErrorData;
+import com.ap.listing.exception.BadRequestException;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.experimental.UtilityClass;
 
-    WRITING_PLACEMENT,
-    CONTENT_PLACEMENT,
-    LINK_INSERTION
+@UtilityClass
+public class ExtractTokenUtil {
+
+    public String extractToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader(ServiceConstants.AUTHORIZATION);
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            return bearerToken;
+        }
+        throw new BadRequestException(ErrorData.TOKEN_NOT_PRESENT);
+    }
 }

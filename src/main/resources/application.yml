@@ -48,6 +48,7 @@ bloggios-auth:
       is-http-only: true
       same-site: None
       secure: true
+      isRemoteAddressAuthentication: false
   excluded-paths:
     jwt-paths:
       exclude-paths:
@@ -129,3 +130,15 @@ feign-client:
       url: https://similar-web-api.p.rapidapi.com
       host: similar-web-api.p.rapidapi.com
       api-key: 770cdcf629msh8ac0af84d9825b2p1ba4fdjsn3e5df144492e
+  ap-payment-service:
+    name: apPaymentServiceClient
+    url: http://localhost:8082/payment-service
+#    url: https://devapi.advertpulse.com/payment-service
+
+ap:
+  platform-fee:
+    content-placement: 10
+    writing-placement: 10
+    link-insertion: 20
+  reserved-balance:
+    hidden-url: 100

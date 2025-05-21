@@ -72,6 +72,8 @@ public class FeignInterceptors {
             } else if (requestTemplate.url().contains("/analyticsv1")) {
                 requestTemplate.header(X_RAPIDAPI_HOST, similarWebHost);
                 requestTemplate.header(X_RAPIDAPI_KEY, apiKey);
+            } else if (requestTemplate.url().contains("/v1/wallet")) {
+                log.info("Request Received for the ap-payment-service Get Wallet");
             } else {
                 requestTemplate.header(X_RAPIDAPI_HOST, domainMetricsDomain);
                 requestTemplate.header(X_RAPIDAPI_KEY, apiKey);

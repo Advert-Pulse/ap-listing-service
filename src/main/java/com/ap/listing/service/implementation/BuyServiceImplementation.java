@@ -37,18 +37,33 @@ package com.ap.listing.service.implementation;
   File: BuyServiceImplementation
  */
 
+import com.ap.listing.dao.repository.TaskBuyerRepository;
+import com.ap.listing.dao.repository.TaskPublisherRepository;
 import com.ap.listing.dao.repository.WebsitePublisherRepository;
 import com.ap.listing.enums.ErrorData;
 import com.ap.listing.exception.BadRequestException;
+import com.ap.listing.feign.ApPaymentServiceFeignClient;
+import com.ap.listing.model.TaskBuyer;
+import com.ap.listing.model.TaskPublisher;
 import com.ap.listing.model.WebsitePublisher;
 import com.ap.listing.payload.request.BuyContentPlacementRequest;
-import com.ap.listing.payload.response.ListResponse;
+import com.ap.listing.payload.request.SendFundsToReservedRequest;
+import com.ap.listing.payload.response.WalletResponse;
+import com.ap.listing.properties.AdvertPulseProperties;
 import com.ap.listing.service.BuyService;
+import com.ap.listing.transformer.PrepareTaskBuyContentPlacement;
+import com.ap.listing.utils.ExtractTokenUtil;
+import com.ap.listing.utils.SecurityContextUtil;
 import com.ap.listing.validator.BuyContentPlacementRequestValidator;
+import com.bloggios.provider.payload.ModuleResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -57,13 +72,51 @@ public class BuyServiceImplementation implements BuyService {
 
     private final WebsitePublisherRepository websitePublisherRepository;
     private final BuyContentPlacementRequestValidator buyContentPlacementRequestValidator;
+    private final PrepareTaskBuyContentPlacement prepareTaskBuyContentPlacement;
+    private final TaskPublisherRepository taskPublisherRepository;
+    private final TaskBuyerRepository taskBuyerRepository;
+    private final ApPaymentServiceFeignClient apPaymentServiceFeignClient;
+    private final AdvertPulseProperties advertPulseProperties;
 
     @Override
-    public ResponseEntity<ListResponse> buyContentPlacement(BuyContentPlacementRequest buyContentPlacementRequest, String publishingId) {
+    @Transactional
+    public ResponseEntity<ModuleResponse> buyContentPlacement(BuyContentPlacementRequest buyContentPlacementRequest, String publishingId, HttpServletRequest request) {
         WebsitePublisher websitePublisher = websitePublisherRepository.findByPublishingId(publishingId)
                 .orElseThrow(() -> new BadRequestException(ErrorData.WEBSITE_PUBLISHER_NOT_FOUND));
         buyContentPlacementRequestValidator.validate(buyContentPlacementRequest, websitePublisher);
-
-        return null;
+        WalletResponse walletResponse = apPaymentServiceFeignClient.getWallet(
+                ExtractTokenUtil.extractToken(request),
+                "BUYER"
+        );
+        log.info("Wallet response: {}", walletResponse);
+        TaskPublisher taskPublisher = prepareTaskBuyContentPlacement.preparePublisherTask(buyContentPlacementRequest, websitePublisher);
+        if (taskPublisher.getTotalPrice() > walletResponse.getBalance()) {
+            throw new BadRequestException(
+                    ErrorData.INSUFFICIENT_FUNDS,
+                    "Balance",
+                    String.format("Your wallet has insufficient funds. Please add %s USD to place an order", (taskPublisher.getTotalPrice() - walletResponse.getBalance())));
+        }
+        TaskPublisher taskPublisherResponse = taskPublisherRepository.save(taskPublisher);
+        log.info("Task publisher saved to database : {}", taskPublisherResponse);
+        TaskBuyer taskBuyer = prepareTaskBuyContentPlacement.prepareBuyerTask(taskPublisherResponse);
+        TaskBuyer taskBuyerResponse = taskBuyerRepository.save(taskBuyer);
+        log.info("Task buyer saved to database : {}", taskBuyerResponse);
+        ModuleResponse moduleResponse = apPaymentServiceFeignClient.sendFundsToReserved(
+                ExtractTokenUtil.extractToken(request),
+                new SendFundsToReservedRequest(
+                        taskBuyerResponse.getTaskId(),
+                        walletResponse.getWalletId(),
+                        taskBuyerResponse.getTotalPrice(),
+                        websitePublisher.getUserId()
+                )
+        );
+        log.info("Response received from ap-payment-service for sendFundsToReserved: {}", moduleResponse);
+        return ResponseEntity.ok(
+                ModuleResponse
+                        .builder()
+                        .message("Order Processed")
+                        .userId(UUID.fromString(SecurityContextUtil.getLoggedInUserOrThrow().getUserId()))
+                        .build()
+        );
     }
 }

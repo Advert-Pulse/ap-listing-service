@@ -28,18 +28,17 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.enums;
+package com.ap.listing.dao.repository;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: ProductType
+  File: TaskPublisherRepository
  */
 
-public enum ProductType {
+import com.ap.listing.model.TaskPublisher;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-    WRITING_PLACEMENT,
-    CONTENT_PLACEMENT,
-    LINK_INSERTION
+public interface TaskPublisherRepository extends JpaRepository<TaskPublisher, String> {
 }

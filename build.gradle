@@ -62,7 +62,7 @@ dependencies {
 	implementation "org.springframework.boot:spring-boot-starter-oauth2-resource-server"
 	implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client"
 	implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
-	implementation "com.bloggios.auth-provider-dep:bloggios-auth-provider-dep:2.0.1"
+	implementation "com.bloggios.auth-provider-dep:bloggios-auth-provider-dep:2.0.2"
 	implementation "com.bloggios.provider:bloggios-provider:${bloggiosProvider}"
 	implementation group: "org.jsoup", name: "jsoup", version: "1.17.2"
 	implementation group: "dnsjava", name: "dnsjava", version: "3.6.3"

@@ -50,4 +50,6 @@ public class EntityConstants {
     public static final String WEBSITE_PUBLISHER = "website_publisher";
     public static final String SOCIAL_MEDIA = "social_media";
     public static final String ORDER_ARTICLE = "order_article";
+    public static final String TASK_PUBLISHER = "task_publisher";
+    public static final String TASK_BUYER = "task_buyer";
 }

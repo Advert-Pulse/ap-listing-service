@@ -28,18 +28,35 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.enums;
+package com.ap.listing.feign;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: ProductType
+  File: ApPaymentServiceFeignClient
  */
 
-public enum ProductType {
+import com.ap.listing.configuration.FeignConfig;
+import com.ap.listing.constants.ServiceConstants;
+import com.ap.listing.payload.request.SendFundsToReservedRequest;
+import com.ap.listing.payload.response.WalletResponse;
+import com.bloggios.provider.payload.ModuleResponse;
+import feign.Headers;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.*;
 
-    WRITING_PLACEMENT,
-    CONTENT_PLACEMENT,
-    LINK_INSERTION
+@FeignClient(
+        name = "${feign-client.ap-payment-service.name}",
+        url = "${feign-client.ap-payment-service.url}",
+        configuration = FeignConfig.class
+)
+@Headers("Authorization: {token}")
+public interface ApPaymentServiceFeignClient {
+
+    @GetMapping("/v1/wallet")
+    WalletResponse getWallet(@RequestHeader(ServiceConstants.AUTHORIZATION) String token, @RequestParam String preference);
+
+    @PostMapping("/v1/wallet/send-reserved")
+    ModuleResponse sendFundsToReserved(@RequestHeader(ServiceConstants.AUTHORIZATION) String token, @RequestBody SendFundsToReservedRequest sendFundsToReservedRequest);
 }

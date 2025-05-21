@@ -28,18 +28,40 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.enums;
+package com.ap.listing.properties;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: ProductType
+  File: AdvertPulseProperties
  */
 
-public enum ProductType {
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 
-    WRITING_PLACEMENT,
-    CONTENT_PLACEMENT,
-    LINK_INSERTION
+@Configuration
+@ConfigurationProperties(prefix = "ap")
+@Getter
+@Setter
+public class AdvertPulseProperties {
+
+    private PlatformFee platformFee;
+    private ReservedBalance reservedBalance;
+
+    @Getter
+    @Setter
+    public static class PlatformFee {
+        private double contentPlacement;
+        private double writingPlacement;
+        private double linkInsertion;
+    }
+
+    @Getter
+    @Setter
+    public static class ReservedBalance {
+        private double hiddenUrl;
+    }
 }

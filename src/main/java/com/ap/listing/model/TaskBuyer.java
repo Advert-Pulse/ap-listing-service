@@ -34,13 +34,12 @@ package com.ap.listing.model;
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: Task
+  File: TaskBuyer
  */
 
-import com.ap.listing.annotation.GeneratedCustomId;
 import com.ap.listing.constants.EntityConstants;
+import com.ap.listing.payload.BuyerTaskStatusPayload;
 import com.ap.listing.payload.PricingPayload;
-import com.ap.listing.payload.PublisherTaskStatusPayload;
 import com.ap.listing.payload.UrlAnchorTextPayload;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
@@ -60,20 +59,15 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @ToString
 @Table(
-        name = EntityConstants.TASK_PUBLISHER,
+        name = EntityConstants.TASK_BUYER,
         schema = EntityConstants.LISTING_SCHEMA
 )
-public class TaskPublisher {
+public class TaskBuyer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String taskPublisherUUID;
+    private String taskBuyerUUID;
 
-    @GeneratedCustomId(
-            prefix = "APTK",
-            sequence = "listing.ap_task_sequence",
-            length = 7
-    )
     @Column(unique = true)
     private String taskId;
 
@@ -85,12 +79,12 @@ public class TaskPublisher {
     private List<PricingPayload> priceBreak;
     private double totalPrice;
 
-    // publisher task status enum
+    // buyer task status enum
     private String currentStatus;
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
-    private List<PublisherTaskStatusPayload> taskStatus;
+    private List<BuyerTaskStatusPayload> taskStatus;
     private String isSpecialTopic;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -113,4 +107,5 @@ public class TaskPublisher {
 
     private String buyerId;
     private String publisherId;
+
 }

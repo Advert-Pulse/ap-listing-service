@@ -33,6 +33,8 @@ package com.ap.listing.exception;
 import com.ap.listing.enums.ErrorData;
 import com.ap.listing.utils.ErrorResponseGeneratorUtil;
 import com.bloggios.provider.payload.ExceptionResponse;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -64,9 +66,12 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(FeignClientException.class)
-    public ResponseEntity<ExceptionResponse> feignClientException(FeignClientException exception) {
+    public ResponseEntity<ExceptionResponse> feignClientException(FeignClientException exception) throws JsonProcessingException {
         log.error("FeignClientException Occurred >> {}", exception.toString());
+        ObjectMapper objectMapper = new ObjectMapper();
+        ExceptionResponse response = objectMapper.readValue(exception.getLocalizedMessage(), ExceptionResponse.class);
         ExceptionResponse exceptionResponse = ErrorResponseGeneratorUtil.generate(exception);
+        exceptionResponse.setMessage(response.getMessage());
         return new ResponseEntity<>(
                 exceptionResponse,
                 exception.getHttpStatus()

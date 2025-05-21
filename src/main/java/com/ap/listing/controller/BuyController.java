@@ -39,16 +39,15 @@ package com.ap.listing.controller;
 
 import com.ap.listing.constants.ApiConstants;
 import com.ap.listing.payload.request.BuyContentPlacementRequest;
-import com.ap.listing.payload.response.ListResponse;
 import com.ap.listing.service.BuyService;
 import com.bloggios.provider.payload.ExceptionResponse;
 import com.bloggios.provider.payload.ModuleResponse;
 import com.bloggios.provider.utils.ControllerHelper;
-import com.bloggios.query.payload.ListPayload;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +55,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/buy")
+@RequestMapping("/v1/buy")
 @RequiredArgsConstructor
 public class BuyController {
 
@@ -80,9 +79,9 @@ public class BuyController {
             }
     )
     @PostMapping("/content-placement/{publishingId}")
-    ResponseEntity<ListResponse> buyContentPlacement(@RequestBody BuyContentPlacementRequest buyContentPlacementRequest, @PathVariable String publishingId) {
+    ResponseEntity<ModuleResponse> buyContentPlacement(@RequestBody BuyContentPlacementRequest buyContentPlacementRequest, @PathVariable String publishingId, HttpServletRequest request) {
         return ControllerHelper.loggedResponse(
-                ()-> buyService.buyContentPlacement(buyContentPlacementRequest, publishingId),
+                ()-> buyService.buyContentPlacement(buyContentPlacementRequest, publishingId, request),
                 ApiConstants.BUY_CONTENT_PLACEMENT,
                 LOGGER
         );

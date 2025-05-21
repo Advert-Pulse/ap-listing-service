@@ -85,7 +85,10 @@ public enum ErrorData {
     ONLY_THREE_URL_ANCHOR_TEXT_ALLOWED("AP__ERROR--3312", "Only three URL with Anchor Text is allowed" ),
     URL_MANDATORY_FOR_URL_ANCHOR_TEXT("AP__ERROR--3313", "Url mandatory for URL with Anchor text" ),
     ANCHOR_TEXT_MANDATORY_FOR_URL_ANCHOR_TEXT("AP__ERROR--3314", "Anchor Text mandatory for URL with Anchor text" ),
-    NO_EXTRA_LINKS_ALLOWED("AP__ERROR--3315", "No extra links allowed" ),;
+    NO_EXTRA_LINKS_ALLOWED("AP__ERROR--3315", "No extra links allowed" ),
+    TOKEN_NOT_PRESENT("AP__ERROR--3316", "Token not present in the request Header" ),
+    INSUFFICIENT_FUNDS("AP__ERROR--3317", "Insufficient Funds" ),
+    WEBSITE_PUBLISHER_NOT_APPROVED("AP__ERROR--3318", "Website publisher not approved" ),;
 
     private final String code;
     private final String message;
