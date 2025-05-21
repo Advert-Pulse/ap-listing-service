@@ -37,6 +37,7 @@ package com.ap.listing.model;
   File: Task
  */
 
+import com.ap.listing.annotation.CustomIdGeneratorListener;
 import com.ap.listing.annotation.GeneratedCustomId;
 import com.ap.listing.constants.EntityConstants;
 import com.ap.listing.payload.PricingPayload;
@@ -63,6 +64,7 @@ import java.util.List;
         name = EntityConstants.TASK_PUBLISHER,
         schema = EntityConstants.LISTING_SCHEMA
 )
+@EntityListeners(CustomIdGeneratorListener.class)
 public class TaskPublisher {
 
     @Id
@@ -80,6 +82,8 @@ public class TaskPublisher {
     // From Product Type Enum
     private String productType;
 
+    private String siteUrl;
+
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
     private List<PricingPayload> priceBreak;
@@ -95,6 +99,9 @@ public class TaskPublisher {
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateCreated;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateUpdated;
 
     @Lob
     @Column(length = 10000000)

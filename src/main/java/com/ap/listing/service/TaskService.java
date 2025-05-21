@@ -28,21 +28,27 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.dao.repository;
+package com.ap.listing.service;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: TaskBuyerRepository
+  File: TaskService
  */
 
-import com.ap.listing.model.TaskBuyer;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.ap.listing.payload.response.DetailedTaskBuyerResponse;
+import com.ap.listing.payload.response.ListResponse;
+import com.bloggios.query.payload.ListPayload;
+import org.springframework.http.ResponseEntity;
 
-import java.util.List;
-import java.util.Optional;
+public interface TaskService {
 
-public interface TaskBuyerRepository extends JpaRepository<TaskBuyer, String> {
-    Optional<TaskBuyer> findByTaskId(String taskId);
+    ResponseEntity<ListResponse> listBuyerTasks(ListPayload listPayload);
+    ResponseEntity<ListResponse> listPublisherTasks(ListPayload listPayload);
+
+    ResponseEntity<ListResponse> myListBuyerTasks(ListPayload listPayload);
+
+    ResponseEntity<ListResponse> myListPublisherTasks(ListPayload listPayload);
+    ResponseEntity<DetailedTaskBuyerResponse> getBuyerTask(String taskId);
 }

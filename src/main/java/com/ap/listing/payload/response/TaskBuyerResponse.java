@@ -28,21 +28,33 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.dao.repository;
+package com.ap.listing.payload.response;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: TaskBuyerRepository
+  File: TaskBuyerResponse
  */
 
-import com.ap.listing.model.TaskBuyer;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.Date;
 
-public interface TaskBuyerRepository extends JpaRepository<TaskBuyer, String> {
-    Optional<TaskBuyer> findByTaskId(String taskId);
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
+@ToString
+public class TaskBuyerResponse {
+
+    private String taskId;
+    private String productType;
+    private double totalPrice;
+    private String currentStatus;
+    private Date dateCreated;
+    private String siteUrl;
 }

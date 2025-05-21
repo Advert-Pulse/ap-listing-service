@@ -28,21 +28,54 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.dao.repository;
+package com.ap.listing.payload.response;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: TaskBuyerRepository
+  File: DetailedTaskBuyerResponse
  */
 
-import com.ap.listing.model.TaskBuyer;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.ap.listing.payload.BuyerTaskStatusPayload;
+import com.ap.listing.payload.PricingPayload;
+import com.ap.listing.payload.UrlAnchorTextPayload;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.Column;
+import jakarta.persistence.Lob;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
+import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
-public interface TaskBuyerRepository extends JpaRepository<TaskBuyer, String> {
-    Optional<TaskBuyer> findByTaskId(String taskId);
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
+@ToString
+public class DetailedTaskBuyerResponse {
+
+    private String taskId;
+    private String productType;
+    private String siteUrl;
+    private List<PricingPayload> priceBreak;
+    private double totalPrice;
+    private String currentStatus;
+    private List<BuyerTaskStatusPayload> taskStatus;
+    private String isSpecialTopic;
+    private Date dateCreated;
+    private Date dateUpdated;
+    private String content;
+    private String specialRequirements;
+    private List<UrlAnchorTextPayload> urlAnchorTexts;
+    private String taskPlacementUrl;
+    private String contentType;
+    private String buyerId;
+    private String publisherId;
 }

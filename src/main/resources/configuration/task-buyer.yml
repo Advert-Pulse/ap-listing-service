@@ -1,0 +1,92 @@
+task-buyer:
+  data:
+    taskBuyerUUID:
+      type: STRING
+      filterAndSortField: taskBuyerUUID
+      searchAllowed: true
+      searchField: taskBuyerUUID
+      partialSearch: false
+    taskId:
+      type: STRING
+      filterAndSortField: taskId
+      searchAllowed: true
+      searchField: taskId
+      partialSearch: false
+    productType:
+      type: STRING
+      filterAndSortField: productType
+      searchAllowed: true
+      searchField: productType
+      partialSearch: false
+    siteUrl:
+      type: STRING
+      filterAndSortField: siteUrl
+      searchAllowed: true
+      searchField: siteUrl
+      partialSearch: true
+    totalPrice:
+      type: DOUBLE
+      filterAndSortField: totalPrice
+      searchAllowed: false
+      searchField: totalPrice
+      partialSearch: false
+    currentStatus:
+      type: STRING
+      filterAndSortField: currentStatus
+      searchAllowed: true
+      searchField: currentStatus
+      partialSearch: false
+    isSpecialTopic:
+      type: STRING
+      filterAndSortField: isSpecialTopic
+      searchAllowed: false
+      searchField: isSpecialTopic
+      partialSearch: false
+    dateCreated:
+      type: DATE_TIME
+      filterAndSortField: dateCreated
+      searchAllowed: false
+      searchField: dateCreated
+      partialSearch: false
+    dateUpdated:
+      type: DATE_TIME
+      filterAndSortField: dateUpdated
+      searchAllowed: false
+      searchField: dateUpdated
+      partialSearch: false
+    content:
+      type: STRING
+      filterAndSortField: content
+      searchAllowed: false
+      searchField: content
+      partialSearch: true
+    specialRequirements:
+      type: STRING
+      filterAndSortField: specialRequirements
+      searchAllowed: false
+      searchField: specialRequirements
+      partialSearch: true
+    taskPlacementUrl:
+      type: STRING
+      filterAndSortField: taskPlacementUrl
+      searchAllowed: false
+      searchField: taskPlacementUrl
+      partialSearch: true
+    contentType:
+      type: STRING
+      filterAndSortField: contentType
+      searchAllowed: true
+      searchField: contentType
+      partialSearch: false
+    buyerId:
+      type: STRING
+      filterAndSortField: buyerId
+      searchAllowed: true
+      searchField: buyerId
+      partialSearch: false
+    publisherId:
+      type: STRING
+      filterAndSortField: publisherId
+      searchAllowed: true
+      searchField: publisherId
+      partialSearch: false

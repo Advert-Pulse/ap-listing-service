@@ -76,7 +76,6 @@ public class BuyServiceImplementation implements BuyService {
     private final TaskPublisherRepository taskPublisherRepository;
     private final TaskBuyerRepository taskBuyerRepository;
     private final ApPaymentServiceFeignClient apPaymentServiceFeignClient;
-    private final AdvertPulseProperties advertPulseProperties;
 
     @Override
     @Transactional

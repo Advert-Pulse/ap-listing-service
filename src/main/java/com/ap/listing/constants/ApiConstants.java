@@ -59,4 +59,9 @@ public class ApiConstants {
     public static final String LIST_WEBSITE_PUBLISHERS = "ListWebsitePublishers";
     public static final String MANAGE_PUBLISHER = "ManagePublisher";
     public static final String BUY_CONTENT_PLACEMENT = "BuyContentPlacement";
+    public static final String LIST_BUYER_TASK = "ListBuyerTask";
+    public static final String LIST_PUBLISHER_TASK = "ListPublisherTask";
+    public static final String LIST_MY_BUYER_TASK = "ListMyBuyerTask";
+    public static final String LIST_MY_PUBLISHER_TASK = "ListMyPublisherTask";
+    public static final String GET_BUYER_TASK = "GetBuyerTask";
 }

@@ -28,21 +28,32 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.dao.repository;
+package com.ap.listing.transformer;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: TaskBuyerRepository
+  File: TaskBuyerToTaskBuyerResponseTransformer
  */
 
 import com.ap.listing.model.TaskBuyer;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.ap.listing.payload.response.TaskBuyerResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.Optional;
+@Component
+@RequiredArgsConstructor
+@Slf4j
+public class TaskBuyerToTaskBuyerResponseTransformer {
 
-public interface TaskBuyerRepository extends JpaRepository<TaskBuyer, String> {
-    Optional<TaskBuyer> findByTaskId(String taskId);
+    private final ModelMapper modelMapper;
+
+    public TaskBuyerResponse transform(TaskBuyer taskBuyer) {
+        TaskBuyerResponse taskBuyerResponse = modelMapper.map(taskBuyer, TaskBuyerResponse.class);
+        log.info("Task buyer response: {}", taskBuyerResponse);
+        return taskBuyerResponse;
+    }
 }

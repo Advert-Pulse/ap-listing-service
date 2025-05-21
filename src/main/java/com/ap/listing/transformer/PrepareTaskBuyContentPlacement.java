@@ -78,12 +78,14 @@ public class PrepareTaskBuyContentPlacement {
         taskPublisher.setTaskStatus(new ArrayList<>(List.of(PublisherTaskStatusPayload.builder().date(now).status(PublisherTaskStatus.YOUR_ACCEPTANCE).build())));
         taskPublisher.setIsSpecialTopic(Boolean.FALSE.toString());
         taskPublisher.setDateCreated(now);
+        taskPublisher.setDateUpdated(now);
         taskPublisher.setContent(buyContentPlacementRequest.getContent());
         taskPublisher.setSpecialRequirements(buyContentPlacementRequest.getSpecialRequirements());
         taskPublisher.setUrlAnchorTexts(buyContentPlacementRequest.getUrlAnchorTexts());
         taskPublisher.setContentType("N/A");
         taskPublisher.setBuyerId(SecurityContextUtil.getLoggedInUserOrThrow().getUserId());
         taskPublisher.setPublisherId(websitePublisher.getUserId());
+        taskPublisher.setSiteUrl(websitePublisher.getDomain());
         log.info("Task Publisher prepared with response {}", taskPublisher);
         return taskPublisher;
     }

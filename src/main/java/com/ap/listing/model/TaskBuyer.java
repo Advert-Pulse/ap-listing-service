@@ -74,6 +74,8 @@ public class TaskBuyer {
     // From Product Type Enum
     private String productType;
 
+    private String siteUrl;
+
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
     private List<PricingPayload> priceBreak;
@@ -89,6 +91,9 @@ public class TaskBuyer {
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateCreated;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateUpdated;
 
     @Lob
     @Column(length = 10000000)

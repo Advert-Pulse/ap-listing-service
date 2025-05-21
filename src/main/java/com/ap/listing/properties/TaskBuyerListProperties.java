@@ -28,21 +28,32 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.dao.repository;
+package com.ap.listing.properties;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: TaskBuyerRepository
+  File: TaskBuyerListProperties
  */
 
-import com.ap.listing.model.TaskBuyer;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.bloggios.provider.utils.YmlFileMapParserFactory;
+import com.bloggios.query.payload.ListProviderPayload;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
 
-public interface TaskBuyerRepository extends JpaRepository<TaskBuyer, String> {
-    Optional<TaskBuyer> findByTaskId(String taskId);
+@Configuration
+@ConfigurationProperties(prefix = "task-buyer")
+@PropertySource(value = "classpath:configuration/task-buyer.yml", factory = YmlFileMapParserFactory.class)
+@Getter
+@Setter
+public class TaskBuyerListProperties {
+
+    private Map<String, ListProviderPayload> data = new HashMap<>();
 }
