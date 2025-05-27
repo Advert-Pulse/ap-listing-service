@@ -89,7 +89,10 @@ public enum ErrorData {
     TOKEN_NOT_PRESENT("AP__ERROR--3316", "Token not present in the request Header" ),
     INSUFFICIENT_FUNDS("AP__ERROR--3317", "Insufficient Funds" ),
     WEBSITE_PUBLISHER_NOT_APPROVED("AP__ERROR--3318", "Website publisher not approved" ),
-    TASK_BUYER_NOT_FOUND("AP__ERROR--3319", "Task buyer not found" ),;
+    TASK_BUYER_NOT_FOUND("AP__ERROR--3319", "Task buyer not found" ),
+    TASK_PUBLISHER_NOT_FOUND("AP__ERROR--3320", "Task publisher not found" ),
+    MANAGE_TASK_INITIAL_STATUS_INVALID("AP__ERROR--3321", "Manage Initial Status invalid" ),
+    CANNOT_MANAGE_OTHERS_TASK("AP__ERROR--3322", "Cannot Manage other Tasks" ),;
 
     private final String code;
     private final String message;

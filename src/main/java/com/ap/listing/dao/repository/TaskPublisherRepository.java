@@ -40,5 +40,9 @@ package com.ap.listing.dao.repository;
 import com.ap.listing.model.TaskPublisher;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+import java.util.Optional;
+
 public interface TaskPublisherRepository extends JpaRepository<TaskPublisher, String> {
+    Optional<TaskPublisher> findByTaskId(String taskId);
 }
