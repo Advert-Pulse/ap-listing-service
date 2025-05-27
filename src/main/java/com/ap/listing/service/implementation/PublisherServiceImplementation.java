@@ -48,11 +48,15 @@ public class PublisherServiceImplementation implements PublisherService {
         Date now = new Date();
         TaskBuyer taskBuyer = taskBuyerRepository.findByTaskId(taskId)
                 .orElseThrow(() -> new BadRequestException(ErrorData.TASK_BUYER_NOT_FOUND));
+        if (!taskPublisher.getCurrentStatus().equalsIgnoreCase(PublisherTaskStatus.YOUR_ACCEPTANCE.name())) {
+            throw new BadRequestException(ErrorData.TASK_SHOULD_BE_IN_YOUR_ACCEPTANCE_TO_MANAGE_IT_INITIALLY);
+        }
         if (status.equalsIgnoreCase(PublisherTaskStatus.IN_PROGRESS.name())) {
             updatePublisherTaskForManageTaskInitial(taskPublisher, now);
             updateBuyerTaskForManageTaskInitial(taskBuyer, now);
         } else if (status.equalsIgnoreCase(PublisherTaskStatus.REJECTED.name())) {
-
+            // Payment Refund
+            // Status Update
         } else {
             throw new BadRequestException(
                     ErrorData.MANAGE_TASK_INITIAL_STATUS_INVALID,
