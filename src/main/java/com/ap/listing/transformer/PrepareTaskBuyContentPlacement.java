@@ -43,6 +43,7 @@ import com.ap.listing.enums.PublisherTaskStatus;
 import com.ap.listing.model.TaskBuyer;
 import com.ap.listing.model.TaskPublisher;
 import com.ap.listing.model.WebsitePublisher;
+import com.ap.listing.payload.BuyerTaskStatusPayload;
 import com.ap.listing.payload.PricingPayload;
 import com.ap.listing.payload.PublisherTaskStatusPayload;
 import com.ap.listing.payload.UrlAnchorTextPayload;
@@ -92,6 +93,7 @@ public class PrepareTaskBuyContentPlacement {
 
     public TaskBuyer prepareBuyerTask(TaskPublisher taskPublisher) {
         TaskBuyer taskBuyer = modelMapper.map(taskPublisher, TaskBuyer.class);
+        taskBuyer.setTaskStatus(new ArrayList<>(List.of(BuyerTaskStatusPayload.builder().date(new Date()).status(BuyerTaskStatus.PUBLISHER_APPROVAL).build())));
         taskBuyer.setCurrentStatus(BuyerTaskStatus.PUBLISHER_APPROVAL.name());
         log.info("Task Buyer prepared with response {}", taskBuyer);
         return taskBuyer;

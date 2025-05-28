@@ -28,39 +28,29 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.feign;
+package com.ap.listing.payload.request;
 
 /*
   Developer: Rohit Parihar
-  Project: ap-listing-service
+  Project: ap-payment-service
   GitHub: github.com/rohit-zip
-  File: ApPaymentServiceFeignClient
+  File: ReverseReservedFundsRequest
  */
 
-import com.ap.listing.configuration.FeignConfig;
-import com.ap.listing.constants.ServiceConstants;
-import com.ap.listing.payload.request.ReverseReservedFundsRequest;
-import com.ap.listing.payload.request.SendFundsToReservedRequest;
-import com.ap.listing.payload.response.WalletResponse;
-import com.bloggios.provider.payload.ModuleResponse;
-import feign.Headers;
-import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
 
-@FeignClient(
-        name = "${feign-client.ap-payment-service.name}",
-        url = "${feign-client.ap-payment-service.url}",
-        configuration = FeignConfig.class
-)
-@Headers("Authorization: {token}")
-public interface ApPaymentServiceFeignClient {
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
+@ToString
+public class ReverseReservedFundsRequest {
 
-    @GetMapping("/v1/wallet")
-    WalletResponse getWallet(@RequestHeader(ServiceConstants.AUTHORIZATION) String token, @RequestParam String preference);
-
-    @PostMapping("/v1/wallet/send-reserved")
-    ModuleResponse sendFundsToReserved(@RequestHeader(ServiceConstants.AUTHORIZATION) String token, @RequestBody SendFundsToReservedRequest sendFundsToReservedRequest);
-
-    @PostMapping("/v1/wallet/reverse-reserved")
-    ModuleResponse reverseReservedFund(@RequestHeader(ServiceConstants.AUTHORIZATION) String token, @RequestBody ReverseReservedFundsRequest reverseReservedFundsRequest);
+    private String buyerId;
+    private String publisherId;
+    private double amount;
+    private String taskId;
 }

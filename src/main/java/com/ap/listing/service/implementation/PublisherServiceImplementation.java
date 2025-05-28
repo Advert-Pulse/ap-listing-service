@@ -17,9 +17,11 @@ import com.ap.listing.model.TaskBuyer;
 import com.ap.listing.model.TaskPublisher;
 import com.ap.listing.payload.BuyerTaskStatusPayload;
 import com.ap.listing.payload.PublisherTaskStatusPayload;
+import com.ap.listing.processor.PublisherRejectedTaskProcessor;
 import com.ap.listing.service.PublisherService;
 import com.ap.listing.utils.SecurityContextUtil;
 import com.bloggios.provider.payload.ModuleResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -37,9 +39,10 @@ public class PublisherServiceImplementation implements PublisherService {
 
     private final TaskPublisherRepository taskPublisherRepository;
     private final TaskBuyerRepository taskBuyerRepository;
+    private final PublisherRejectedTaskProcessor publisherRejectedTaskProcessor;
 
     @Override
-    public ResponseEntity<ModuleResponse> manageTaskInitial(String taskId, String status) {
+    public ResponseEntity<ModuleResponse> manageTaskInitial(String taskId, String status, HttpServletRequest httpServletRequest) {
         TaskPublisher taskPublisher = taskPublisherRepository.findByTaskId(taskId)
                 .orElseThrow(() -> new BadRequestException(ErrorData.TASK_PUBLISHER_NOT_FOUND));
         if (!taskPublisher.getPublisherId().equalsIgnoreCase(SecurityContextUtil.getLoggedInUserOrThrow().getUserId())) {
@@ -55,8 +58,7 @@ public class PublisherServiceImplementation implements PublisherService {
             updatePublisherTaskForManageTaskInitial(taskPublisher, now);
             updateBuyerTaskForManageTaskInitial(taskBuyer, now);
         } else if (status.equalsIgnoreCase(PublisherTaskStatus.REJECTED.name())) {
-            // Payment Refund
-            // Status Update
+            publisherRejectedTaskProcessor.process(taskPublisher, taskBuyer, httpServletRequest);
         } else {
             throw new BadRequestException(
                     ErrorData.MANAGE_TASK_INITIAL_STATUS_INVALID,
