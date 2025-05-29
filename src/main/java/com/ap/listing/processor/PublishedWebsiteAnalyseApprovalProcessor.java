@@ -28,19 +28,36 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.service;
+package com.ap.listing.processor;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: PublisherService
+  File: PublishedWebsiteAnalyseApproval
  */
 
-import com.bloggios.provider.payload.ModuleResponse;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.http.ResponseEntity;
+import com.ap.listing.dao.repository.WebsitePublisherRepository;
+import com.ap.listing.dao.repository.WebsiteRepository;
+import com.ap.listing.enums.ErrorData;
+import com.ap.listing.exception.BadRequestException;
+import com.ap.listing.model.WebsitePublisher;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
-public interface PublisherService {
-    ResponseEntity<ModuleResponse> manageTaskInitial(String taskId, String status, HttpServletRequest httpServletRequest);
+@Component
+@RequiredArgsConstructor
+@Slf4j
+public class PublishedWebsiteAnalyseApprovalProcessor {
+
+    private final WebsitePublisherRepository websitePublisherRepository;
+    private final WebsiteRepository websiteRepository;
+
+    public void process(String publishingId) {
+        log.info("Processing published website analyse approval for {}", publishingId);
+        WebsitePublisher websitePublisher = websitePublisherRepository.findByPublishingId(publishingId)
+                .orElseThrow(() -> new BadRequestException(ErrorData.WEBSITE_PUBLISHER_NOT_FOUND));
+        String websiteId = websitePublisher.getWebsiteData().getWebsiteId();
+    }
 }

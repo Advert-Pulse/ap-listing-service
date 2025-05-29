@@ -47,4 +47,6 @@ public class ServiceConstants {
     public static final String HTTP = "http://";
     public static final String HTTPS = "https://";
     public static final String AUTHORIZATION = "Authorization";
+    public static final String FALSE = "false";
+    public static final String SCHEDULER_ID = "schedulerId";
 }

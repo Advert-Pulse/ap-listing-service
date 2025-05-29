@@ -41,6 +41,7 @@ import com.ap.listing.configuration.FeignConfig;
 import com.ap.listing.configuration.FeignInterceptors;
 import com.ap.listing.payload.response.DomainMetricsFeignResponse;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -55,5 +56,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface DomainMetricsFeignClient {
 
     @GetMapping("/domain-metrics/{domain}/")
-    DomainMetricsFeignResponse getDomainMetrics(@PathVariable String domain);
+    ResponseEntity<DomainMetricsFeignResponse> getDomainMetrics(@PathVariable String domain);
 }

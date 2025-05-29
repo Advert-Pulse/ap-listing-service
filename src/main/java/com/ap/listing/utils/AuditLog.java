@@ -52,7 +52,10 @@ public class AuditLog {
 
     @Before("execution(* com.ap.listing.service.implementation.*.*(..))" +
             "||" +
-            "execution(* com.ap.listing.transformer.*.*(..))")
+            "execution(* com.ap.listing.transformer.*.*(..))" +
+            "||" +
+            "execution(* com.ap.listing.scheduler.generator.*.*(..))"
+    )
     public void logAfterMethod(JoinPoint joinPoint) {
         String className = joinPoint.getTarget().getClass().getSimpleName();
         String methodName = joinPoint.getSignature().getName();

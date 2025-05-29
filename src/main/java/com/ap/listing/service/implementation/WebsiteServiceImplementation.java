@@ -47,13 +47,12 @@ import com.ap.listing.generator.AddWebsiteResponseGenerator;
 import com.ap.listing.model.WebsiteData;
 import com.ap.listing.model.WebsitePublisher;
 import com.ap.listing.payload.response.AddWebsiteResponse;
-import com.ap.listing.payload.response.DomainMetricsFeignResponse;
 import com.ap.listing.payload.response.ListResponse;
 import com.ap.listing.payload.response.WebsiteResponse;
-import com.ap.listing.processor.AddWebsiteRapidApiProcessor;
 import com.ap.listing.processor.UrlAvailabilityWebsiteProcessor;
 import com.ap.listing.processor.WebsiteDefaultPublisherProcessor;
 import com.ap.listing.properties.WebsiteListProperties;
+import com.ap.listing.scheduler.generator.WebsiteDataFetchSchedulerGenerator;
 import com.ap.listing.service.WebsiteService;
 import com.ap.listing.transformer.WebsiteToWebsiteResponseTransformer;
 import com.ap.listing.transformer.WebsiteTransformer;
@@ -73,7 +72,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 
 import static com.ap.listing.constants.ServiceConstants.HTTPS;
 
@@ -87,11 +85,11 @@ public class WebsiteServiceImplementation implements WebsiteService {
     private final WebsiteRepository websiteRepository;
     private final WebsiteDefaultPublisherProcessor websiteDefaultPublisherProcessor;
     private final UrlAvailabilityWebsiteProcessor urlAvailabilityWebsiteProcessor;
-    private final AddWebsiteRapidApiProcessor addWebsiteRapidApiProcessor;
     private final ListProcessor listProcessor;
     private final WebsiteListProperties websiteListProperties;
     private final InitQuery<WebsiteData> initQuery;
     private final WebsiteToWebsiteResponseTransformer websiteToWebsiteResponseTransformer;
+    private final WebsiteDataFetchSchedulerGenerator websiteDataFetchSchedulerGenerator;
 
     @Override
     public ResponseEntity<AddWebsiteResponse> addWebsite(String website) {
@@ -110,22 +108,11 @@ public class WebsiteServiceImplementation implements WebsiteService {
             if (!urlAvailable) {
                 throw new BadRequestException(ErrorData.WEBSITE_IRRESPONSIVE, "website");
             }
-            String feignUrl;
-            if (baseUrl.startsWith(HTTPS)) {
-                feignUrl = baseUrl.substring(8);
-            } else {
-                feignUrl = baseUrl.substring(7);
-            }
-            DomainMetricsFeignResponse domainMetrics = domainMetricsFeignClient.getDomainMetrics(feignUrl);
-            log.info("Domain Metrics Response: {}", domainMetrics);
-            if (domainMetrics.getDomain() == null) {
-                throw new BadRequestException(ErrorData.WEBSITE_IRRESPONSIVE, "website");
-            }
             WebsiteData websiteDataEntity = websiteTransformer.transform(baseUrl);
             WebsiteData websiteDataResponse = websiteRepository.save(websiteDataEntity);
             log.info("Website Saved : {}", websiteDataResponse);
             WebsitePublisher websitePublisher = websiteDefaultPublisherProcessor.process(websiteDataEntity);
-            CompletableFuture.runAsync(()-> addWebsiteRapidApiProcessor.process(feignUrl, domainMetrics, websiteDataEntity.getWebsiteId()));
+            websiteDataFetchSchedulerGenerator.process(websiteDataResponse.getWebsiteId());
             return AddWebsiteResponseGenerator.generate(websiteDataResponse, websitePublisher, Boolean.FALSE);
         }
     }

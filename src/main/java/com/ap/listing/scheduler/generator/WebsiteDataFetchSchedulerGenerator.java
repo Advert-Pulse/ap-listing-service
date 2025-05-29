@@ -28,19 +28,44 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.service;
+package com.ap.listing.scheduler.generator;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: PublisherService
+  File: WebsiteDataFetchSchedulerProcessor
  */
 
-import com.bloggios.provider.payload.ModuleResponse;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.http.ResponseEntity;
+import com.ap.listing.dao.repository.SchedulerRepository;
+import com.ap.listing.enums.ScheduleTaskType;
+import com.ap.listing.model.Scheduler;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
-public interface PublisherService {
-    ResponseEntity<ModuleResponse> manageTaskInitial(String taskId, String status, HttpServletRequest httpServletRequest);
+import java.util.Date;
+
+@Component
+@RequiredArgsConstructor
+@Slf4j
+public class WebsiteDataFetchSchedulerGenerator {
+
+
+    private final SchedulerRepository schedulerRepository;
+
+    public void process(String websiteId) {
+        Date now = new Date();
+        Scheduler scheduler = Scheduler
+                .builder()
+                .primaryId(websiteId)
+                .isSchedulingDone(false)
+                .scheduledTaskType(ScheduleTaskType.FETCH_WEBSITE_DATA)
+                .timesUsed(0)
+                .createdOn(now)
+                .updatedOn(now)
+                .build();
+        log.info("Scheduler Data Prepared for Website Id: {}", websiteId);
+        schedulerRepository.saveAndFlush(scheduler);
+    }
 }

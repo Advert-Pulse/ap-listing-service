@@ -157,3 +157,9 @@ website:
       searchAllowed: false
       searchField: country
       partialSearch: false
+    isActive:
+      type: STRING
+      filterAndSortField: isActive
+      searchAllowed: false
+      searchField: isActive
+      partialSearch: false

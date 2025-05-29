@@ -142,4 +142,7 @@ public class WebsiteData {
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
     private List<TopCountry> similarWebTopCountries;
+
+    private String isActive;
+    private String message;
 }

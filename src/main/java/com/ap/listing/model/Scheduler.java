@@ -28,19 +28,61 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.service;
+package com.ap.listing.model;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: PublisherService
+  File: Scheduler
  */
 
-import com.bloggios.provider.payload.ModuleResponse;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.http.ResponseEntity;
+import com.ap.listing.constants.EntityConstants;
+import com.ap.listing.enums.ScheduleTaskType;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
+import lombok.*;
 
-public interface PublisherService {
-    ResponseEntity<ModuleResponse> manageTaskInitial(String taskId, String status, HttpServletRequest httpServletRequest);
+import java.util.Date;
+
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
+@ToString
+@Table(
+        name = EntityConstants.SCHEDULER,
+        schema = EntityConstants.LISTING_SCHEMA
+)
+public class Scheduler {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String schedulerId;
+
+    @Column(nullable = false)
+    private String primaryId;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date scheduleEndDate;
+
+    @Column(columnDefinition = "boolean default false")
+    private Boolean isSchedulingDone;
+
+    @Enumerated(EnumType.STRING)
+    private ScheduleTaskType scheduledTaskType;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date scheduleCompletedOn;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdOn;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updatedOn;
+
+    private int timesUsed;
 }

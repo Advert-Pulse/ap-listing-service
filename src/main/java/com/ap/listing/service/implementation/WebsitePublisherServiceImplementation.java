@@ -47,6 +47,7 @@ import com.ap.listing.payload.request.ManagePublisherRequest;
 import com.ap.listing.payload.request.PublishWebsiteRequest;
 import com.ap.listing.payload.response.ListResponse;
 import com.ap.listing.payload.response.WebsitePublisherResponse;
+import com.ap.listing.processor.PublishedWebsiteAnalyseApprovalProcessor;
 import com.ap.listing.processor.UserIdAdditionInFilter;
 import com.ap.listing.processor.WebsitePublisherToWebsiteSyncProcessor;
 import com.ap.listing.processor.WebsitePublishingStatusAnalyser;
@@ -72,6 +73,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
@@ -89,6 +91,7 @@ public class WebsitePublisherServiceImplementation implements WebsitePublisherSe
     private final UserIdAdditionInFilter userIdAdditionInFilter;
     private final WebsitePublishingStatusAnalyser websitePublishingStatusAnalyser;
     private final WebsitePublisherToWebsiteSyncProcessor websitePublisherToWebsiteSyncProcessor;
+    private final PublishedWebsiteAnalyseApprovalProcessor publishedWebsiteAnalyseApprovalProcessor;
 
     @Override
     public ResponseEntity<ModuleResponse> publishSite(PublishWebsiteRequest publishWebsiteRequest, String websitePublisherId) {
@@ -97,8 +100,9 @@ public class WebsitePublisherServiceImplementation implements WebsitePublisherSe
         publishWebsiteRequestValidator.validate(publishWebsiteRequest);
         WebsitePublisher transformedWebsitePublisher = publishWebsiteRequestToWebsitePublisherTransformer.transform(publishWebsiteRequest, websitePublisher);
         WebsitePublisher analysed = websitePublishingStatusAnalyser.analyse(transformedWebsitePublisher);
-        WebsitePublisher websitePublisherResponse = websitePublisherRepository.save(analysed);
+        WebsitePublisher websitePublisherResponse = websitePublisherRepository.saveAndFlush(analysed);
         log.info("Website publisher saved to database: {}", websitePublisherResponse);
+        CompletableFuture.runAsync(() -> publishedWebsiteAnalyseApprovalProcessor.process(websitePublisher.getPublishingId()));
         websitePublisherToWebsiteSyncProcessor.doSync(websitePublisherResponse);
         return ResponseEntity.ok(ModuleResponse
                 .builder()

@@ -28,19 +28,28 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.service;
+package com.ap.listing.utils;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: PublisherService
+  File: IntegerUtils
  */
 
-import com.bloggios.provider.payload.ModuleResponse;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.http.ResponseEntity;
+import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 
-public interface PublisherService {
-    ResponseEntity<ModuleResponse> manageTaskInitial(String taskId, String status, HttpServletRequest httpServletRequest);
+@UtilityClass
+@Slf4j
+public class IntegerUtils {
+
+    public int getOrZero(String data) {
+        try {
+            return Integer.parseInt(data);
+        } catch (Exception e) {
+            log.info("Error parsing data: {}", data);
+            return 0;
+        }
+    }
 }

@@ -28,19 +28,22 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.service;
+package com.ap.listing.dao.repository;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: PublisherService
+  File: SchedulerRepository
  */
 
-import com.bloggios.provider.payload.ModuleResponse;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.http.ResponseEntity;
+import com.ap.listing.enums.ScheduleTaskType;
+import com.ap.listing.model.Scheduler;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface PublisherService {
-    ResponseEntity<ModuleResponse> manageTaskInitial(String taskId, String status, HttpServletRequest httpServletRequest);
+import java.util.List;
+
+public interface SchedulerRepository extends JpaRepository<Scheduler, String> {
+    List<Scheduler> findAllByScheduledTaskTypeAndIsSchedulingDone(ScheduleTaskType scheduledTaskType, boolean schedulingDone);
+    List<Scheduler> findAllByIsSchedulingDone(boolean schedulingDone);
 }

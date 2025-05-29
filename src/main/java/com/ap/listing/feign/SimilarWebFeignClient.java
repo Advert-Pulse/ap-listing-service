@@ -41,8 +41,11 @@ import com.ap.listing.configuration.FeignConfig;
 import com.ap.listing.configuration.FeignInterceptors;
 import com.ap.listing.payload.SimilarWebTrafficHistoryWrapper;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.concurrent.CompletableFuture;
 
 @FeignClient(
         name = "${feign-client.similar-web.analytics.name}",
@@ -55,5 +58,5 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface SimilarWebFeignClient {
 
     @GetMapping("/analyticsv1")
-    SimilarWebTrafficHistoryWrapper getWebsiteTraffic(@RequestParam String url);
+    ResponseEntity<SimilarWebTrafficHistoryWrapper> getWebsiteTraffic(@RequestParam String url);
 }

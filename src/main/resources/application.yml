@@ -10,11 +10,12 @@ spring:
       username: ${POSTGRES_USERNAME}
       password: ${POSTGRES_PASSWORD}
       maximum-pool-size: 100
-      minimum-idle: 7
+      minimum-idle: 10
       leak-detection-threshold: 120000
-      max-lifetime: 1800000
+      max-lifetime: 300000          # 5 minutes
       idle-timeout: 600000
       connection-timeout: 30000
+      validation-timeout: 5000      # optional, to avoid long validation hangs
       connection-test-query: SELECT 1
       auto-commit: false
   jpa:
@@ -110,7 +111,7 @@ swagger-properties:
 
 logging:
   level:
-    com.bloggios: OFF
+    com.bloggios: DEBUG
 
 feign-client:
   domain-metrics:

@@ -28,19 +28,45 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.service;
+package com.ap.listing.utils;
 
-/*
-  Developer: Rohit Parihar
-  Project: ap-listing-service
-  GitHub: github.com/rohit-zip
-  File: PublisherService
+import com.ap.listing.enums.ErrorData;
+import com.ap.listing.exception.BadRequestException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+
+/**
+ * Owner - Rohit Parihar
+ * Author - rohit
+ * Project - auth-provider-application
+ * Package - com.bloggios.auth.provider.utils
+ * Created_on - 29 November-2023
+ * Created_at - 16 : 19
  */
 
-import com.bloggios.provider.payload.ModuleResponse;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.http.ResponseEntity;
+public class AsyncUtils {
 
-public interface PublisherService {
-    ResponseEntity<ModuleResponse> manageTaskInitial(String taskId, String status, HttpServletRequest httpServletRequest);
+    private static final Logger logger = LoggerFactory.getLogger(AsyncUtils.class);
+
+    public static <T> T getAsyncResult(CompletableFuture<T> future) {
+        try {
+            return future.get();
+        } catch (InterruptedException | ExecutionException ex) {
+            throw handleException(ex.getCause());
+        }
+    }
+
+    private static RuntimeException handleException(Throwable cause) {
+        if (cause instanceof BadRequestException badRequestException) {
+            return badRequestException;
+        } else {
+            logger.error("Exception Caused in Async Utils : {}", cause.getMessage(), cause);
+            return new BadRequestException(ErrorData.INTERNAL_ERROR);
+        }
+    }
+
+    private AsyncUtils() {}
 }

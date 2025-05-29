@@ -28,19 +28,36 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.service;
+package com.ap.listing.scheduler;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: PublisherService
+  File: GlobalScheduler
  */
 
-import com.bloggios.provider.payload.ModuleResponse;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.http.ResponseEntity;
+import com.ap.listing.scheduler.service.OneHourScheduler;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
-public interface PublisherService {
-    ResponseEntity<ModuleResponse> manageTaskInitial(String taskId, String status, HttpServletRequest httpServletRequest);
+import java.time.LocalDateTime;
+import java.util.Date;
+
+@Component
+@RequiredArgsConstructor
+@Slf4j
+public class GlobalScheduler {
+
+    private final OneHourScheduler oneHourScheduler;
+
+    @Scheduled(cron = "0 0 * * * ?")
+    public void taskEveryOneHour() {
+        long startTime = System.currentTimeMillis();
+        log.info("One hour scheduled task ran at {}", new Date());
+        oneHourScheduler.doProcess();
+        log.info("One Hour Scheduler took {} ms", System.currentTimeMillis() - startTime);
+    }
 }

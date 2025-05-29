@@ -37,6 +37,7 @@ package com.ap.listing.transformer;
   File: WebsiteTransformer
  */
 
+import com.ap.listing.constants.ServiceConstants;
 import com.ap.listing.model.WebsiteData;
 import com.ap.listing.utils.SecurityContextUtil;
 import org.springframework.stereotype.Component;
@@ -55,6 +56,7 @@ public class WebsiteTransformer {
                 .dateCreated(now)
                 .dateUpdated(now)
                 .userId(SecurityContextUtil.getLoggedInUserOrThrow().getUserId())
+                .isActive(ServiceConstants.FALSE)
                 .build();
     }
 

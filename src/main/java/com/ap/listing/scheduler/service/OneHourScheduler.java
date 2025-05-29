@@ -28,19 +28,48 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.service;
+package com.ap.listing.scheduler.service;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: PublisherService
+  File: OneHourScheduler
  */
 
-import com.bloggios.provider.payload.ModuleResponse;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.http.ResponseEntity;
+import com.ap.listing.constants.ServiceConstants;
+import com.ap.listing.dao.repository.SchedulerRepository;
+import com.ap.listing.enums.ScheduleTaskType;
+import com.ap.listing.model.Scheduler;
+import com.ap.listing.scheduler.processor.FetchWebsiteDataSchedulerProcessor;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
+import org.springframework.stereotype.Component;
 
-public interface PublisherService {
-    ResponseEntity<ModuleResponse> manageTaskInitial(String taskId, String status, HttpServletRequest httpServletRequest);
+import java.util.List;
+
+@Component
+@RequiredArgsConstructor
+@Slf4j
+public class OneHourScheduler {
+
+
+    private final SchedulerRepository schedulerRepository;
+    private final FetchWebsiteDataSchedulerProcessor fetchWebsiteDataSchedulerProcessor;
+
+    public void doProcess() {
+        try {
+            List<Scheduler> listOfSchedulers = schedulerRepository.findAllByIsSchedulingDone(Boolean.FALSE);
+            log.info("Found {} schedulers", listOfSchedulers.size());
+            for (Scheduler scheduler : listOfSchedulers) {
+                MDC.put(ServiceConstants.SCHEDULER_ID, scheduler.getSchedulerId());
+                switch (scheduler.getScheduledTaskType()) {
+                    case ScheduleTaskType.FETCH_WEBSITE_DATA -> fetchWebsiteDataSchedulerProcessor.process(scheduler);
+                }
+            }
+        } finally {
+            MDC.remove(ServiceConstants.SCHEDULER_ID);
+        }
+    }
 }
