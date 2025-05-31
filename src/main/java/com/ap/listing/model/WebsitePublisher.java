@@ -153,4 +153,6 @@ public class WebsitePublisher {
 
     private String message;
     private String publishingManager;
+
+    private String isActive;
 }

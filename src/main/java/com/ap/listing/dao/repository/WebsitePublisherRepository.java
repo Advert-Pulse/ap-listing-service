@@ -41,10 +41,13 @@ import com.ap.listing.model.WebsiteData;
 import com.ap.listing.model.WebsitePublisher;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface WebsitePublisherRepository extends JpaRepository<WebsitePublisher, String> {
 
     Optional<WebsitePublisher> findByWebsiteDataAndUserId(WebsiteData websiteData, String userId);
     Optional<WebsitePublisher> findByPublishingId(String publishingId);
+
+    List<WebsitePublisher> findByUserId(String userId);
 }

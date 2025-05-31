@@ -11,15 +11,15 @@
  * <p>
  * You may not:
  * 1. Copy, modify, distribute, or sublicense this software without express
- *    written permission from Advert Pulse or Bloggios.
+ * written permission from Advert Pulse or Bloggios.
  * 2. Reverse engineer, decompile, disassemble, or otherwise attempt to derive
- *    the source code of the software.
+ * the source code of the software.
  * 3. Modify this license in any way, including but not limited to altering its
- *    terms, even by Advert Pulse or any other entity, without express written
- *    permission from Bloggios administrators. Bloggios is the creator of this
- *    license and retains exclusive rights to update or modify it.
+ * terms, even by Advert Pulse or any other entity, without express written
+ * permission from Bloggios administrators. Bloggios is the creator of this
+ * license and retains exclusive rights to update or modify it.
  * 4. Update or modify the license without written permission from Bloggios
- *    administrators.
+ * administrators.
  * <p>
  * The software is provided "as is," and Advert Pulse makes no warranties,
  * express or implied, regarding the software, including but not limited to any
@@ -38,6 +38,7 @@ package com.ap.listing.scheduler;
  */
 
 import com.ap.listing.scheduler.service.OneHourScheduler;
+import com.ap.listing.scheduler.service.WebsitePublisherScheduler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -52,12 +53,23 @@ import java.util.Date;
 public class GlobalScheduler {
 
     private final OneHourScheduler oneHourScheduler;
+    private final WebsitePublisherScheduler websitePublisherScheduler;
 
-    @Scheduled(cron = "0 0 * * * ?")
+    //    @Scheduled(cron = "0 0 * * * ?")
+    @Scheduled(cron = "0 0/2 * * * ?")
     public void taskEveryOneHour() {
         long startTime = System.currentTimeMillis();
         log.info("One hour scheduled task ran at {}", new Date());
         oneHourScheduler.doProcess();
         log.info("One Hour Scheduler took {} ms", System.currentTimeMillis() - startTime);
+    }
+
+    //    @Scheduled(cron = "0 0 0/2 * * ?")
+    @Scheduled(cron = "0 0/4 * * * ?")
+    public void taskEveryTwoHours() {
+        long startTime = System.currentTimeMillis();
+        log.info("Two hour scheduled task ran at {}", new Date());
+        websitePublisherScheduler.doProcess();
+        log.info("Two Hour Scheduler took {} ms", System.currentTimeMillis() - startTime);
     }
 }

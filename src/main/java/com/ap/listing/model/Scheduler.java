@@ -66,9 +66,6 @@ public class Scheduler {
     @Column(nullable = false)
     private String primaryId;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date scheduleEndDate;
-
     @Column(columnDefinition = "boolean default false")
     private Boolean isSchedulingDone;
 
