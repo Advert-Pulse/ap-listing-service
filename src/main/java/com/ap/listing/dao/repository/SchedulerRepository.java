@@ -42,8 +42,11 @@ import com.ap.listing.model.Scheduler;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface SchedulerRepository extends JpaRepository<Scheduler, String> {
     List<Scheduler> findAllByScheduledTaskTypeAndIsSchedulingDone(ScheduleTaskType scheduledTaskType, boolean schedulingDone);
     List<Scheduler> findAllByIsSchedulingDone(boolean schedulingDone);
+
+    List<Scheduler> findByPrimaryId(String primaryId);
 }

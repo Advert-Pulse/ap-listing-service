@@ -52,6 +52,7 @@ import com.ap.listing.processor.UserIdAdditionInFilter;
 import com.ap.listing.processor.WebsitePublisherToWebsiteSyncProcessor;
 import com.ap.listing.processor.WebsitePublishingStatusAnalyser;
 import com.ap.listing.properties.WebsitePublisherListProperties;
+import com.ap.listing.scheduler.generator.WebsitePublisherSchedulerGenerator;
 import com.ap.listing.service.WebsitePublisherService;
 import com.ap.listing.transformer.PublishWebsiteRequestToWebsitePublisherTransformer;
 import com.ap.listing.transformer.WebsitePublisherToResponseTransformer;
@@ -92,6 +93,7 @@ public class WebsitePublisherServiceImplementation implements WebsitePublisherSe
     private final WebsitePublishingStatusAnalyser websitePublishingStatusAnalyser;
     private final WebsitePublisherToWebsiteSyncProcessor websitePublisherToWebsiteSyncProcessor;
     private final PublishedWebsiteAnalyseApprovalProcessor publishedWebsiteAnalyseApprovalProcessor;
+    private final WebsitePublisherSchedulerGenerator websitePublisherSchedulerGenerator;
 
     @Override
     public ResponseEntity<ModuleResponse> publishSite(PublishWebsiteRequest publishWebsiteRequest, String websitePublisherId) {
@@ -104,6 +106,7 @@ public class WebsitePublisherServiceImplementation implements WebsitePublisherSe
         log.info("Website publisher saved to database: {}", websitePublisherResponse);
         CompletableFuture.runAsync(() -> publishedWebsiteAnalyseApprovalProcessor.process(websitePublisher.getPublishingId()));
         websitePublisherToWebsiteSyncProcessor.doSync(websitePublisherResponse);
+        websitePublisherSchedulerGenerator.process(websitePublisherResponse);
         return ResponseEntity.ok(ModuleResponse
                 .builder()
                 .message("Website Published and currently in moderation process")

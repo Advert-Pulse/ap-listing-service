@@ -69,10 +69,10 @@ public class WebsitePublisher {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String websitePublisherId;
+    private String websitePublisherId; // UUID
 
     @Column(nullable = false, unique = true, updatable = false)
-    private String publishingId;
+    private String publishingId; // AP
 
     // Use WebsitePublishingStatus Enum values
     private String websitePublishingStatus;

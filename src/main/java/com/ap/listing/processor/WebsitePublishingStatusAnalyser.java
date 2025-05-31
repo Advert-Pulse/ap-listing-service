@@ -51,15 +51,14 @@ import java.util.Objects;
 public class WebsitePublishingStatusAnalyser {
 
     public WebsitePublisher analyse(WebsitePublisher websitePublisher) {
-        if (
-                Objects.nonNull(websitePublisher.getContentPlacementPrice()) && websitePublisher.getContentPlacementPrice() >= 4 &&
-                        Objects.nonNull(websitePublisher.getWritingAndPlacementPrice()) && websitePublisher.getWritingAndPlacementPrice() >= 4
-        ) {
-            if (websitePublisher.getWebsitePublishingStatus().equals(WebsitePublishingStatus.PENDING_SPECIFICATION.name())) {
+            if (
+                    (Objects.nonNull(websitePublisher.getContentPlacementPrice()) && websitePublisher.getContentPlacementPrice() >= 4 &&
+                            Objects.nonNull(websitePublisher.getWritingAndPlacementPrice()) && websitePublisher.getWritingAndPlacementPrice() >= 4) ||
+                            Objects.nonNull(websitePublisher.getLinkInsertionPrice()) && websitePublisher.getLinkInsertionPrice() >= 4
+            ) {
                 websitePublisher.setWebsitePublishingStatus(WebsitePublishingStatus.PENDING_MODERATION.name());
+                return websitePublisher;
             }
             return websitePublisher;
-        }
-        return websitePublisher;
     }
 }
