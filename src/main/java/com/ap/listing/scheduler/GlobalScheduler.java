@@ -55,8 +55,7 @@ public class GlobalScheduler {
     private final OneHourScheduler oneHourScheduler;
     private final WebsitePublisherScheduler websitePublisherScheduler;
 
-    //    @Scheduled(cron = "0 0 * * * ?")
-    @Scheduled(cron = "0 0/2 * * * ?")
+    @Scheduled(cron = "0 0 * * * ?")
     public void taskEveryOneHour() {
         long startTime = System.currentTimeMillis();
         log.info("One hour scheduled task ran at {}", new Date());
@@ -64,8 +63,7 @@ public class GlobalScheduler {
         log.info("One Hour Scheduler took {} ms", System.currentTimeMillis() - startTime);
     }
 
-    //    @Scheduled(cron = "0 0 0/2 * * ?")
-    @Scheduled(cron = "0 0/4 * * * ?")
+    @Scheduled(fixedRate = 5400000)
     public void taskEveryTwoHours() {
         long startTime = System.currentTimeMillis();
         log.info("Two hour scheduled task ran at {}", new Date());
