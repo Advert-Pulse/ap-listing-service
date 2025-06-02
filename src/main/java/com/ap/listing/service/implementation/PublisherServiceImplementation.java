@@ -37,12 +37,15 @@ package com.ap.listing.service.implementation;
   File: PublisherServiceImplementation
  */
 
+import com.ap.listing.dao.repository.BuyerImprovementRepository;
 import com.ap.listing.dao.repository.TaskBuyerRepository;
 import com.ap.listing.dao.repository.TaskPublisherRepository;
+import com.ap.listing.enums.BuyerImprovementStatus;
 import com.ap.listing.enums.BuyerTaskStatus;
 import com.ap.listing.enums.ErrorData;
 import com.ap.listing.enums.PublisherTaskStatus;
 import com.ap.listing.exception.BadRequestException;
+import com.ap.listing.model.BuyerImprovement;
 import com.ap.listing.model.TaskBuyer;
 import com.ap.listing.model.TaskPublisher;
 import com.ap.listing.payload.BuyerTaskStatusPayload;
@@ -70,6 +73,7 @@ public class PublisherServiceImplementation implements PublisherService {
     private final TaskPublisherRepository taskPublisherRepository;
     private final TaskBuyerRepository taskBuyerRepository;
     private final PublisherRejectedTaskProcessor publisherRejectedTaskProcessor;
+    private final BuyerImprovementRepository buyerImprovementRepository;
 
     @Override
     public ResponseEntity<ModuleResponse> manageTaskInitial(String taskId, String status, HttpServletRequest httpServletRequest) {
@@ -118,6 +122,15 @@ public class PublisherServiceImplementation implements PublisherService {
                 .orElseThrow(() -> new BadRequestException(ErrorData.TASK_BUYER_NOT_FOUND));
         if (!(taskPublisher.getCurrentStatus().equalsIgnoreCase(PublisherTaskStatus.IN_PROGRESS.name()) || taskPublisher.getCurrentStatus().equalsIgnoreCase(PublisherTaskStatus.IMPROVEMENT.name()))) {
             throw new BadRequestException(ErrorData.TASK_SHOULD_BE_IN_IN_PROGRESS_OR_IMPROVEMENT);
+        }
+        if (taskBuyer.getCurrentStatus().equalsIgnoreCase(PublisherTaskStatus.IMPROVEMENT.name())) {
+            buyerImprovementRepository.findByTaskIdAndBuyerImprovementStatus(taskPublisher.getTaskId(), BuyerImprovementStatus.PENDING)
+                    .ifPresent(buyerImprovement -> {
+                        buyerImprovement.setDateUpdated(now);
+                        buyerImprovement.setBuyerImprovementStatus(BuyerImprovementStatus.COMPLETED);
+                        BuyerImprovement buyerImprovementStatus = buyerImprovementRepository.save(buyerImprovement);
+                        log.info("Updating buyer improvement: {}", buyerImprovementStatus.toString());
+                    });
         }
         updateBuyerTaskForInitialApproval(taskBuyer, now, publisherInitialApprovalRequest);
         updatePublisherTaskForInitialApproval(taskPublisher, now, publisherInitialApprovalRequest);
