@@ -39,6 +39,7 @@ package com.ap.listing.feign;
 
 import com.ap.listing.configuration.FeignConfig;
 import com.ap.listing.constants.ServiceConstants;
+import com.ap.listing.payload.request.ReserveFundToBalanceRequest;
 import com.ap.listing.payload.request.ReverseReservedFundsRequest;
 import com.ap.listing.payload.request.SendFundsToReservedRequest;
 import com.ap.listing.payload.response.WalletResponse;
@@ -63,4 +64,7 @@ public interface ApPaymentServiceFeignClient {
 
     @PostMapping("/v1/wallet/reverse-reserved")
     ModuleResponse reverseReservedFund(@RequestHeader(ServiceConstants.AUTHORIZATION) String token, @RequestBody ReverseReservedFundsRequest reverseReservedFundsRequest);
+
+    @PostMapping("/v1/wallet/reserved-to-balance")
+    ModuleResponse reserveFundsToBalance(@RequestHeader(ServiceConstants.AUTHORIZATION) String token, @RequestBody ReserveFundToBalanceRequest reserveFundToBalanceRequest);
 }

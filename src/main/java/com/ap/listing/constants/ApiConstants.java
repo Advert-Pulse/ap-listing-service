@@ -67,4 +67,5 @@ public class ApiConstants {
     public static final String MANAGE_TASK_INITIAL = "ManageTaskInitial";
     public static final String INITIAL_APPROVAL = "InitialApproval";
     public static final String MANAGE_IMPROVEMENT = "ManageImprovement";
+    public static final String MANAGE_COMPLETED = "ManageCompleted";
 }

@@ -41,8 +41,14 @@ import com.ap.listing.constants.ApiConstants;
 import com.ap.listing.payload.response.DetailedTaskBuyerResponse;
 import com.ap.listing.payload.response.ListResponse;
 import com.ap.listing.service.TaskService;
+import com.bloggios.provider.payload.ExceptionResponse;
+import com.bloggios.provider.payload.ModuleResponse;
 import com.bloggios.provider.utils.ControllerHelper;
 import com.bloggios.query.payload.ListPayload;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,6 +64,22 @@ public class TaskController {
 
     private final TaskService taskService;
 
+    @Operation(
+            responses = {
+                    @ApiResponse(description = "SUCCESS", responseCode = "200", content = @Content(
+                            mediaType = "application/json", schema = @Schema(implementation = ListResponse.class)
+                    )),
+                    @ApiResponse(description = "No Content", responseCode = "401", content = {
+                            @Content(schema = @Schema())
+                    }),
+                    @ApiResponse(description = "FORBIDDEN", responseCode = "403", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))
+                    }),
+                    @ApiResponse(description = "BAD REQUEST", responseCode = "400", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = ExceptionResponse.class))
+                    })
+            }
+    )
     @PostMapping("/list-buyer")
     public ResponseEntity<ListResponse> listBuyerTasks(@RequestBody ListPayload listPayload) {
         return ControllerHelper.loggedResponse(
@@ -67,6 +89,22 @@ public class TaskController {
         );
     }
 
+    @Operation(
+            responses = {
+                    @ApiResponse(description = "SUCCESS", responseCode = "200", content = @Content(
+                            mediaType = "application/json", schema = @Schema(implementation = ListResponse.class)
+                    )),
+                    @ApiResponse(description = "No Content", responseCode = "401", content = {
+                            @Content(schema = @Schema())
+                    }),
+                    @ApiResponse(description = "FORBIDDEN", responseCode = "403", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))
+                    }),
+                    @ApiResponse(description = "BAD REQUEST", responseCode = "400", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = ExceptionResponse.class))
+                    })
+            }
+    )
     @PostMapping("/list-publisher")
     public ResponseEntity<ListResponse> listPublisherTasks(@RequestBody ListPayload listPayload) {
         return ControllerHelper.loggedResponse(
@@ -76,6 +114,22 @@ public class TaskController {
         );
     }
 
+    @Operation(
+            responses = {
+                    @ApiResponse(description = "SUCCESS", responseCode = "200", content = @Content(
+                            mediaType = "application/json", schema = @Schema(implementation = ListResponse.class)
+                    )),
+                    @ApiResponse(description = "No Content", responseCode = "401", content = {
+                            @Content(schema = @Schema())
+                    }),
+                    @ApiResponse(description = "FORBIDDEN", responseCode = "403", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))
+                    }),
+                    @ApiResponse(description = "BAD REQUEST", responseCode = "400", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = ExceptionResponse.class))
+                    })
+            }
+    )
     @PostMapping("/my-list-buyer")
     public ResponseEntity<ListResponse> myListBuyerTasks(@RequestBody ListPayload listPayload) {
         return ControllerHelper.loggedResponse(
@@ -85,6 +139,22 @@ public class TaskController {
         );
     }
 
+    @Operation(
+            responses = {
+                    @ApiResponse(description = "SUCCESS", responseCode = "200", content = @Content(
+                            mediaType = "application/json", schema = @Schema(implementation = ListResponse.class)
+                    )),
+                    @ApiResponse(description = "No Content", responseCode = "401", content = {
+                            @Content(schema = @Schema())
+                    }),
+                    @ApiResponse(description = "FORBIDDEN", responseCode = "403", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))
+                    }),
+                    @ApiResponse(description = "BAD REQUEST", responseCode = "400", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = ExceptionResponse.class))
+                    })
+            }
+    )
     @PostMapping("/my-list-publisher")
     public ResponseEntity<ListResponse> myListPublisherTasks(@RequestBody ListPayload listPayload) {
         return ControllerHelper.loggedResponse(
@@ -94,6 +164,22 @@ public class TaskController {
         );
     }
 
+    @Operation(
+            responses = {
+                    @ApiResponse(description = "SUCCESS", responseCode = "200", content = @Content(
+                            mediaType = "application/json", schema = @Schema(implementation = DetailedTaskBuyerResponse.class)
+                    )),
+                    @ApiResponse(description = "No Content", responseCode = "401", content = {
+                            @Content(schema = @Schema())
+                    }),
+                    @ApiResponse(description = "FORBIDDEN", responseCode = "403", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))
+                    }),
+                    @ApiResponse(description = "BAD REQUEST", responseCode = "400", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = ExceptionResponse.class))
+                    })
+            }
+    )
     @GetMapping("/buyer/{taskId}")
     public ResponseEntity<DetailedTaskBuyerResponse> getBuyerTask(@PathVariable String taskId) {
         return ControllerHelper.loggedResponse(

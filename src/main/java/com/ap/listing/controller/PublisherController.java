@@ -40,8 +40,13 @@ package com.ap.listing.controller;
 import com.ap.listing.constants.ApiConstants;
 import com.ap.listing.payload.request.PublisherInitialApprovalRequest;
 import com.ap.listing.service.PublisherService;
+import com.bloggios.provider.payload.ExceptionResponse;
 import com.bloggios.provider.payload.ModuleResponse;
 import com.bloggios.provider.utils.ControllerHelper;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,6 +64,22 @@ public class PublisherController {
         this.publisherService = publisherService;
     }
 
+    @Operation(
+            responses = {
+                    @ApiResponse(description = "SUCCESS", responseCode = "200", content = @Content(
+                            mediaType = "application/json", schema = @Schema(implementation = ModuleResponse.class)
+                    )),
+                    @ApiResponse(description = "No Content", responseCode = "401", content = {
+                            @Content(schema = @Schema())
+                    }),
+                    @ApiResponse(description = "FORBIDDEN", responseCode = "403", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))
+                    }),
+                    @ApiResponse(description = "BAD REQUEST", responseCode = "400", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = ExceptionResponse.class))
+                    })
+            }
+    )
     @PostMapping("/manage-task-initial/{taskId}")
     public ResponseEntity<ModuleResponse> manageTaskInitial(
             @PathVariable String taskId,
@@ -72,6 +93,22 @@ public class PublisherController {
         );
     }
 
+    @Operation(
+            responses = {
+                    @ApiResponse(description = "SUCCESS", responseCode = "200", content = @Content(
+                            mediaType = "application/json", schema = @Schema(implementation = ModuleResponse.class)
+                    )),
+                    @ApiResponse(description = "No Content", responseCode = "401", content = {
+                            @Content(schema = @Schema())
+                    }),
+                    @ApiResponse(description = "FORBIDDEN", responseCode = "403", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))
+                    }),
+                    @ApiResponse(description = "BAD REQUEST", responseCode = "400", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = ExceptionResponse.class))
+                    })
+            }
+    )
     @PostMapping("/initial-approval/{taskId}")
     public ResponseEntity<ModuleResponse> initialApproval(
             @PathVariable String taskId,

@@ -28,29 +28,18 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.model;
+package com.ap.listing.payload.request;
 
 /*
   Developer: Rohit Parihar
-  Project: ap-listing-service
+  Project: ap-payment-service
   GitHub: github.com/rohit-zip
-  File: TaskBuyer
+  File: ReserveFundToBalanceRequest
  */
 
-import com.ap.listing.constants.EntityConstants;
-import com.ap.listing.payload.BuyerTaskStatusPayload;
-import com.ap.listing.payload.PricingPayload;
-import com.ap.listing.payload.UrlAnchorTextPayload;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
-import java.util.Date;
-import java.util.List;
-
-@Entity
 @Getter
 @Setter
 @NoArgsConstructor
@@ -58,61 +47,11 @@ import java.util.List;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 @ToString
-@Table(
-        name = EntityConstants.TASK_BUYER,
-        schema = EntityConstants.LISTING_SCHEMA
-)
-public class TaskBuyer {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String taskBuyerUUID;
-
-    @Column(unique = true)
-    private String taskId;
-
-    // From Product Type Enum
-    private String productType;
-
-    private String siteUrl;
-
-    @JdbcTypeCode(SqlTypes.JSON)
-    @Column(columnDefinition = "jsonb")
-    private List<PricingPayload> priceBreak;
-    private double totalPrice;
-
-    // buyer task status enum
-    private String currentStatus;
-
-    @JdbcTypeCode(SqlTypes.JSON)
-    @Column(columnDefinition = "jsonb")
-    private List<BuyerTaskStatusPayload> taskStatus;
-    private String isSpecialTopic;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date dateCreated;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date dateUpdated;
-
-    @Lob
-    @Column(length = 10000000)
-    private String content;
-
-    @Column(length = 70000)
-    private String specialRequirements;
-
-    @JdbcTypeCode(SqlTypes.JSON)
-    @Column(columnDefinition = "jsonb")
-    private List<UrlAnchorTextPayload> urlAnchorTexts;
-
-    private String taskPlacementUrl;
-
-    private String contentType;
+public class ReserveFundToBalanceRequest {
 
     private String buyerId;
     private String publisherId;
-
+    private double amount;
+    private String taskId;
     private double platformFee;
-
 }

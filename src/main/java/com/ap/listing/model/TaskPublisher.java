@@ -120,4 +120,6 @@ public class TaskPublisher {
 
     private String buyerId;
     private String publisherId;
+
+    private double platformFee;
 }

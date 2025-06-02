@@ -14,16 +14,20 @@ import com.ap.listing.enums.BuyerTaskStatus;
 import com.ap.listing.enums.ErrorData;
 import com.ap.listing.enums.PublisherTaskStatus;
 import com.ap.listing.exception.BadRequestException;
+import com.ap.listing.feign.ApPaymentServiceFeignClient;
 import com.ap.listing.model.BuyerImprovement;
 import com.ap.listing.model.TaskBuyer;
 import com.ap.listing.model.TaskPublisher;
 import com.ap.listing.payload.BuyerTaskStatusPayload;
 import com.ap.listing.payload.PublisherTaskStatusPayload;
 import com.ap.listing.payload.request.BuyerImprovementRequest;
+import com.ap.listing.payload.request.ReserveFundToBalanceRequest;
 import com.ap.listing.service.BuyerService;
 import com.ap.listing.transformer.BuyerImprovementRequestToEntityTransformer;
+import com.ap.listing.utils.ExtractTokenUtil;
 import com.ap.listing.utils.SecurityContextUtil;
 import com.bloggios.provider.payload.ModuleResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +46,7 @@ public class BuyerServiceImplementation implements BuyerService {
     private final TaskPublisherRepository taskPublisherRepository;
     private final BuyerImprovementRequestToEntityTransformer buyerImprovementRequestToEntityTransformer;
     private final BuyerImprovementRepository buyerImprovementRepository;
+    private final ApPaymentServiceFeignClient apPaymentServiceFeignClient;
 
     @Override
     public ResponseEntity<ModuleResponse> manageImprovement(BuyerImprovementRequest buyerImprovementRequest) {
@@ -70,6 +75,41 @@ public class BuyerServiceImplementation implements BuyerService {
         );
     }
 
+    @Override
+    public ResponseEntity<ModuleResponse> manageCompleted(String taskId, HttpServletRequest request) {
+        TaskBuyer taskBuyer = taskBuyerRepository.findByTaskId(taskId)
+                .orElseThrow(() -> new BadRequestException(ErrorData.TASK_BUYER_NOT_FOUND));
+        if (!taskBuyer.getBuyerId().equalsIgnoreCase(SecurityContextUtil.getLoggedInUserOrThrow().getUserId())) {
+            throw new BadRequestException(ErrorData.CANNOT_MANAGE_OTHERS_TASK);
+        }
+        if (!taskBuyer.getCurrentStatus().equalsIgnoreCase(BuyerTaskStatus.YOUR_APPROVAL.name())) {
+            throw new BadRequestException(ErrorData.TASK_SHOULD_BE_BUYER_APPROVAL_TO_MANAGE);
+        }
+        TaskPublisher taskPublisher = taskPublisherRepository.findByTaskId(taskId)
+                .orElseThrow(() -> new BadRequestException(ErrorData.TASK_PUBLISHER_NOT_FOUND));
+        ModuleResponse reserveFundsToBalanceResponse = apPaymentServiceFeignClient.reserveFundsToBalance(
+                ExtractTokenUtil.extractToken(request),
+                ReserveFundToBalanceRequest
+                        .builder()
+                        .buyerId(taskBuyer.getBuyerId())
+                        .publisherId(taskBuyer.getPublisherId())
+                        .amount(taskPublisher.getTotalPrice() - taskPublisher.getPlatformFee())
+                        .taskId(taskPublisher.getTaskId())
+                        .platformFee(taskPublisher.getPlatformFee())
+                        .build()
+        );
+        Date now = new Date();
+        updateBuyerTaskForManageCompleted(taskBuyer, now);
+        updatePublisherTaskForManageCompleted(taskPublisher, now);
+        return ResponseEntity.ok(
+                ModuleResponse
+                        .builder()
+                        .message("Task Completed")
+                        .userId(UUID.fromString(SecurityContextUtil.getLoggedInUserOrThrow().getUserId()))
+                        .build()
+        );
+    }
+
     private void updateBuyerTaskForManageImprovement(TaskBuyer taskBuyer, Date now) {
         taskBuyer.setCurrentStatus(BuyerTaskStatus.IMPROVEMENT.name());
         List<BuyerTaskStatusPayload> taskStatus = taskBuyer.getTaskStatus();
@@ -84,6 +124,26 @@ public class BuyerServiceImplementation implements BuyerService {
         taskPublisher.setCurrentStatus(PublisherTaskStatus.IMPROVEMENT.name());
         List<PublisherTaskStatusPayload> taskStatus = taskPublisher.getTaskStatus();
         taskStatus.add(new PublisherTaskStatusPayload(now, PublisherTaskStatus.IMPROVEMENT));
+        taskPublisher.setTaskStatus(taskStatus);
+        taskPublisher.setDateUpdated(now);
+        TaskPublisher taskPublisherResponse = taskPublisherRepository.save(taskPublisher);
+        log.info("Task publisher successfully updated to Database : {}", taskPublisherResponse.toString());
+    }
+
+    private void updateBuyerTaskForManageCompleted(TaskBuyer taskBuyer, Date now) {
+        taskBuyer.setCurrentStatus(BuyerTaskStatus.COMPLETED.name());
+        List<BuyerTaskStatusPayload> taskStatus = taskBuyer.getTaskStatus();
+        taskStatus.add(new BuyerTaskStatusPayload(now, BuyerTaskStatus.COMPLETED));
+        taskBuyer.setTaskStatus(taskStatus);
+        taskBuyer.setDateUpdated(now);
+        TaskBuyer taskBuyerResponse = taskBuyerRepository.save(taskBuyer);
+        log.info("Task buyer created: {}", taskBuyerResponse.toString());
+    }
+
+    private void updatePublisherTaskForManageCompleted(TaskPublisher taskPublisher, Date now) {
+        taskPublisher.setCurrentStatus(PublisherTaskStatus.COMPLETED.name());
+        List<PublisherTaskStatusPayload> taskStatus = taskPublisher.getTaskStatus();
+        taskStatus.add(new PublisherTaskStatusPayload(now, PublisherTaskStatus.COMPLETED));
         taskPublisher.setTaskStatus(taskStatus);
         taskPublisher.setDateUpdated(now);
         TaskPublisher taskPublisherResponse = taskPublisherRepository.save(taskPublisher);

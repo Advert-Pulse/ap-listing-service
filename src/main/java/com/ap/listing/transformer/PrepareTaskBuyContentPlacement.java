@@ -74,6 +74,7 @@ public class PrepareTaskBuyContentPlacement {
         List<PricingPayload> finalPricingPayloads = prepareFinalPricingPayload(pricingPayloads);
         taskPublisher.setProductType(ProductType.CONTENT_PLACEMENT.name());
         taskPublisher.setPriceBreak(finalPricingPayloads);
+        taskPublisher.setPlatformFee(preparePlatformFee(pricingPayloads));
         taskPublisher.setTotalPrice(prepareTotalPrice(finalPricingPayloads));
         taskPublisher.setCurrentStatus(PublisherTaskStatus.YOUR_ACCEPTANCE.name());
         taskPublisher.setTaskStatus(new ArrayList<>(List.of(PublisherTaskStatusPayload.builder().date(now).status(PublisherTaskStatus.YOUR_ACCEPTANCE).build())));
@@ -143,5 +144,11 @@ public class PrepareTaskBuyContentPlacement {
         pricingPayloads.add(payload);
         log.info("Pricing Payload prepared with response {}", pricingPayloads);
         return pricingPayloads;
+    }
+
+    private double preparePlatformFee(List<PricingPayload> pricingPayloads) {
+        double totalPrice = prepareTotalPrice(pricingPayloads);
+        double contentPlacement = advertPulseProperties.getPlatformFee().getContentPlacement();
+        return totalPrice/contentPlacement;
     }
 }
