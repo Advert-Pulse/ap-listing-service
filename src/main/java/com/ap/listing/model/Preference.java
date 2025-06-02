@@ -63,7 +63,7 @@ import java.util.Date;
                 )
         }
 )
-public class Preference extends BaseModel {
+public class Preference {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -73,15 +73,9 @@ public class Preference extends BaseModel {
 
     private String preferenceType;
 
-    @PrePersist
-    protected void onCreate() {
-        Date now = new Date();
-        this.setCreatedAt(now);
-        this.setUpdatedAt(now);
-    }
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
 
-    @PreUpdate
-    protected void onUpdate() {
-        this.setUpdatedAt(new Date());
-    }
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updatedAt;
 }

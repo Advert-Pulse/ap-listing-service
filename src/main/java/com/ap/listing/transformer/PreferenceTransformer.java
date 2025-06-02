@@ -42,16 +42,21 @@ import com.ap.listing.utils.SecurityContextUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
+
 @Component
 @Slf4j
 public class PreferenceTransformer {
 
     public Preference transform(String preference) {
         log.info("{} >> transform", getClass().getSimpleName());
+        Date now = new Date();
         return Preference
                 .builder()
                 .userId(SecurityContextUtil.getLoggedInUserOrThrow().getUserId())
                 .preferenceType(preference.trim().toLowerCase())
+                .createdAt(now)
+                .updatedAt(now)
                 .build();
     }
 }
