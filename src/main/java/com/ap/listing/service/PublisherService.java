@@ -37,10 +37,12 @@ package com.ap.listing.service;
   File: PublisherService
  */
 
+import com.ap.listing.payload.request.PublisherInitialApprovalRequest;
 import com.bloggios.provider.payload.ModuleResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 
 public interface PublisherService {
     ResponseEntity<ModuleResponse> manageTaskInitial(String taskId, String status, HttpServletRequest httpServletRequest);
+    ResponseEntity<ModuleResponse> initialApproval(String taskId, PublisherInitialApprovalRequest publisherInitialApprovalRequest);
 }

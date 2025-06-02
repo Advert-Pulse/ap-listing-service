@@ -38,6 +38,7 @@ package com.ap.listing.controller;
  */
 
 import com.ap.listing.constants.ApiConstants;
+import com.ap.listing.payload.request.PublisherInitialApprovalRequest;
 import com.ap.listing.service.PublisherService;
 import com.bloggios.provider.payload.ModuleResponse;
 import com.bloggios.provider.utils.ControllerHelper;
@@ -67,6 +68,18 @@ public class PublisherController {
         return ControllerHelper.loggedResponse(
                 ()-> publisherService.manageTaskInitial(taskId, status, httpServletRequest),
                 ApiConstants.MANAGE_TASK_INITIAL,
+                LOGGER
+        );
+    }
+
+    @PostMapping("/initial-approval/{taskId}")
+    public ResponseEntity<ModuleResponse> initialApproval(
+            @PathVariable String taskId,
+            @RequestBody PublisherInitialApprovalRequest publisherInitialApprovalRequest
+            ) {
+        return ControllerHelper.loggedResponse(
+                ()-> publisherService.initialApproval(taskId, publisherInitialApprovalRequest),
+                ApiConstants.INITIAL_APPROVAL,
                 LOGGER
         );
     }

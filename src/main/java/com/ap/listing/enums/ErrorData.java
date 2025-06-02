@@ -93,7 +93,8 @@ public enum ErrorData {
     TASK_PUBLISHER_NOT_FOUND("AP__ERROR--3320", "Task publisher not found" ),
     MANAGE_TASK_INITIAL_STATUS_INVALID("AP__ERROR--3321", "Manage Initial Status invalid" ),
     CANNOT_MANAGE_OTHERS_TASK("AP__ERROR--3322", "Cannot Manage other Tasks" ),
-    TASK_SHOULD_BE_IN_YOUR_ACCEPTANCE_TO_MANAGE_IT_INITIALLY("AP__ERROR--3323", "Task should be in Your Acceptance To Manage it Initially" ),;
+    TASK_SHOULD_BE_IN_YOUR_ACCEPTANCE_TO_MANAGE_IT_INITIALLY("AP__ERROR--3323", "Task should be in Your Acceptance To Manage it Initially" ),
+    TASK_SHOULD_BE_IN_IN_PROGRESS_OR_IMPROVEMENT("AP__ERROR--3324", "Task should be in In Progress or Improvement for initial approval" ),;
 
     private final String code;
     private final String message;

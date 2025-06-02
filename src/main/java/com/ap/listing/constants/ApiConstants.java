@@ -65,4 +65,6 @@ public class ApiConstants {
     public static final String LIST_MY_PUBLISHER_TASK = "ListMyPublisherTask";
     public static final String GET_BUYER_TASK = "GetBuyerTask";
     public static final String MANAGE_TASK_INITIAL = "ManageTaskInitial";
+    public static final String INITIAL_APPROVAL = "InitialApproval";
+    public static final String MANAGE_IMPROVEMENT = "ManageImprovement";
 }

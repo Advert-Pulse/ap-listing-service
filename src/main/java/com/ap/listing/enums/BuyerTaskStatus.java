@@ -41,7 +41,7 @@ public enum BuyerTaskStatus {
 
     PUBLISHER_APPROVAL,
     IN_PROGRESS,
-    BUYER_APPROVAL,
+    YOUR_APPROVAL,
     IMPROVEMENT,
     COMPLETED,
     REJECTED

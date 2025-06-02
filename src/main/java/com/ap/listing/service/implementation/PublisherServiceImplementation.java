@@ -47,6 +47,7 @@ import com.ap.listing.model.TaskBuyer;
 import com.ap.listing.model.TaskPublisher;
 import com.ap.listing.payload.BuyerTaskStatusPayload;
 import com.ap.listing.payload.PublisherTaskStatusPayload;
+import com.ap.listing.payload.request.PublisherInitialApprovalRequest;
 import com.ap.listing.processor.PublisherRejectedTaskProcessor;
 import com.ap.listing.service.PublisherService;
 import com.ap.listing.utils.SecurityContextUtil;
@@ -57,7 +58,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import javax.swing.tree.DefaultTreeCellEditor;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -106,6 +106,28 @@ public class PublisherServiceImplementation implements PublisherService {
                 .build());
     }
 
+    @Override
+    public ResponseEntity<ModuleResponse> initialApproval(String taskId, PublisherInitialApprovalRequest publisherInitialApprovalRequest) {
+        TaskPublisher taskPublisher = taskPublisherRepository.findByTaskId(taskId)
+                .orElseThrow(() -> new BadRequestException(ErrorData.TASK_PUBLISHER_NOT_FOUND));
+        if (!taskPublisher.getPublisherId().equalsIgnoreCase(SecurityContextUtil.getLoggedInUserOrThrow().getUserId())) {
+            throw new BadRequestException(ErrorData.CANNOT_MANAGE_OTHERS_TASK);
+        }
+        Date now = new Date();
+        TaskBuyer taskBuyer = taskBuyerRepository.findByTaskId(taskId)
+                .orElseThrow(() -> new BadRequestException(ErrorData.TASK_BUYER_NOT_FOUND));
+        if (!(taskPublisher.getCurrentStatus().equalsIgnoreCase(PublisherTaskStatus.IN_PROGRESS.name()) || taskPublisher.getCurrentStatus().equalsIgnoreCase(PublisherTaskStatus.IMPROVEMENT.name()))) {
+            throw new BadRequestException(ErrorData.TASK_SHOULD_BE_IN_IN_PROGRESS_OR_IMPROVEMENT);
+        }
+        updateBuyerTaskForInitialApproval(taskBuyer, now, publisherInitialApprovalRequest);
+        updatePublisherTaskForInitialApproval(taskPublisher, now, publisherInitialApprovalRequest);
+        return ResponseEntity.ok(ModuleResponse
+                .builder()
+                .message("Status has been updated to Buyer Approval")
+                .userId(UUID.fromString(SecurityContextUtil.getLoggedInUserOrThrow().getUserId()))
+                .build());
+    }
+
     private void updateBuyerTaskForManageTaskInitial(TaskBuyer taskBuyer, Date now) {
         taskBuyer.setCurrentStatus(BuyerTaskStatus.IN_PROGRESS.name());
         List<BuyerTaskStatusPayload> taskStatus = taskBuyer.getTaskStatus();
@@ -122,6 +144,28 @@ public class PublisherServiceImplementation implements PublisherService {
         taskStatus.add(new PublisherTaskStatusPayload(now, PublisherTaskStatus.IN_PROGRESS));
         taskPublisher.setTaskStatus(taskStatus);
         taskPublisher.setDateUpdated(now);
+        TaskPublisher taskPublisherResponse = taskPublisherRepository.save(taskPublisher);
+        log.info("Task publisher successfully updated to Database : {}", taskPublisherResponse.toString());
+    }
+
+    private void updateBuyerTaskForInitialApproval(TaskBuyer taskBuyer, Date now, PublisherInitialApprovalRequest publisherInitialApprovalRequest) {
+        taskBuyer.setCurrentStatus(BuyerTaskStatus.YOUR_APPROVAL.name());
+        List<BuyerTaskStatusPayload> taskStatus = taskBuyer.getTaskStatus();
+        taskStatus.add(new BuyerTaskStatusPayload(now, BuyerTaskStatus.YOUR_APPROVAL));
+        taskBuyer.setTaskStatus(taskStatus);
+        taskBuyer.setDateUpdated(now);
+        taskBuyer.setTaskPlacementUrl(publisherInitialApprovalRequest.getPublishedLink());
+        TaskBuyer taskBuyerResponse = taskBuyerRepository.save(taskBuyer);
+        log.info("Task buyer created: {}", taskBuyerResponse.toString());
+    }
+
+    private void updatePublisherTaskForInitialApproval(TaskPublisher taskPublisher, Date now, PublisherInitialApprovalRequest publisherInitialApprovalRequest) {
+        taskPublisher.setCurrentStatus(PublisherTaskStatus.BUYER_APPROVAL.name());
+        List<PublisherTaskStatusPayload> taskStatus = taskPublisher.getTaskStatus();
+        taskStatus.add(new PublisherTaskStatusPayload(now, PublisherTaskStatus.BUYER_APPROVAL));
+        taskPublisher.setTaskStatus(taskStatus);
+        taskPublisher.setDateUpdated(now);
+        taskPublisher.setTaskPlacementUrl(publisherInitialApprovalRequest.getPublishedLink());
         TaskPublisher taskPublisherResponse = taskPublisherRepository.save(taskPublisher);
         log.info("Task publisher successfully updated to Database : {}", taskPublisherResponse.toString());
     }
