@@ -47,6 +47,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -104,9 +105,9 @@ public class BuyerController {
             }
     )
     @GetMapping("/manage-completed/{taskId}")
-    public ResponseEntity<ModuleResponse> manageCompleted(@PathVariable String taskId) {
+    public ResponseEntity<ModuleResponse> manageCompleted(@PathVariable String taskId, HttpServletRequest request) {
         return ControllerHelper.loggedResponse(
-                ()-> buyerService.manageCompleted(taskId),
+                ()-> buyerService.manageCompleted(taskId, request),
                 ApiConstants.MANAGE_COMPLETED,
                 LOGGER
         );

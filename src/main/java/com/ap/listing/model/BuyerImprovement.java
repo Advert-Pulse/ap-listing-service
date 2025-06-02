@@ -44,6 +44,7 @@ import lombok.*;
 
 import java.util.Date;
 
+@Entity
 @Getter
 @Setter
 @NoArgsConstructor
