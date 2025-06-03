@@ -74,6 +74,7 @@ public class WebsiteResponse {
     private String isContentPlacement;
     private Double contentPlacementPrice;
     private Double writingAndPlacementPrice;
+    private Double linkInsertionPrice;
     private String isWritingPlacement;
     private List<WebsiteCategory> categories = new ArrayList<>();
     private Integer mozDa;
