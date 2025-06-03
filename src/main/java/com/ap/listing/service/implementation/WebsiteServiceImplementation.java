@@ -58,6 +58,7 @@ import com.ap.listing.transformer.WebsiteToWebsiteResponseTransformer;
 import com.ap.listing.transformer.WebsiteTransformer;
 import com.ap.listing.utils.ExtractBaseUrl;
 import com.ap.listing.utils.UrlChecker;
+import com.bloggios.provider.utils.ValueCheckerUtil;
 import com.bloggios.query.payload.ListPayload;
 import com.bloggios.query.processor.ListProcessor;
 import com.bloggios.query.query.InitQuery;
@@ -162,5 +163,14 @@ public class WebsiteServiceImplementation implements WebsiteService {
                 .totalRecordsCount(initQuery.getTotalRecords(transformedListPayload, WebsiteData.class))
                 .build();
         return ResponseEntity.ok(listResponse);
+    }
+
+    @Override
+    public ResponseEntity<WebsiteResponse> getWebsiteData(String websiteId) {
+        ValueCheckerUtil.isValidUUID(websiteId, ()-> new BadRequestException(ErrorData.WEBSITE_ID_NOT_VALID));
+        WebsiteData websiteData = websiteRepository.findById(websiteId)
+                .orElseThrow(() -> new BadRequestException(ErrorData.WEBSITE_NOT_FOUND_BY_ID));
+        WebsiteResponse websiteResponse = websiteToWebsiteResponseTransformer.transform(websiteData);
+        return ResponseEntity.ok(websiteResponse);
     }
 }

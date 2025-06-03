@@ -68,4 +68,5 @@ public class ApiConstants {
     public static final String INITIAL_APPROVAL = "InitialApproval";
     public static final String MANAGE_IMPROVEMENT = "ManageImprovement";
     public static final String MANAGE_COMPLETED = "ManageCompleted";
+    public static final String GET_WEBSITE_DATA = "GetWebsiteData";
 }

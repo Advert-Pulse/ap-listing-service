@@ -39,6 +39,7 @@ package com.ap.listing.service;
 
 import com.ap.listing.payload.response.AddWebsiteResponse;
 import com.ap.listing.payload.response.ListResponse;
+import com.ap.listing.payload.response.WebsiteResponse;
 import com.bloggios.query.payload.ListPayload;
 import org.springframework.http.ResponseEntity;
 
@@ -49,4 +50,5 @@ public interface WebsiteService {
     ResponseEntity<AddWebsiteResponse> addWebsite(String website);
     ResponseEntity<List<AddWebsiteResponse>> addMultipleWebsite(List<String> websites);
     ResponseEntity<ListResponse> list(ListPayload listPayload);
+    ResponseEntity<WebsiteResponse> getWebsiteData(String websiteId);
 }
