@@ -134,6 +134,6 @@ public interface WebsiteApi {
                     })
             }
     )
-    @PostMapping("/{websiteId}")
+    @GetMapping("/{websiteId}")
     ResponseEntity<WebsiteResponse> getWebsiteData(@PathVariable String websiteId);
 }
