@@ -98,12 +98,12 @@ public class FetchWebsiteDataSchedulerProcessor {
         CompletableFuture<ResponseEntity<AhrefBacklinkResponse>> ahrefBacklinkResponseFuture = CompletableFuture.supplyAsync(()-> ahrefFeignClient.getBacklinkResponse(feignUrl));
         CompletableFuture<ResponseEntity<AhrefWebsiteTrafficResponse>> ahrefWebsiteTrafficResponseFuture = CompletableFuture.supplyAsync(()-> ahrefFeignClient.getWebsiteTraffic(feignUrl));
         CompletableFuture<ResponseEntity<SimilarWebTrafficHistoryWrapper>> similarWebWebsiteTrafficResponseFuture = CompletableFuture.supplyAsync(()-> similarWebFeignClient.getWebsiteTraffic(feignUrl));
-        AsyncUtils.getAsyncResult(CompletableFuture.allOf(
+        CompletableFuture.allOf(
                 domainMetricsResponseFuture,
                 ahrefBacklinkResponseFuture,
                 ahrefWebsiteTrafficResponseFuture,
                 similarWebWebsiteTrafficResponseFuture
-        ));
+        );
         ResponseEntity<DomainMetricsFeignResponse> domainMetricsResponse = domainMetricsResponseFuture.join();
         ResponseEntity<AhrefBacklinkResponse> ahrefBacklinkResponse = ahrefBacklinkResponseFuture.join();
         ResponseEntity<AhrefWebsiteTrafficResponse> ahrefWebsiteTrafficResponse = ahrefWebsiteTrafficResponseFuture.join();
