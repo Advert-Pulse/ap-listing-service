@@ -37,26 +37,41 @@ package com.ap.listing.transformer;
   File: PreferenceTransformer
  */
 
+import com.ap.listing.dao.repository.PreferenceRepository;
 import com.ap.listing.model.Preference;
 import com.ap.listing.utils.SecurityContextUtil;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.Optional;
 
 @Component
+@RequiredArgsConstructor
 @Slf4j
 public class PreferenceTransformer {
+
+    private final PreferenceRepository preferenceRepository;
 
     public Preference transform(String preference) {
         log.info("{} >> transform", getClass().getSimpleName());
         Date now = new Date();
-        return Preference
-                .builder()
-                .userId(SecurityContextUtil.getLoggedInUserOrThrow().getUserId())
-                .preferenceType(preference.trim().toLowerCase())
-                .createdAt(now)
-                .updatedAt(now)
-                .build();
+        String userId = SecurityContextUtil.getLoggedInUserOrThrow().getUserId();
+        Optional<Preference> byUserId = preferenceRepository.findByUserId(userId);
+        if (byUserId.isPresent()) {
+            Preference response = byUserId.get();
+            response.setPreferenceId(preference.trim().toLowerCase());
+            response.setUpdatedAt(now);
+            return response;
+        } else {
+            return Preference
+                    .builder()
+                    .userId(userId)
+                    .preferenceType(preference.trim().toLowerCase())
+                    .createdAt(now)
+                    .updatedAt(now)
+                    .build();
+        }
     }
 }
