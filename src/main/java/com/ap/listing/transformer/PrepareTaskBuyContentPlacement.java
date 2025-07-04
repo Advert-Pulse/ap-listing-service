@@ -118,14 +118,16 @@ public class PrepareTaskBuyContentPlacement {
                 .build();
         pricingPayloads.add(pricingPayload);
 
-        for (int i=0 ; i<urlAnchorTexts.size() ; i++) {
-            PricingPayload payload = PricingPayload
-                    .builder()
-                    .title("URL " + (i + 1))
-                    .category("Extra services")
-                    .price(websitePublisher.getExtraLinkPricing())
-                    .build();
-            pricingPayloads.add(payload);
+        if (urlAnchorTexts.size() > 1) {
+            for (int i=0 ; i<urlAnchorTexts.size() ; i++) {
+                PricingPayload payload = PricingPayload
+                        .builder()
+                        .title("URL " + (i + 1))
+                        .category("Extra services")
+                        .price(websitePublisher.getExtraLinkPricing())
+                        .build();
+                pricingPayloads.add(payload);
+            }
         }
 
         return pricingPayloads;
