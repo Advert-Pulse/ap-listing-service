@@ -37,7 +37,7 @@ package com.ap.listing.service;
   File: TaskService
  */
 
-import com.ap.listing.payload.response.DetailedTaskBuyerResponse;
+import com.ap.listing.payload.response.DetailedTaskResponse;
 import com.ap.listing.payload.response.ListResponse;
 import com.bloggios.query.payload.ListPayload;
 import org.springframework.http.ResponseEntity;
@@ -50,5 +50,5 @@ public interface TaskService {
     ResponseEntity<ListResponse> myListBuyerTasks(ListPayload listPayload);
 
     ResponseEntity<ListResponse> myListPublisherTasks(ListPayload listPayload);
-    ResponseEntity<DetailedTaskBuyerResponse> getBuyerTask(String taskId);
+    ResponseEntity<DetailedTaskResponse> getTaskDetails(String taskId);
 }

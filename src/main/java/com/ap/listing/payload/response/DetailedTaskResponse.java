@@ -28,32 +28,48 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.transformer;
+package com.ap.listing.payload.response;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: TaskBuyerToDetailedTaskTransformer
+  File: DetailedTaskBuyerResponse
  */
 
-import com.ap.listing.model.TaskBuyer;
-import com.ap.listing.payload.response.DetailedTaskBuyerResponse;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
-import org.springframework.stereotype.Component;
+import com.ap.listing.payload.BuyerTaskStatusPayload;
+import com.ap.listing.payload.PricingPayload;
+import com.ap.listing.payload.UrlAnchorTextPayload;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
 
-@Component
-@RequiredArgsConstructor
-@Slf4j
-public class TaskBuyerToDetailedTaskTransformer {
+import java.util.Date;
+import java.util.List;
 
-    private final ModelMapper modelMapper;
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
+@ToString
+public class DetailedTaskResponse {
 
-    public DetailedTaskBuyerResponse transform(TaskBuyer taskBuyer) {
-        DetailedTaskBuyerResponse detailedTaskBuyerResponse = modelMapper.map(taskBuyer, DetailedTaskBuyerResponse.class);
-        log.info("Task buyer to detailed task: {}", detailedTaskBuyerResponse);
-        return detailedTaskBuyerResponse;
-    }
+    private String taskId;
+    private String productType;
+    private String siteUrl;
+    private List<PricingPayload> priceBreak;
+    private double totalPrice;
+    private String currentStatus;
+    private List<BuyerTaskStatusPayload> taskStatus;
+    private String isSpecialTopic;
+    private Date dateCreated;
+    private Date dateUpdated;
+    private String content;
+    private String specialRequirements;
+    private List<UrlAnchorTextPayload> urlAnchorTexts;
+    private String taskPlacementUrl;
+    private String contentType;
+    private String buyerId;
+    private String publisherId;
 }

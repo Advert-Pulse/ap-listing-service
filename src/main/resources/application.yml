@@ -135,6 +135,11 @@ feign-client:
     name: apPaymentServiceClient
 #    url: http://localhost:8082/payment-service
     url: https://devapi.advertpulse.com/payment-service
+  google-service:
+    name: googleClient
+    url: https://oauth2.googleapis.com
+    client-id: 898797817545-3lnhm1esudbkd5lcvlibvvdb73t7n866.apps.googleusercontent.com
+    client-secret: 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
 
 ap:
   platform-fee:
