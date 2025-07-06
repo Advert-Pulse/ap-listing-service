@@ -61,6 +61,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -127,9 +128,13 @@ public class TaskServiceImplementation implements TaskService {
     }
 
     @Override
-    public ResponseEntity<DetailedTaskResponse> getTaskDetails(String taskId) {
+    public ResponseEntity<DetailedTaskResponse> getTaskDetails(String taskId, String preference) {
+        Set<String> validPreferences = Set.of(ServiceConstants.BUYER, ServiceConstants.SELLER);
+        if (!validPreferences.contains(preference)) {
+            throw new BadRequestException(ErrorData.INVALID_PREFERENCE, "preference");
+        }
         DetailedTaskResponse detailedTaskResponse;
-        if (taskId.equalsIgnoreCase(ServiceConstants.BUYER)) {
+        if (preference.equalsIgnoreCase(ServiceConstants.BUYER)) {
             TaskBuyer taskBuyer = taskBuyerRepository.findByTaskId(taskId)
                     .orElseThrow(() -> new BadRequestException(ErrorData.TASK_BUYER_NOT_FOUND));
             detailedTaskResponse = taskToDetailedTaskTransformer.transform(taskBuyer);

@@ -61,7 +61,7 @@ public class DetailedTaskResponse {
     private List<PricingPayload> priceBreak;
     private double totalPrice;
     private String currentStatus;
-    private List<BuyerTaskStatusPayload> taskStatus;
+    private List<Object> taskStatus;
     private String isSpecialTopic;
     private Date dateCreated;
     private Date dateUpdated;
