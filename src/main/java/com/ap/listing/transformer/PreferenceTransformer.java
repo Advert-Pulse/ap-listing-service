@@ -51,9 +51,10 @@ public class PreferenceTransformer {
     public Preference transform(String preference) {
         log.info("{} >> transform", getClass().getSimpleName());
         Date now = new Date();
+        String userId = SecurityContextUtil.getLoggedInUserOrThrow().getUserId();
         return Preference
                 .builder()
-                .userId(SecurityContextUtil.getLoggedInUserOrThrow().getUserId())
+                .userId(userId)
                 .preferenceType(preference.trim().toLowerCase())
                 .createdAt(now)
                 .updatedAt(now)

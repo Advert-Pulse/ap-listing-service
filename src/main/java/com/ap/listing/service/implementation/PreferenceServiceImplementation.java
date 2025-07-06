@@ -70,6 +70,7 @@ public class PreferenceServiceImplementation implements PreferenceService {
         if (!validPreferences.contains(preference)) {
             throw new BadRequestException(ErrorData.INVALID_PREFERENCE, "preference");
         }
+
         Preference preferenceEntity = preferenceTransformer.transform(preference);
         Preference preferenceResponse = preferenceRepository.saveAndFlush(preferenceEntity);
         log.info("{} >> addPreference -> Preference Saved : {}", getClass().getSimpleName(), preferenceResponse);
