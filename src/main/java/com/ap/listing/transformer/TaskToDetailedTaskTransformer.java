@@ -28,54 +28,39 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.payload.response;
+package com.ap.listing.transformer;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: DetailedTaskBuyerResponse
+  File: TaskBuyerToDetailedTaskTransformer
  */
 
-import com.ap.listing.payload.BuyerTaskStatusPayload;
-import com.ap.listing.payload.PricingPayload;
-import com.ap.listing.payload.UrlAnchorTextPayload;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.Column;
-import jakarta.persistence.Lob;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
-import lombok.*;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
+import com.ap.listing.model.TaskBuyer;
+import com.ap.listing.model.TaskPublisher;
+import com.ap.listing.payload.response.DetailedTaskResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Component;
 
-import java.util.Date;
-import java.util.List;
+@Component
+@RequiredArgsConstructor
+@Slf4j
+public class TaskToDetailedTaskTransformer {
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@JsonIgnoreProperties(ignoreUnknown = true)
-@ToString
-public class DetailedTaskBuyerResponse {
+    private final ModelMapper modelMapper;
 
-    private String taskId;
-    private String productType;
-    private String siteUrl;
-    private List<PricingPayload> priceBreak;
-    private double totalPrice;
-    private String currentStatus;
-    private List<BuyerTaskStatusPayload> taskStatus;
-    private String isSpecialTopic;
-    private Date dateCreated;
-    private Date dateUpdated;
-    private String content;
-    private String specialRequirements;
-    private List<UrlAnchorTextPayload> urlAnchorTexts;
-    private String taskPlacementUrl;
-    private String contentType;
-    private String buyerId;
-    private String publisherId;
+    public DetailedTaskResponse transform(TaskBuyer taskBuyer) {
+        DetailedTaskResponse detailedTaskResponse = modelMapper.map(taskBuyer, DetailedTaskResponse.class);
+        log.info("Task buyer to detailed task: {}", detailedTaskResponse);
+        return detailedTaskResponse;
+    }
+
+    public DetailedTaskResponse transform(TaskPublisher taskPublisher) {
+        DetailedTaskResponse detailedTaskResponse = modelMapper.map(taskPublisher, DetailedTaskResponse.class);
+        log.info("Task Publisher to detailed task: {}", detailedTaskResponse);
+        return detailedTaskResponse;
+    }
 }

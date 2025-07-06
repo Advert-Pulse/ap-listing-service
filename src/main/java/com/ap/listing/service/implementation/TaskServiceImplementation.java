@@ -11,15 +11,15 @@
  * <p>
  * You may not:
  * 1. Copy, modify, distribute, or sublicense this software without express
- *    written permission from Advert Pulse or Bloggios.
+ * written permission from Advert Pulse or Bloggios.
  * 2. Reverse engineer, decompile, disassemble, or otherwise attempt to derive
- *    the source code of the software.
+ * the source code of the software.
  * 3. Modify this license in any way, including but not limited to altering its
- *    terms, even by Advert Pulse or any other entity, without express written
- *    permission from Bloggios administrators. Bloggios is the creator of this
- *    license and retains exclusive rights to update or modify it.
+ * terms, even by Advert Pulse or any other entity, without express written
+ * permission from Bloggios administrators. Bloggios is the creator of this
+ * license and retains exclusive rights to update or modify it.
  * 4. Update or modify the license without written permission from Bloggios
- *    administrators.
+ * administrators.
  * <p>
  * The software is provided "as is," and Advert Pulse makes no warranties,
  * express or implied, regarding the software, including but not limited to any
@@ -37,17 +37,18 @@ package com.ap.listing.service.implementation;
   File: TaskServiceImplementation
  */
 
+import com.ap.listing.constants.ServiceConstants;
 import com.ap.listing.dao.repository.TaskBuyerRepository;
+import com.ap.listing.dao.repository.TaskPublisherRepository;
 import com.ap.listing.enums.ErrorData;
 import com.ap.listing.exception.BadRequestException;
 import com.ap.listing.model.TaskBuyer;
 import com.ap.listing.model.TaskPublisher;
-import com.ap.listing.model.WebsitePublisher;
 import com.ap.listing.payload.response.*;
 import com.ap.listing.properties.TaskBuyerListProperties;
 import com.ap.listing.properties.TaskPublisherListProperties;
 import com.ap.listing.service.TaskService;
-import com.ap.listing.transformer.TaskBuyerToDetailedTaskTransformer;
+import com.ap.listing.transformer.TaskToDetailedTaskTransformer;
 import com.ap.listing.transformer.TaskBuyerToTaskBuyerResponseTransformer;
 import com.ap.listing.transformer.TaskPublisherToTaskPublisherResponseTransformer;
 import com.bloggios.query.payload.ListPayload;
@@ -74,7 +75,8 @@ public class TaskServiceImplementation implements TaskService {
     private final InitQuery<TaskPublisher> publisherInitQuery;
     private final TaskPublisherToTaskPublisherResponseTransformer taskPublisherToTaskPublisherResponseTransformer;
     private final TaskBuyerRepository taskBuyerRepository;
-    private final TaskBuyerToDetailedTaskTransformer taskBuyerToDetailedTaskTransformer;
+    private final TaskToDetailedTaskTransformer taskToDetailedTaskTransformer;
+    private final TaskPublisherRepository taskPublisherRepository;
 
     @Override
     public ResponseEntity<ListResponse> listBuyerTasks(ListPayload listPayload) {
@@ -125,10 +127,17 @@ public class TaskServiceImplementation implements TaskService {
     }
 
     @Override
-    public ResponseEntity<DetailedTaskBuyerResponse> getBuyerTask(String taskId) {
-        TaskBuyer taskBuyer = taskBuyerRepository.findByTaskId(taskId)
-                .orElseThrow(() -> new BadRequestException(ErrorData.TASK_BUYER_NOT_FOUND));
-        DetailedTaskBuyerResponse detailedTaskBuyerResponse = taskBuyerToDetailedTaskTransformer.transform(taskBuyer);
-        return ResponseEntity.ok(detailedTaskBuyerResponse);
+    public ResponseEntity<DetailedTaskResponse> getTaskDetails(String taskId) {
+        DetailedTaskResponse detailedTaskResponse;
+        if (taskId.equalsIgnoreCase(ServiceConstants.BUYER)) {
+            TaskBuyer taskBuyer = taskBuyerRepository.findByTaskId(taskId)
+                    .orElseThrow(() -> new BadRequestException(ErrorData.TASK_BUYER_NOT_FOUND));
+            detailedTaskResponse = taskToDetailedTaskTransformer.transform(taskBuyer);
+        } else {
+            TaskPublisher taskPublisher = taskPublisherRepository.findByTaskId(taskId)
+                    .orElseThrow(() -> new BadRequestException(ErrorData.TASK_PUBLISHER_NOT_FOUND));
+            detailedTaskResponse = taskToDetailedTaskTransformer.transform(taskPublisher);
+        }
+        return ResponseEntity.ok(detailedTaskResponse);
     }
 }

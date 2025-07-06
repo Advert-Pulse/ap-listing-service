@@ -38,11 +38,10 @@ package com.ap.listing.controller;
  */
 
 import com.ap.listing.constants.ApiConstants;
-import com.ap.listing.payload.response.DetailedTaskBuyerResponse;
+import com.ap.listing.payload.response.DetailedTaskResponse;
 import com.ap.listing.payload.response.ListResponse;
 import com.ap.listing.service.TaskService;
 import com.bloggios.provider.payload.ExceptionResponse;
-import com.bloggios.provider.payload.ModuleResponse;
 import com.bloggios.provider.utils.ControllerHelper;
 import com.bloggios.query.payload.ListPayload;
 import io.swagger.v3.oas.annotations.Operation;
@@ -167,7 +166,7 @@ public class TaskController {
     @Operation(
             responses = {
                     @ApiResponse(description = "SUCCESS", responseCode = "200", content = @Content(
-                            mediaType = "application/json", schema = @Schema(implementation = DetailedTaskBuyerResponse.class)
+                            mediaType = "application/json", schema = @Schema(implementation = DetailedTaskResponse.class)
                     )),
                     @ApiResponse(description = "No Content", responseCode = "401", content = {
                             @Content(schema = @Schema())
@@ -180,10 +179,10 @@ public class TaskController {
                     })
             }
     )
-    @GetMapping("/buyer/{taskId}")
-    public ResponseEntity<DetailedTaskBuyerResponse> getBuyerTask(@PathVariable String taskId) {
+    @GetMapping("/details/{taskId}")
+    public ResponseEntity<DetailedTaskResponse> getTaskDetails(@PathVariable String taskId, @RequestParam String preference) {
         return ControllerHelper.loggedResponse(
-                ()-> taskService.getBuyerTask(taskId),
+                ()-> taskService.getTaskDetails(taskId),
                 ApiConstants.GET_BUYER_TASK,
                 LOGGER
         );
