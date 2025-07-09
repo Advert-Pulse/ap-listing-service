@@ -122,4 +122,6 @@ public class TaskPublisher {
     private String publisherId;
 
     private double platformFee;
+
+    private String publishingId;
 }

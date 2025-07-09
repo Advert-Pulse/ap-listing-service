@@ -88,6 +88,7 @@ public class PrepareTaskBuyContentPlacement {
         taskPublisher.setBuyerId(SecurityContextUtil.getLoggedInUserOrThrow().getUserId());
         taskPublisher.setPublisherId(websitePublisher.getUserId());
         taskPublisher.setSiteUrl(websitePublisher.getDomain());
+        taskPublisher.setPublishingId(websitePublisher.getPublishingId());
         log.info("Task Publisher prepared with response {}", taskPublisher);
         return taskPublisher;
     }

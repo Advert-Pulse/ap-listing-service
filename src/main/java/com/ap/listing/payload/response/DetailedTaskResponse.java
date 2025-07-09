@@ -72,4 +72,5 @@ public class DetailedTaskResponse {
     private String contentType;
     private String buyerId;
     private String publisherId;
+    private String publishingId;
 }
