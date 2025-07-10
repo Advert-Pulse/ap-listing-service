@@ -45,12 +45,14 @@ import com.ap.listing.exception.BadRequestException;
 import com.ap.listing.model.TaskBuyer;
 import com.ap.listing.model.TaskPublisher;
 import com.ap.listing.payload.response.*;
+import com.ap.listing.processor.UserIdAdditionInFilter;
 import com.ap.listing.properties.TaskBuyerListProperties;
 import com.ap.listing.properties.TaskPublisherListProperties;
 import com.ap.listing.service.TaskService;
 import com.ap.listing.transformer.TaskToDetailedTaskTransformer;
 import com.ap.listing.transformer.TaskBuyerToTaskBuyerResponseTransformer;
 import com.ap.listing.transformer.TaskPublisherToTaskPublisherResponseTransformer;
+import com.ap.listing.validator.NoUserIdInFilterValidator;
 import com.bloggios.query.payload.ListPayload;
 import com.bloggios.query.processor.ListProcessor;
 import com.bloggios.query.query.InitQuery;
@@ -78,6 +80,8 @@ public class TaskServiceImplementation implements TaskService {
     private final TaskBuyerRepository taskBuyerRepository;
     private final TaskToDetailedTaskTransformer taskToDetailedTaskTransformer;
     private final TaskPublisherRepository taskPublisherRepository;
+    private final NoUserIdInFilterValidator noUserIdInFilterValidator;
+    private final UserIdAdditionInFilter userIdAdditionInFilter;
 
     @Override
     public ResponseEntity<ListResponse> listBuyerTasks(ListPayload listPayload) {
@@ -119,12 +123,44 @@ public class TaskServiceImplementation implements TaskService {
 
     @Override
     public ResponseEntity<ListResponse> myListBuyerTasks(ListPayload listPayload) {
-        return null;
+        noUserIdInFilterValidator.validate(listPayload, "buyerId");
+        ListPayload processedListPayload = userIdAdditionInFilter.process(listPayload, "buyerId");
+        ListPayload transformedListPayload = listProcessor.initProcess(processedListPayload, taskBuyerListProperties.getData(), "dateUpdated");
+        TypedQuery<TaskBuyer> build = buyerInitQuery.build(transformedListPayload, TaskBuyer.class);
+        List<TaskBuyerResponse> taskBuyerResponses = build
+                .getResultList()
+                .stream()
+                .map(taskBuyerToTaskBuyerResponseTransformer::transform)
+                .toList();
+        ListResponse listResponse = ListResponse
+                .builder()
+                .object(taskBuyerResponses)
+                .page(listPayload.getPage())
+                .size(listPayload.getSize())
+                .totalRecordsCount(buyerInitQuery.getTotalRecords(transformedListPayload, TaskBuyer.class))
+                .build();
+        return ResponseEntity.ok(listResponse);
     }
 
     @Override
     public ResponseEntity<ListResponse> myListPublisherTasks(ListPayload listPayload) {
-        return null;
+        noUserIdInFilterValidator.validate(listPayload, "publisherId");
+        ListPayload processedListPayload = userIdAdditionInFilter.process(listPayload, "publisherId");
+        ListPayload transformedListPayload = listProcessor.initProcess(processedListPayload, taskPublisherListProperties.getData(), "dateUpdated");
+        TypedQuery<TaskPublisher> build = publisherInitQuery.build(transformedListPayload, TaskPublisher.class);
+        List<TaskPublisherResponse> taskPublisherResponses = build
+                .getResultList()
+                .stream()
+                .map(taskPublisherToTaskPublisherResponseTransformer::transform)
+                .toList();
+        ListResponse listResponse = ListResponse
+                .builder()
+                .object(taskPublisherResponses)
+                .page(listPayload.getPage())
+                .size(listPayload.getSize())
+                .totalRecordsCount(publisherInitQuery.getTotalRecords(transformedListPayload, TaskPublisher.class))
+                .build();
+        return ResponseEntity.ok(listResponse);
     }
 
     @Override

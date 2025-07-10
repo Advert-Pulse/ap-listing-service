@@ -58,4 +58,14 @@ public class NoUserIdInFilterValidator {
             });
         }
     }
+
+    public void validate(ListPayload listPayload, String filterKey) {
+        if (Objects.nonNull(listPayload) && Objects.nonNull(listPayload.getFilters())) {
+            listPayload.getFilters().forEach(filter -> {
+                if (filter.getFilterKey().equals(filterKey)) {
+                    throw new BadRequestException(ErrorData.MY_PUBLISHED_SITE_USER_ID_FILTER);
+                }
+            });
+        }
+    }
 }
