@@ -71,6 +71,7 @@ public class WebsitePublisherSchedulerGenerator {
                     .isSchedulingDone(false)
                     .scheduledTaskType(ScheduleTaskType.APPROVE_PUBLISHER)
                     .timesUsed(0)
+                    .scheduledOn(new Date())
                     .createdOn(now)
                     .updatedOn(now)
                     .build();
