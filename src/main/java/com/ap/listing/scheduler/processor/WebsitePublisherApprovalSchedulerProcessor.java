@@ -44,6 +44,7 @@ import com.ap.listing.enums.WebsitePublishingStatus;
 import com.ap.listing.model.Scheduler;
 import com.ap.listing.model.WebsiteData;
 import com.ap.listing.model.WebsitePublisher;
+import com.ap.listing.utils.MessageUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.message.LeaderAndIsrResponseData;
@@ -70,19 +71,31 @@ public class WebsitePublisherApprovalSchedulerProcessor {
         Optional<WebsitePublisher> websitePublisherOptional = websitePublisherRepository.findById(scheduler.getPrimaryId());
         int timesUsed = scheduler.getTimesUsed();
         if (websitePublisherOptional.isEmpty()) {
-            log.info("No website publisher found for id {}", scheduler.getPrimaryId());
+            scheduler.setIsSchedulingDone(true);
+            scheduler.setScheduleCompletedOn(now);
+            scheduler.setUpdatedOn(now);
+            scheduler.setIsPassed(false);
+            scheduler.setMessage(MessageUtil.getMessage(scheduler.getMessage(), "Website Publisher is not found with the given primary id: " + scheduler.getPrimaryId()));
+            Scheduler schedulerResponse = schedulerRepository.saveAndFlush(scheduler);
+            log.info("Scheduler Updated to DB {}", schedulerResponse);
             return;
         }
         WebsitePublisher websitePublisher = websitePublisherOptional.get();
         String websiteId = websitePublisher.getWebsiteData().getWebsiteId();
         Optional<WebsiteData> websiteDataOptional = websiteRepository.findById(websiteId);
         if (websiteDataOptional.isEmpty()) {
-            log.info("No website found for id {}", websiteId);
+            scheduler.setIsSchedulingDone(true);
+            scheduler.setScheduleCompletedOn(now);
+            scheduler.setUpdatedOn(now);
+            scheduler.setIsPassed(false);
+            scheduler.setMessage(MessageUtil.getMessage(scheduler.getMessage(), "No Website found for the given Publisher: " + scheduler.getPrimaryId()));
+            Scheduler schedulerResponse = schedulerRepository.saveAndFlush(scheduler);
+            log.info("Scheduler Updated to DB {}", schedulerResponse);
             return;
         }
         WebsiteData websiteData = websiteDataOptional.get();
         if (websiteData.getIsActive().equalsIgnoreCase(Boolean.FALSE.toString())) {
-            log.info("Website publisher is in inactive state");
+            log.info("Website publisher is in inactive state for publisher: {}", scheduler.getPrimaryId());
             List<Scheduler> byPrimaryId = schedulerRepository.findByPrimaryId(websiteData.getWebsiteId());
             if (!CollectionUtils.isEmpty(byPrimaryId)) {
                 List<Boolean> list = new ArrayList<>();
@@ -119,8 +132,8 @@ public class WebsitePublisherApprovalSchedulerProcessor {
             return;
         }
         String userId = websitePublisher.getUserId();
-        List<WebsitePublisher> byUserId = websitePublisherRepository.findByUserId(userId);
-        if (byUserId.size() < 10) {
+        List<WebsitePublisher> byUserId = websitePublisherRepository.findByUserIdAndWebsitePublishingStatus(userId, WebsitePublishingStatus.APPROVED.name());
+        if (byUserId.size() < 9) {
             websitePublisher.setIsActive(Boolean.FALSE.toString());
             websitePublisher.setWebsitePublishingStatus(WebsitePublishingStatus.APPROVED.name());
             websitePublisher.setMessage("Website is not in inactive state");
@@ -129,34 +142,40 @@ public class WebsitePublisherApprovalSchedulerProcessor {
             log.info("Website publisher successfully updated : {}", websitePublisherResponse.toString());
             updateYes(scheduler, now);
         } else {
-            List<Boolean> list = new ArrayList<>();
-            byUserId
+            List<WebsitePublisher> listData = new ArrayList<>();
+            List<WebsitePublisher> byUserIdInactive = websitePublisherRepository.findByUserIdAndWebsitePublishingStatusAndIsActive(userId, WebsitePublishingStatus.APPROVED.name(), "false");
+            byUserIdInactive
                     .forEach(data -> {
-                        if (data.getWebsitePublishingStatus().equalsIgnoreCase(WebsitePublishingStatus.APPROVED.name())) {
-                            list.add(Boolean.TRUE);
+                        data.setIsActive(Boolean.TRUE.toString());
+                        data.setWebsitePublishingStatus(WebsitePublishingStatus.APPROVED.name());
+                        data.setMessage("Website is not in inactive state");
+                        data.setDateUpdated(now);
+                        Optional<WebsiteData> websiteDataOptional1 = websiteRepository.findById(data.getWebsiteData().getWebsiteId());
+                        if (websiteDataOptional1.isPresent()) {
+                            WebsiteData website = websiteDataOptional1.get();
+                            website.setIsPublisherAvailable(Boolean.TRUE.toString());
+                            website.setDateUpdated(now);
+                            WebsiteData websiteDataResponse = websiteRepository.save(website);
+                            log.info("Website data successfully updated : {}", websiteDataResponse.toString());
                         }
+                        log.info("Website publisher successfully updated : {}", data.toString());
+                        listData.add(data);
                     });
-            if (list.size() < 10) {
-                websitePublisher.setIsActive(Boolean.FALSE.toString());
-                websitePublisher.setWebsitePublishingStatus(WebsitePublishingStatus.APPROVED.name());
-                websitePublisher.setMessage("Website is not in inactive state");
-                websitePublisher.setDateUpdated(now);
-                WebsitePublisher websitePublisherResponse = websitePublisherRepository.save(websitePublisher);
-                log.info("Website publisher successfully updated : {}", websitePublisherResponse.toString());
-            } else {
-                List<WebsitePublisher> listData = websitePublisherRepository.findByUserId(userId);
-                byUserId
-                        .forEach(data -> {
-                            data.setIsActive(Boolean.TRUE.toString());
-                            data.setWebsitePublishingStatus(WebsitePublishingStatus.APPROVED.name());
-                            data.setMessage("Website is not in inactive state");
-                            data.setDateUpdated(now);
-                            log.info("Website publisher successfully updated : {}", data.toString());
-                            listData.add(data);
-                        });
-                List<WebsitePublisher> websitePublishers = websitePublisherRepository.saveAll(listData);
-                log.info("Website Publishers updated : {}", websitePublishers);
+            websitePublisher.setIsActive(Boolean.TRUE.toString());
+            websitePublisher.setWebsitePublishingStatus(WebsitePublishingStatus.APPROVED.name());
+            websitePublisher.setMessage("Website is not in inactive state");
+            websitePublisher.setDateUpdated(now);
+            listData.add(websitePublisher);
+            List<WebsitePublisher> websitePublishers = websitePublisherRepository.saveAll(listData);
+            Optional<WebsiteData> websiteDataOptional1 = websiteRepository.findById(websitePublisher.getWebsiteData().getWebsiteId());
+            if (websiteDataOptional1.isPresent()) {
+                WebsiteData website = websiteDataOptional1.get();
+                website.setIsPublisherAvailable(Boolean.TRUE.toString());
+                website.setDateUpdated(now);
+                WebsiteData websiteDataResponse = websiteRepository.save(website);
+                log.info("Website data successfully updated : {}", websiteDataResponse.toString());
             }
+            log.info("Website Publishers updated : {}", websitePublishers);
             updateYes(scheduler, now);
         }
     }

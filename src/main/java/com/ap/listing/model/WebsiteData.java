@@ -143,7 +143,7 @@ public class WebsiteData {
     @Column(columnDefinition = "jsonb")
     private List<TopCountry> similarWebTopCountries;
 
-    private String isGuestPostingActive;
-    private String isLinkInsertionActive;
+    private String isActive;
+    private String isPublisherAvailable;
     private String message;
 }

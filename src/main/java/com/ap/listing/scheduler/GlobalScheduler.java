@@ -55,7 +55,13 @@ public class GlobalScheduler {
     private final WebsitePublisherScheduler websitePublisherScheduler;
 
 //    @Scheduled(cron = "0 0 * * * ?")
-    @Scheduled(cron = "0 */2 * * * ?")
+
+    /**
+     * Next Run : 2:00
+     * Website List: 1:20
+     *
+     */
+    @Scheduled(cron = "0 0 * * * ?")
     public void taskFetchWebsite() {
         long startTime = System.currentTimeMillis();
         log.info("Fetch Website scheduled task ran at {}", new Date());
@@ -63,6 +69,11 @@ public class GlobalScheduler {
         log.info("Fetch Website Scheduler took {} ms", System.currentTimeMillis() - startTime);
     }
 
+    /**
+     * Next Run : 1:30
+     * Website Publisher : 1:22 (Pending Moderation)
+     * Website In Active
+     */
     @Scheduled(fixedRate = 5400000)
     public void taskApproveWebsite() {
         long startTime = System.currentTimeMillis();

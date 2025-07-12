@@ -49,5 +49,7 @@ public interface WebsitePublisherRepository extends JpaRepository<WebsitePublish
     Optional<WebsitePublisher> findByWebsiteDataAndUserId(WebsiteData websiteData, String userId);
     Optional<WebsitePublisher> findByPublishingId(String publishingId);
 
-    List<WebsitePublisher> findByUserId(String userId);
+    List<WebsitePublisher> findByUserIdAndWebsitePublishingStatus(String userId, String websitePublishingStatus);
+
+    List<WebsitePublisher> findByUserIdAndWebsitePublishingStatusAndIsActive(String userId, String websitePublishingStatus, String isActive);
 }
