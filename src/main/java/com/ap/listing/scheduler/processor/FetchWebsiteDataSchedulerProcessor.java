@@ -47,7 +47,6 @@ import com.ap.listing.model.WebsiteData;
 import com.ap.listing.payload.*;
 import com.ap.listing.payload.response.AhrefWebsiteTrafficResponse;
 import com.ap.listing.payload.response.DomainMetricsFeignResponse;
-import com.ap.listing.utils.AsyncUtils;
 import com.ap.listing.utils.CountryNameUtil;
 import com.ap.listing.utils.IntegerUtils;
 import jakarta.transaction.Transactional;
@@ -95,7 +94,7 @@ public class FetchWebsiteDataSchedulerProcessor {
             feignUrl = baseUrl.substring(7);
         }
         CompletableFuture<ResponseEntity<DomainMetricsFeignResponse>> domainMetricsResponseFuture = CompletableFuture.supplyAsync(()-> domainMetricsFeignClient.getDomainMetrics(feignUrl));
-        CompletableFuture<ResponseEntity<AhrefBacklinkResponse>> ahrefBacklinkResponseFuture = CompletableFuture.supplyAsync(()-> ahrefFeignClient.getBacklinkResponse(feignUrl));
+        CompletableFuture<ResponseEntity<AhrefWebsiteAuthorityCheckerResponse>> ahrefBacklinkResponseFuture = CompletableFuture.supplyAsync(()-> ahrefFeignClient.getBacklinkResponse(feignUrl));
         CompletableFuture<ResponseEntity<AhrefWebsiteTrafficResponse>> ahrefWebsiteTrafficResponseFuture = CompletableFuture.supplyAsync(()-> ahrefFeignClient.getWebsiteTraffic(feignUrl));
         CompletableFuture<ResponseEntity<SimilarWebTrafficHistoryWrapper>> similarWebWebsiteTrafficResponseFuture = CompletableFuture.supplyAsync(()-> similarWebFeignClient.getWebsiteTraffic(feignUrl));
         CompletableFuture.allOf(
@@ -105,12 +104,12 @@ public class FetchWebsiteDataSchedulerProcessor {
                 similarWebWebsiteTrafficResponseFuture
         );
         ResponseEntity<DomainMetricsFeignResponse> domainMetricsResponse = domainMetricsResponseFuture.join();
-        ResponseEntity<AhrefBacklinkResponse> ahrefBacklinkResponse = ahrefBacklinkResponseFuture.join();
+        ResponseEntity<AhrefWebsiteAuthorityCheckerResponse> ahrefBacklinkResponse = ahrefBacklinkResponseFuture.join();
         ResponseEntity<AhrefWebsiteTrafficResponse> ahrefWebsiteTrafficResponse = ahrefWebsiteTrafficResponseFuture.join();
         ResponseEntity<SimilarWebTrafficHistoryWrapper> similarWebWebsiteTrafficResponse = similarWebWebsiteTrafficResponseFuture.join();
         if (domainMetricsResponse.getStatusCode().is2xxSuccessful() && ahrefBacklinkResponse.getStatusCode().is2xxSuccessful() && ahrefWebsiteTrafficResponse.getStatusCode().is2xxSuccessful() && similarWebWebsiteTrafficResponse.getStatusCode().is2xxSuccessful()) {
             DomainMetricsFeignResponse domainMetrics = domainMetricsResponse.getBody();
-            AhrefBacklinkResponse ahrefBacklink = ahrefBacklinkResponse.getBody();
+            AhrefWebsiteAuthorityCheckerResponse ahrefBacklink = ahrefBacklinkResponse.getBody();
             AhrefWebsiteTrafficResponse ahrefWebsiteTraffic = ahrefWebsiteTrafficResponse.getBody();
             SimilarWebTrafficHistoryWrapper similarWebWebsiteTraffic = similarWebWebsiteTrafficResponse.getBody();
             boolean analyseDomainMetrics = analyseDomainMetrics(domainMetrics);
@@ -176,10 +175,10 @@ public class FetchWebsiteDataSchedulerProcessor {
         }
     }
 
-    public boolean analyseDomainRating(AhrefBacklinkResponse ahrefBacklinkResponse) {
-        if (ahrefBacklinkResponse.getDomainRating() == null) return false;
+    public boolean analyseDomainRating(AhrefWebsiteAuthorityCheckerResponse ahrefWebsiteAuthorityCheckerResponse) {
+        if (ahrefWebsiteAuthorityCheckerResponse.getDomainRating() == null) return false;
         try {
-            int domainRating = Integer.parseInt(ahrefBacklinkResponse.getDomainRating());
+            int domainRating = Integer.parseInt(ahrefWebsiteAuthorityCheckerResponse.getDomainRating());
             return domainRating > 10;
         } catch (Exception ignored) {
             log.info("Exception occurred while converting DR to int");

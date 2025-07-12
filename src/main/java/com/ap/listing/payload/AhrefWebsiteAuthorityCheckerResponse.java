@@ -47,10 +47,15 @@ import lombok.*;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 @ToString
-public class AhrefBacklinkResponse {
+public class AhrefWebsiteAuthorityCheckerResponse {
 
-    private String domainRating;
-    private String urlRating;
+    private String status;
+    private Overview overview;
 
+    @Data
+    public static class Overview {
+        private int domainRating;
+        private int urlRating;
+    }
 
 }
