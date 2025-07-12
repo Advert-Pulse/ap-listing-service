@@ -64,10 +64,10 @@ public class GlobalScheduler {
     }
 
     @Scheduled(fixedRate = 5400000)
-    public void taskEveryTwoHours() {
+    public void taskApproveWebsite() {
         long startTime = System.currentTimeMillis();
-        log.info("Two hour scheduled task ran at {}", new Date());
+        log.info("Approve Website scheduled task ran at {}", new Date());
         websitePublisherScheduler.doProcess();
-        log.info("Two Hour Scheduler took {} ms", System.currentTimeMillis() - startTime);
+        log.info("Approve Website Scheduler took {} ms", System.currentTimeMillis() - startTime);
     }
 }

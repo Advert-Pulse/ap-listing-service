@@ -47,6 +47,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -59,7 +60,11 @@ public class WebsitePublisherScheduler {
 
     public void doProcess() {
         try {
-            List<Scheduler> listOfSchedulers = schedulerRepository.findAllByScheduledTaskTypeAndIsSchedulingDone(ScheduleTaskType.APPROVE_PUBLISHER, Boolean.FALSE);
+            List<Scheduler> listOfSchedulers = schedulerRepository.findAllByScheduledTaskTypeAndIsSchedulingDoneAndScheduledOnBefore(
+                    ScheduleTaskType.APPROVE_PUBLISHER,
+                    Boolean.FALSE,
+                    new Date()
+            );
             log.info("Found {} schedulers for Approve Publisher", listOfSchedulers.size());
             for (Scheduler scheduler : listOfSchedulers) {
                 MDC.put(ServiceConstants.SCHEDULER_ID, scheduler.getSchedulerId());
