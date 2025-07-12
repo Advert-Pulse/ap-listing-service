@@ -56,9 +56,6 @@ public class FeignInterceptors {
     @Value("${feign-client.domain-metrics.api-key}")
     private String apiKey;
 
-    @Value("${feign-client.ahref.website-traffic.host}")
-    private String ahrefHost;
-
     @Value("${feign-client.similar-web.analytics.host}")
     private String similarWebHost;
 
@@ -67,7 +64,7 @@ public class FeignInterceptors {
         return requestTemplate -> {
             log.info("Feign Interceptor {}", requestTemplate);
             if (requestTemplate.url().contains("/traffic") || requestTemplate.url().contains("/backlinks")) {
-                requestTemplate.header(X_RAPIDAPI_HOST, ahrefHost);
+//                requestTemplate.header(X_RAPIDAPI_HOST, ahrefHost);
                 requestTemplate.header(X_RAPIDAPI_KEY, apiKey);
             } else if (requestTemplate.url().contains("/analyticsv1")) {
                 requestTemplate.header(X_RAPIDAPI_HOST, similarWebHost);

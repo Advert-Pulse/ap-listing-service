@@ -47,12 +47,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class OneHourScheduler {
+public class FetchWebsiteDataScheduler {
 
 
     private final SchedulerRepository schedulerRepository;
@@ -60,13 +61,15 @@ public class OneHourScheduler {
 
     public void doProcess() {
         try {
-            List<Scheduler> listOfSchedulers = schedulerRepository.findAllByIsSchedulingDone(Boolean.FALSE);
+            List<Scheduler> listOfSchedulers = schedulerRepository.findAllByScheduledTaskTypeAndIsSchedulingDoneAndScheduledOnBefore(
+                    ScheduleTaskType.FETCH_WEBSITE_DATA,
+                    Boolean.FALSE,
+                    new Date()
+            );
             log.info("Found {} schedulers", listOfSchedulers.size());
             for (Scheduler scheduler : listOfSchedulers) {
                 MDC.put(ServiceConstants.SCHEDULER_ID, scheduler.getSchedulerId());
-                switch (scheduler.getScheduledTaskType()) {
-                    case ScheduleTaskType.FETCH_WEBSITE_DATA -> fetchWebsiteDataSchedulerProcessor.process(scheduler);
-                }
+                fetchWebsiteDataSchedulerProcessor.process(scheduler);
             }
         } finally {
             MDC.remove(ServiceConstants.SCHEDULER_ID);

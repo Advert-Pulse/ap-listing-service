@@ -82,4 +82,7 @@ public class Scheduler {
     private Date updatedOn;
 
     private int timesUsed;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date scheduledOn;
 }

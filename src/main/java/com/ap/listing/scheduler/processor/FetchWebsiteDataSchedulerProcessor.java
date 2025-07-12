@@ -116,7 +116,7 @@ public class FetchWebsiteDataSchedulerProcessor {
             boolean analyseDomainRating = analyseDomainRating(ahrefBacklink);
             websiteData.setMozDa(IntegerUtils.getOrZero(domainMetrics.getMozDA()));
             websiteData.setMajesticTf(IntegerUtils.getOrZero(domainMetrics.getMajesticTF()));
-            websiteData.setDomainRating(IntegerUtils.getOrZero(ahrefBacklink.getDomainRating()));
+//            websiteData.setDomainRating(IntegerUtils.getOrZero(ahrefBacklink.getDomainRating()));
             if (!analyseDomainMetrics) {
                 websiteData.setIsActive(Boolean.FALSE.toString());
                 websiteData.setMessage("MozDA is less than 10");
@@ -129,9 +129,9 @@ public class FetchWebsiteDataSchedulerProcessor {
             if (analyseDomainMetrics && analyseDomainRating) {
                 websiteData.setIsActive(Boolean.TRUE.toString());
             }
-            websiteData.setAhrefOrganicTraffic(ahrefWebsiteTraffic.getTrafficMonthlyAvg());
+//            websiteData.setAhrefOrganicTraffic(ahrefWebsiteTraffic.getTrafficMonthlyAvg());
             websiteData.setSimilarWebTraffic(similarWebWebsiteTraffic.getDomainAnalytics().getEngagements().getVisits());
-            websiteData.setUrlRating(IntegerUtils.getOrZero(ahrefBacklink.getUrlRating()));
+//            websiteData.setUrlRating(IntegerUtils.getOrZero(ahrefBacklink.getUrlRating()));
             websiteData.setCountryCode(similarWebWebsiteTraffic.getDomainAnalytics().getCountryRank().getCountryCode());
             websiteData.setCountry(CountryNameUtil.getCountryName(similarWebWebsiteTraffic.getDomainAnalytics().getCountryRank().getCountryCode()));
             websiteData.setAhrefTrafficHistory(ahrefWebsiteTraffic.getTrafficHistory());
@@ -176,10 +176,11 @@ public class FetchWebsiteDataSchedulerProcessor {
     }
 
     public boolean analyseDomainRating(AhrefWebsiteAuthorityCheckerResponse ahrefWebsiteAuthorityCheckerResponse) {
-        if (ahrefWebsiteAuthorityCheckerResponse.getDomainRating() == null) return false;
+//        if (ahrefWebsiteAuthorityCheckerResponse.getDomainRating() == null) return false;
         try {
-            int domainRating = Integer.parseInt(ahrefWebsiteAuthorityCheckerResponse.getDomainRating());
-            return domainRating > 10;
+//            int domainRating = Integer.parseInt(ahrefWebsiteAuthorityCheckerResponse.getDomainRating());
+//            return domainRating > 10;
+            return false;
         } catch (Exception ignored) {
             log.info("Exception occurred while converting DR to int");
             return false;

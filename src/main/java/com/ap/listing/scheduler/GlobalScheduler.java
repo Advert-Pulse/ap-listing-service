@@ -37,14 +37,13 @@ package com.ap.listing.scheduler;
   File: GlobalScheduler
  */
 
-import com.ap.listing.scheduler.service.OneHourScheduler;
+import com.ap.listing.scheduler.service.FetchWebsiteDataScheduler;
 import com.ap.listing.scheduler.service.WebsitePublisherScheduler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Component
@@ -52,15 +51,16 @@ import java.util.Date;
 @Slf4j
 public class GlobalScheduler {
 
-    private final OneHourScheduler oneHourScheduler;
+    private final FetchWebsiteDataScheduler fetchWebsiteDataScheduler;
     private final WebsitePublisherScheduler websitePublisherScheduler;
 
-    @Scheduled(cron = "0 0 * * * ?")
-    public void taskEveryOneHour() {
+//    @Scheduled(cron = "0 0 * * * ?")
+    @Scheduled(cron = "0 */2 * * * ?")
+    public void taskFetchWebsite() {
         long startTime = System.currentTimeMillis();
-        log.info("One hour scheduled task ran at {}", new Date());
-        oneHourScheduler.doProcess();
-        log.info("One Hour Scheduler took {} ms", System.currentTimeMillis() - startTime);
+        log.info("Fetch Website scheduled task ran at {}", new Date());
+        fetchWebsiteDataScheduler.doProcess();
+        log.info("Fetch Website Scheduler took {} ms", System.currentTimeMillis() - startTime);
     }
 
     @Scheduled(fixedRate = 5400000)

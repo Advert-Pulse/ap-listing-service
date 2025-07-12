@@ -53,6 +53,7 @@ bloggios-auth:
   excluded-paths:
     jwt-paths:
       exclude-paths:
+        - /test/**
         - /v1/url-api/**
         - /actuator/**
         - /oauth2/**

@@ -114,7 +114,7 @@ public class WebsiteServiceImplementation implements WebsiteService {
             log.info("Website Saved : {}", websiteDataResponse);
             WebsitePublisher websitePublisher = websiteDefaultPublisherProcessor.process(websiteDataEntity);
             websiteDataFetchSchedulerGenerator.process(websiteDataResponse.getWebsiteId());
-            return AddWebsiteResponseGenerator.generate(websiteDataResponse, websitePublisher, Boolean.FALSE);
+            return AddWebsiteResponseGenerator.generate(websiteDataResponse, websitePublisher, Boolean.TRUE);
         }
     }
 
