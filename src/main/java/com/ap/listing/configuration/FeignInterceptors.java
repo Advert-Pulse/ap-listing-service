@@ -59,13 +59,15 @@ public class FeignInterceptors {
     @Value("${feign-client.similar-web.analytics.host}")
     private String similarWebHost;
 
+    @Value("${feign-client.ahref.website-traffic.api-key}")
+    private String scraperTechApiKey;
+
     @Bean
     public RequestInterceptor requestInterceptor() {
         return requestTemplate -> {
             log.info("Feign Interceptor {}", requestTemplate);
-            if (requestTemplate.url().contains("/traffic") || requestTemplate.url().contains("/backlinks")) {
-//                requestTemplate.header(X_RAPIDAPI_HOST, ahrefHost);
-                requestTemplate.header(X_RAPIDAPI_KEY, apiKey);
+            if (requestTemplate.url().contains("/website-authority-checker") || requestTemplate.url().contains("/website-traffic-checker")) {
+                requestTemplate.header("scraper-key", scraperTechApiKey);
             } else if (requestTemplate.url().contains("/analyticsv1")) {
                 requestTemplate.header(X_RAPIDAPI_HOST, similarWebHost);
                 requestTemplate.header(X_RAPIDAPI_KEY, apiKey);

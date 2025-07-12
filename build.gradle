@@ -40,7 +40,7 @@ ext {
 	logstashVersion = "8.0"
 	flywayVersion = "11.2.0"
 	elasticClientVersion = "8.17.0"
-	bloggiosProvider = "2.1.0"
+	bloggiosProvider = "2.1.1"
 	bloggiosSqlQuery = "1.0.1"
 }
 

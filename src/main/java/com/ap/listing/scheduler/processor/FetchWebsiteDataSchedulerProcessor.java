@@ -11,15 +11,15 @@
  * <p>
  * You may not:
  * 1. Copy, modify, distribute, or sublicense this software without express
- *    written permission from Advert Pulse or Bloggios.
+ * written permission from Advert Pulse or Bloggios.
  * 2. Reverse engineer, decompile, disassemble, or otherwise attempt to derive
- *    the source code of the software.
+ * the source code of the software.
  * 3. Modify this license in any way, including but not limited to altering its
- *    terms, even by Advert Pulse or any other entity, without express written
- *    permission from Bloggios administrators. Bloggios is the creator of this
- *    license and retains exclusive rights to update or modify it.
+ * terms, even by Advert Pulse or any other entity, without express written
+ * permission from Bloggios administrators. Bloggios is the creator of this
+ * license and retains exclusive rights to update or modify it.
  * 4. Update or modify the license without written permission from Bloggios
- *    administrators.
+ * administrators.
  * <p>
  * The software is provided "as is," and Advert Pulse makes no warranties,
  * express or implied, regarding the software, including but not limited to any
@@ -49,9 +49,16 @@ import com.ap.listing.payload.response.AhrefWebsiteTrafficResponse;
 import com.ap.listing.payload.response.DomainMetricsFeignResponse;
 import com.ap.listing.utils.CountryNameUtil;
 import com.ap.listing.utils.IntegerUtils;
+import com.ap.listing.utils.MessageUtil;
+import com.bloggios.provider.utils.DateUtils;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
@@ -71,7 +78,24 @@ public class FetchWebsiteDataSchedulerProcessor {
     private final AhrefFeignClient ahrefFeignClient;
     private final SimilarWebFeignClient similarWebFeignClient;
 
+    @Value("${scheduler.fetchWebsite.limit}")
+    private int limit;
+
+    @Value("${scheduler.fetchWebsite.multiplier}")
+    private int multiplier;
+
+    @Value("${website-analyser.mozDA}")
+    private int mozDALimit;
+
+    @Value("${website-analyser.domainRating}")
+    private int domainRatingLimit;
+
     @Transactional
+    @SneakyThrows(
+            value = {
+                    JsonProcessingException.class
+            }
+    )
     public void process(Scheduler scheduler) {
         log.info("{} >> {}", getClass().getSimpleName(), scheduler.toString());
         String websiteId = scheduler.getPrimaryId();
@@ -81,6 +105,8 @@ public class FetchWebsiteDataSchedulerProcessor {
             scheduler.setIsSchedulingDone(true);
             scheduler.setScheduleCompletedOn(now);
             scheduler.setUpdatedOn(now);
+            scheduler.setIsPassed(false);
+            scheduler.setMessage(MessageUtil.getMessage(scheduler.getMessage(), "Website is not found with the given primary id: " + websiteId));
             Scheduler schedulerResponse = schedulerRepository.saveAndFlush(scheduler);
             log.info("Scheduler saved successfully to database {}", schedulerResponse.toString());
             return;
@@ -93,10 +119,10 @@ public class FetchWebsiteDataSchedulerProcessor {
         } else {
             feignUrl = baseUrl.substring(7);
         }
-        CompletableFuture<ResponseEntity<DomainMetricsFeignResponse>> domainMetricsResponseFuture = CompletableFuture.supplyAsync(()-> domainMetricsFeignClient.getDomainMetrics(feignUrl));
-        CompletableFuture<ResponseEntity<AhrefWebsiteAuthorityCheckerResponse>> ahrefBacklinkResponseFuture = CompletableFuture.supplyAsync(()-> ahrefFeignClient.getBacklinkResponse(feignUrl));
-        CompletableFuture<ResponseEntity<AhrefWebsiteTrafficResponse>> ahrefWebsiteTrafficResponseFuture = CompletableFuture.supplyAsync(()-> ahrefFeignClient.getWebsiteTraffic(feignUrl));
-        CompletableFuture<ResponseEntity<SimilarWebTrafficHistoryWrapper>> similarWebWebsiteTrafficResponseFuture = CompletableFuture.supplyAsync(()-> similarWebFeignClient.getWebsiteTraffic(feignUrl));
+        CompletableFuture<ResponseEntity<DomainMetricsFeignResponse>> domainMetricsResponseFuture = CompletableFuture.supplyAsync(() -> domainMetricsFeignClient.getDomainMetrics(feignUrl));
+        CompletableFuture<ResponseEntity<String>> ahrefBacklinkResponseFuture = CompletableFuture.supplyAsync(() -> ahrefFeignClient.getBacklinkResponse(feignUrl));
+        CompletableFuture<ResponseEntity<String>> ahrefWebsiteTrafficResponseFuture = CompletableFuture.supplyAsync(() -> ahrefFeignClient.getWebsiteTraffic(feignUrl));
+        CompletableFuture<ResponseEntity<SimilarWebTrafficHistoryWrapper>> similarWebWebsiteTrafficResponseFuture = CompletableFuture.supplyAsync(() -> similarWebFeignClient.getWebsiteTraffic(feignUrl));
         CompletableFuture.allOf(
                 domainMetricsResponseFuture,
                 ahrefBacklinkResponseFuture,
@@ -104,19 +130,22 @@ public class FetchWebsiteDataSchedulerProcessor {
                 similarWebWebsiteTrafficResponseFuture
         );
         ResponseEntity<DomainMetricsFeignResponse> domainMetricsResponse = domainMetricsResponseFuture.join();
-        ResponseEntity<AhrefWebsiteAuthorityCheckerResponse> ahrefBacklinkResponse = ahrefBacklinkResponseFuture.join();
-        ResponseEntity<AhrefWebsiteTrafficResponse> ahrefWebsiteTrafficResponse = ahrefWebsiteTrafficResponseFuture.join();
+        ResponseEntity<String> ahrefBacklinkResponse = ahrefBacklinkResponseFuture.join();
+        ResponseEntity<String> ahrefWebsiteTrafficResponse = ahrefWebsiteTrafficResponseFuture.join();
         ResponseEntity<SimilarWebTrafficHistoryWrapper> similarWebWebsiteTrafficResponse = similarWebWebsiteTrafficResponseFuture.join();
         if (domainMetricsResponse.getStatusCode().is2xxSuccessful() && ahrefBacklinkResponse.getStatusCode().is2xxSuccessful() && ahrefWebsiteTrafficResponse.getStatusCode().is2xxSuccessful() && similarWebWebsiteTrafficResponse.getStatusCode().is2xxSuccessful()) {
+            ObjectMapper objectMapper = new ObjectMapper();
             DomainMetricsFeignResponse domainMetrics = domainMetricsResponse.getBody();
-            AhrefWebsiteAuthorityCheckerResponse ahrefBacklink = ahrefBacklinkResponse.getBody();
-            AhrefWebsiteTrafficResponse ahrefWebsiteTraffic = ahrefWebsiteTrafficResponse.getBody();
+            String ahrefBacklinkString = ahrefBacklinkResponse.getBody();
+            String ahrefWebsiteTrafficString = ahrefWebsiteTrafficResponse.getBody();
+            AhrefWebsiteAuthorityCheckerResponse ahrefBacklink = objectMapper.readValue(ahrefBacklinkString, AhrefWebsiteAuthorityCheckerResponse.class);
+            AhrefWebsiteTrafficResponse ahrefWebsiteTraffic = objectMapper.readValue(ahrefWebsiteTrafficString, AhrefWebsiteTrafficResponse.class);
             SimilarWebTrafficHistoryWrapper similarWebWebsiteTraffic = similarWebWebsiteTrafficResponse.getBody();
             boolean analyseDomainMetrics = analyseDomainMetrics(domainMetrics);
             boolean analyseDomainRating = analyseDomainRating(ahrefBacklink);
             websiteData.setMozDa(IntegerUtils.getOrZero(domainMetrics.getMozDA()));
             websiteData.setMajesticTf(IntegerUtils.getOrZero(domainMetrics.getMajesticTF()));
-//            websiteData.setDomainRating(IntegerUtils.getOrZero(ahrefBacklink.getDomainRating()));
+            websiteData.setDomainRating(ahrefBacklink.getOverview().getDomainRating());
             if (!analyseDomainMetrics) {
                 websiteData.setIsActive(Boolean.FALSE.toString());
                 websiteData.setMessage("MozDA is less than 10");
@@ -129,9 +158,9 @@ public class FetchWebsiteDataSchedulerProcessor {
             if (analyseDomainMetrics && analyseDomainRating) {
                 websiteData.setIsActive(Boolean.TRUE.toString());
             }
-//            websiteData.setAhrefOrganicTraffic(ahrefWebsiteTraffic.getTrafficMonthlyAvg());
+            websiteData.setAhrefOrganicTraffic(ahrefWebsiteTraffic.getTraffic().getTrafficMonthlyAvg());
             websiteData.setSimilarWebTraffic(similarWebWebsiteTraffic.getDomainAnalytics().getEngagements().getVisits());
-//            websiteData.setUrlRating(IntegerUtils.getOrZero(ahrefBacklink.getUrlRating()));
+            websiteData.setUrlRating(ahrefBacklink.getOverview().getUrlRating());
             websiteData.setCountryCode(similarWebWebsiteTraffic.getDomainAnalytics().getCountryRank().getCountryCode());
             websiteData.setCountry(CountryNameUtil.getCountryName(similarWebWebsiteTraffic.getDomainAnalytics().getCountryRank().getCountryCode()));
             websiteData.setAhrefTrafficHistory(ahrefWebsiteTraffic.getTrafficHistory());
@@ -143,24 +172,45 @@ public class FetchWebsiteDataSchedulerProcessor {
             scheduler.setScheduleCompletedOn(now);
             scheduler.setIsSchedulingDone(Boolean.TRUE);
             scheduler.setUpdatedOn(now);
+            scheduler.setIsPassed(Boolean.TRUE);
             Scheduler schedulerResponse = schedulerRepository.save(scheduler);
             log.info("Scheduler Saved Successfully {} ", schedulerResponse.toString());
         } else {
-            if (scheduler.getTimesUsed() < 4) {
-                log.info("Scheduler Put on retry mode for Domain Metrics Feign Response");
+            scheduler.setMessage(
+                    MessageUtil.getMessage(
+                            scheduler.getMessage(),
+                            String.format("Feign Response Error for schedulerId: %s domainMetricsResponse: %s, ahrefBacklinkResponse: %s, ahrefWebsiteTrafficResponse: %s and similarWebWebsiteTrafficResponse: %s",
+                                    scheduler.getSchedulerId(),
+                                    domainMetricsResponse.getStatusCode(),
+                                    ahrefBacklinkResponse.getStatusCode(),
+                                    ahrefWebsiteTrafficResponse.getStatusCode(),
+                                    similarWebWebsiteTrafficResponse.getStatusCode()
+                            )
+                    )
+            );
+            log.error(
+                    "DomainMetricsFeignResponse: {}, AhrefBacklinkResponse: {}, AhrefTrafficResponse: {}, SimilarWebTrafficResponse: {}",
+                    domainMetricsResponse.getBody(),
+                    ahrefBacklinkResponse.getBody(),
+                    ahrefWebsiteTrafficResponse.getBody(),
+                    similarWebWebsiteTrafficResponse.getBody()
+            );
+            if (scheduler.getTimesUsed() <= limit) {
+                log.info("Scheduler Put on retry mode for Website Fetch Data Feign Response");
                 int timesUsed = scheduler.getTimesUsed();
                 scheduler.setTimesUsed(timesUsed + 1);
+                scheduler.setScheduledOn(DateUtils.addHours(now, timesUsed * multiplier));
                 scheduler.setUpdatedOn(now);
                 Scheduler schedulerResponse = schedulerRepository.save(scheduler);
                 log.info("Scheduler saved successfully to database {}", schedulerResponse.toString());
             } else {
                 scheduler.setIsSchedulingDone(true);
                 scheduler.setUpdatedOn(now);
+                scheduler.setIsPassed(Boolean.FALSE);
                 scheduler.setScheduleCompletedOn(now);
                 Scheduler schedulerResponse = schedulerRepository.save(scheduler);
                 log.info("Scheduler saved successfully to database {}", schedulerResponse.toString());
             }
-            return;
         }
     }
 
@@ -168,7 +218,7 @@ public class FetchWebsiteDataSchedulerProcessor {
         if (domainMetrics.getMozDA() == null) return false;
         try {
             int mozDA = Integer.parseInt(domainMetrics.getMozDA());
-            return mozDA > 10;
+            return mozDA >= mozDALimit;
         } catch (Exception ignored) {
             log.info("Exception occurred while converting mozDA to int");
             return false;
@@ -176,11 +226,10 @@ public class FetchWebsiteDataSchedulerProcessor {
     }
 
     public boolean analyseDomainRating(AhrefWebsiteAuthorityCheckerResponse ahrefWebsiteAuthorityCheckerResponse) {
-//        if (ahrefWebsiteAuthorityCheckerResponse.getDomainRating() == null) return false;
+        if (ahrefWebsiteAuthorityCheckerResponse.getOverview() == null) return false;
         try {
-//            int domainRating = Integer.parseInt(ahrefWebsiteAuthorityCheckerResponse.getDomainRating());
-//            return domainRating > 10;
-            return false;
+            int domainRating = ahrefWebsiteAuthorityCheckerResponse.getOverview().getDomainRating();
+            return domainRating > domainRatingLimit;
         } catch (Exception ignored) {
             log.info("Exception occurred while converting DR to int");
             return false;

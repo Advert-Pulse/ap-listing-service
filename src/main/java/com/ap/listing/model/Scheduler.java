@@ -85,4 +85,7 @@ public class Scheduler {
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date scheduledOn;
+
+    private Boolean isPassed;
+    private String message;
 }

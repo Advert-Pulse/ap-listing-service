@@ -148,3 +148,12 @@ ap:
     link-insertion: 20
   reserved-balance:
     hidden-url: 100
+
+scheduler:
+  fetchWebsite:
+    limit: 4
+    multiplier: 4
+
+website-analyser:
+  mozDA: 10
+  domainRating: 10

@@ -53,6 +53,7 @@ public class AhrefWebsiteAuthorityCheckerResponse {
     private Overview overview;
 
     @Data
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Overview {
         private int domainRating;
         private int urlRating;

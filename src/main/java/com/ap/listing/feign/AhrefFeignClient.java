@@ -42,6 +42,7 @@ import com.ap.listing.configuration.FeignInterceptors;
 import com.ap.listing.payload.AhrefWebsiteAuthorityCheckerResponse;
 import com.ap.listing.payload.response.AhrefWebsiteTrafficResponse;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -56,9 +57,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 )
 public interface AhrefFeignClient {
 
-    @GetMapping("/traffic")
-    ResponseEntity<AhrefWebsiteTrafficResponse> getWebsiteTraffic(@RequestParam String url);
+    @GetMapping("/website-traffic-checker")
+    ResponseEntity<String> getWebsiteTraffic(@RequestParam String url);
 
-    @GetMapping("/backlinks")
-    ResponseEntity<AhrefWebsiteAuthorityCheckerResponse> getBacklinkResponse(@RequestParam String url);
+    @GetMapping("/website-authority-checker")
+    ResponseEntity<String> getBacklinkResponse(@RequestParam String url);
+
 }
