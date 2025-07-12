@@ -122,9 +122,8 @@ feign-client:
   ahref:
     website-traffic:
       name: ahrefWebsiteTrafficClient
-      url: https://ahrefs2.p.rapidapi.com
-      host: ahrefs2.p.rapidapi.com
-      api-key: 770cdcf629msh8ac0af84d9825b2p1ba4fdjsn3e5df144492e
+      url: https://ahrefs.scraper.tech
+      api-key: 22a8b30745a0c4aa548df74c7251d6e9
   similar-web:
     analytics:
       name: similarWebAnalyticsClient

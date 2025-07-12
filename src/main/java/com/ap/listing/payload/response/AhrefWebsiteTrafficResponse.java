@@ -37,6 +37,7 @@ package com.ap.listing.payload.response;
   File: AhrefWebsiteTrafficResponse
  */
 
+import com.ap.listing.payload.AhrefTrafficDataResponse;
 import com.ap.listing.payload.TopCountry;
 import com.ap.listing.payload.TrafficHistory;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -55,9 +56,9 @@ import java.util.List;
 public class AhrefWebsiteTrafficResponse {
 
     private String status;
-    private String url;
-    private long trafficMonthlyAvg;
-    private long costMonthlyAvg;
+
+    @JsonProperty("traffic")
+    private AhrefTrafficDataResponse traffic;
 
     @JsonProperty("traffic_history")
     private List<TrafficHistory> trafficHistory;
