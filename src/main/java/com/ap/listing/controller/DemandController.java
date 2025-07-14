@@ -28,26 +28,43 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.dao.repository;
+package com.ap.listing.controller;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: DemandRepository
+  File: DemandController
  */
 
-import com.ap.listing.model.Demand;
-import feign.Param;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+import com.ap.listing.constants.ApiConstants;
+import com.ap.listing.payload.response.ListResponse;
+import com.ap.listing.service.DemandService;
+import com.bloggios.provider.utils.ControllerHelper;
+import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
-import java.util.List;
+@RestController
+@RequestMapping("/v1/demand")
+@RequiredArgsConstructor
+public class DemandController {
 
-public interface DemandRepository extends JpaRepository<Demand, String> {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DemandController.class);
 
-    @Query("SELECT d FROM Demand d WHERE d.demandDate BETWEEN :startDate AND :endDate")
-    List<Demand> findByCountryCodeAndDemandDateInRange(@Param("startDate") Date startDate,
-                                                       @Param("endDate") Date endDate);
+    private final DemandService demandService;
+
+    @GetMapping
+    public ResponseEntity<ListResponse> getDemand(@RequestParam Integer days) {
+        return ControllerHelper.loggedResponse(
+                ()-> demandService.getDemand(days),
+                ApiConstants.GET_DEMAND,
+                LOGGER
+        );
+    }
 }

@@ -97,7 +97,8 @@ public enum ErrorData {
     TASK_SHOULD_BE_IN_IN_PROGRESS_OR_IMPROVEMENT("AP__ERROR--3324", "Task should be in In Progress or Improvement for initial approval" ),
     TASK_SHOULD_BE_BUYER_APPROVAL_TO_MANAGE("AP__ERROR--3325", "Task should be in Your (Buyer) Approval To Manage" ),
     WEBSITE_ID_NOT_VALID("AP__ERROR--3326", "Website id is not valid" ),
-    GOOGLE_AUTH_TOKEN_EXCHANGE_ERROR("AP__ERROR--3327", "Google auth token exchange error" ),;
+    GOOGLE_AUTH_TOKEN_EXCHANGE_ERROR("AP__ERROR--3327", "Google auth token exchange error" ),
+    GET_DEMAND_DAYS_ERROR("AP__ERROR--3328", "Demand days should be greater than 0 and less than 180" ),;
 
     private final String code;
     private final String message;

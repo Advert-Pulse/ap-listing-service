@@ -28,26 +28,19 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.dao.repository;
+package com.ap.listing.service;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: DemandRepository
+  File: DemandService
  */
 
-import com.ap.listing.model.Demand;
-import feign.Param;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+import com.ap.listing.payload.response.ListResponse;
+import org.springframework.http.ResponseEntity;
 
-import java.util.Date;
-import java.util.List;
+public interface DemandService {
 
-public interface DemandRepository extends JpaRepository<Demand, String> {
-
-    @Query("SELECT d FROM Demand d WHERE d.demandDate BETWEEN :startDate AND :endDate")
-    List<Demand> findByCountryCodeAndDemandDateInRange(@Param("startDate") Date startDate,
-                                                       @Param("endDate") Date endDate);
+    ResponseEntity<ListResponse> getDemand(Integer days);
 }

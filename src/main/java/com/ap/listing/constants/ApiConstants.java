@@ -71,4 +71,5 @@ public class ApiConstants {
     public static final String GET_WEBSITE_DATA = "GetWebsiteData";
     public static final String INITIAL_GOOGLE_OAUTH = "InitialGoogleOAuth";
     public static final String EXECUTE_FETCH_WEBSITE_SCHEDULER = "ExecuteFetchWebsiteScheduler";
+    public static final String GET_DEMAND = "GetDemand";
 }

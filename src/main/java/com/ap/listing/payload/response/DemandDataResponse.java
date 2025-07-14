@@ -28,26 +28,28 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.dao.repository;
+package com.ap.listing.payload.response;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: DemandRepository
+  File: DemandDataResponse
  */
 
-import com.ap.listing.model.Demand;
-import feign.Param;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
 
-import java.util.Date;
-import java.util.List;
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
+@ToString
+public class DemandDataResponse {
 
-public interface DemandRepository extends JpaRepository<Demand, String> {
-
-    @Query("SELECT d FROM Demand d WHERE d.demandDate BETWEEN :startDate AND :endDate")
-    List<Demand> findByCountryCodeAndDemandDateInRange(@Param("startDate") Date startDate,
-                                                       @Param("endDate") Date endDate);
+    private String countryCode;
+    private int demand;
+    private int demandPercent;
 }
