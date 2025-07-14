@@ -53,4 +53,5 @@ public class EntityConstants {
     public static final String TASK_PUBLISHER = "task_publisher";
     public static final String TASK_BUYER = "task_buyer";
     public static final String SCHEDULER = "scheduler";
+    public static final String DEMAND_TABLE = "demand_table";
 }
