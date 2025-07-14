@@ -1,29 +1,32 @@
 /**
  * Proprietary License Agreement
  * <p>
- * Copyright (c) 2025 Bloggios
+ * Copyright (c) 2025 Advert Pulse
  * <p>
- * This software is the confidential and proprietary property of Bloggios and is provided under a
- * license, not sold. The application owner is Rohit Parihar and Bloggios. Only authorized
- * Bloggios administrators are permitted to copy, modify, distribute, or sublicense this software
- * under the terms set forth in this agreement.
+ * This software is the confidential and proprietary property of Advert Pulse
+ * and is licensed, not sold. The application owner is Advert Pulse, and the
+ * developer and maintainer is Bloggios. Only authorized Bloggios administrators
+ * are permitted to copy, modify, distribute, or sublicense this software under
+ * the terms set forth in this agreement.
  * <p>
- * Restrictions
- *
- * You are expressly prohibited from:
- * 1. Copying, modifying, distributing, or sublicensing this software without the express
- *    written permission of Rohit Parihar or Bloggios.
- * 2. Reverse engineering, decompiling, disassembling, or otherwise attempting to derive
+ * You may not:
+ * 1. Copy, modify, distribute, or sublicense this software without express
+ *    written permission from Advert Pulse or Bloggios.
+ * 2. Reverse engineer, decompile, disassemble, or otherwise attempt to derive
  *    the source code of the software.
- * 3. Altering or modifying the terms of this license without prior written approval from
- *    Rohit Parihar and Bloggios administrators.
+ * 3. Modify this license in any way, including but not limited to altering its
+ *    terms, even by Advert Pulse or any other entity, without express written
+ *    permission from Bloggios administrators. Bloggios is the creator of this
+ *    license and retains exclusive rights to update or modify it.
+ * 4. Update or modify the license without written permission from Bloggios
+ *    administrators.
  * <p>
- * Disclaimer of Warranties:
- * This software is provided "as is" without any warranties, express or implied. Bloggios makes
- * no representations or warranties regarding the software, including but not limited to any
- * warranties of merchantability, fitness for a particular purpose, or non-infringement.
+ * The software is provided "as is," and Advert Pulse makes no warranties,
+ * express or implied, regarding the software, including but not limited to any
+ * warranties of merchantability, fitness for a particular purpose, or
+ * non-infringement.
  * <p>
- * For inquiries regarding licensing, please contact: support@bloggios.com.
+ * For inquiries regarding licensing, please contact support@bloggios.com.
  */
 package com.ap.listing.payload.response;
 
