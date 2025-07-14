@@ -28,27 +28,36 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.constants;
+package com.ap.listing.utils;
 
-/*
-  Developer: Rohit Parihar
-  Project: ap-listing-service
-  GitHub: github.com/rohit-zip
-  File: ServiceConstants
+import com.ap.listing.enums.ErrorData;
+import com.ap.listing.exception.InternalException;
+import com.ap.listing.kafka.IncomingMessageData;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.util.StdConverter;
+
+/**
+ * Owner - Rohit Parihar
+ * Author - rohit
+ * Project - auth-provider-application
+ * Package - com.bloggios.listing.provider.utils
+ * Created_on - 02 December-2023
+ * Created_at - 14 : 44
  */
 
-import lombok.experimental.UtilityClass;
+public class MessageDataDeserializer extends StdConverter<String, IncomingMessageData> {
 
-@UtilityClass
-public class ServiceConstants {
+    private static final ObjectMapper mapper = new ObjectMapper();
 
-    public static final String SELLER = "seller";
-    public static final String BUYER = "buyer";
-    public static final String HTTP = "http://";
-    public static final String HTTPS = "https://";
-    public static final String AUTHORIZATION = "Authorization";
-    public static final String FALSE = "false";
-    public static final String SCHEDULER_ID = "schedulerId";
-    public static final String LOCAL_REMOTE = "0:0:0:0:0:0:0:1";
-    public static final String BREADCRUMB_ID = "breadcrumbId";
+    @Override
+    public IncomingMessageData convert(String s) {
+        try {
+            IncomingMessageData messageData = mapper.readValue(s, IncomingMessageData.class);
+            messageData.setData(mapper.readValue(messageData.getData().toString(), Object.class));
+            return messageData;
+        } catch (JsonProcessingException ignored) {
+            throw new InternalException(ErrorData.JSON_DESERIALIZATION);
+        }
+    }
 }

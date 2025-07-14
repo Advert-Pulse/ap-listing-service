@@ -28,27 +28,20 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.constants;
+package com.ap.listing.kafka.producer;
 
-/*
-  Developer: Rohit Parihar
-  Project: ap-listing-service
-  GitHub: github.com/rohit-zip
-  File: ServiceConstants
- */
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
 
-import lombok.experimental.UtilityClass;
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class PublishingPayload {
 
-@UtilityClass
-public class ServiceConstants {
-
-    public static final String SELLER = "seller";
-    public static final String BUYER = "buyer";
-    public static final String HTTP = "http://";
-    public static final String HTTPS = "https://";
-    public static final String AUTHORIZATION = "Authorization";
-    public static final String FALSE = "false";
-    public static final String SCHEDULER_ID = "schedulerId";
-    public static final String LOCAL_REMOTE = "0:0:0:0:0:0:0:1";
-    public static final String BREADCRUMB_ID = "breadcrumbId";
+    @JsonAlias("messageData")
+    private String messageData;
 }

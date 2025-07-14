@@ -42,7 +42,7 @@ import java.util.concurrent.ExecutionException;
  * Owner - Rohit Parihar
  * Author - rohit
  * Project - auth-provider-application
- * Package - com.bloggios.auth.provider.utils
+ * Package - com.bloggios.listing.provider.utils
  * Created_on - 29 November-2023
  * Created_at - 16 : 19
  */
