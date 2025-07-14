@@ -140,6 +140,9 @@ feign-client:
     url: https://oauth2.googleapis.com
     client-id: 898797817545-3lnhm1esudbkd5lcvlibvvdb73t7n866.apps.googleusercontent.com
     client-secret: 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
+  ipClient:
+    name: ipClientFeign
+    url: http://ip-api.com/json
 
 ap:
   platform-fee:

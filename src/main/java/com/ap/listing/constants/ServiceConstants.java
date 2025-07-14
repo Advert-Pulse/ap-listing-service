@@ -49,4 +49,6 @@ public class ServiceConstants {
     public static final String AUTHORIZATION = "Authorization";
     public static final String FALSE = "false";
     public static final String SCHEDULER_ID = "schedulerId";
+    public static final String LOCAL_REMOTE = "0:0:0:0:0:0:0:1";
+
 }

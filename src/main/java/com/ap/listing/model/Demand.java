@@ -32,7 +32,9 @@ public class Demand {
 
     private String countryName;
     private String countryCode;
+    private String region;
     private String taskId;
+    private String timeZone;
     private String remoteAddress;
 
     @Temporal(TemporalType.TIMESTAMP)

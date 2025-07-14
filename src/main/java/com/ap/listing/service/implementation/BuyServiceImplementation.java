@@ -41,25 +41,28 @@ import com.ap.listing.dao.repository.TaskBuyerRepository;
 import com.ap.listing.dao.repository.TaskPublisherRepository;
 import com.ap.listing.dao.repository.WebsitePublisherRepository;
 import com.ap.listing.enums.ErrorData;
+import com.ap.listing.events.DemandEvent;
 import com.ap.listing.exception.BadRequestException;
 import com.ap.listing.feign.ApPaymentServiceFeignClient;
 import com.ap.listing.model.TaskBuyer;
 import com.ap.listing.model.TaskPublisher;
 import com.ap.listing.model.WebsitePublisher;
+import com.ap.listing.payload.records.DemandDataRecord;
 import com.ap.listing.payload.request.BuyContentPlacementRequest;
 import com.ap.listing.payload.request.SendFundsToReservedRequest;
 import com.ap.listing.payload.response.WalletResponse;
-import com.ap.listing.properties.AdvertPulseProperties;
 import com.ap.listing.service.BuyService;
 import com.ap.listing.transformer.PrepareTaskBuyContentPlacement;
 import com.ap.listing.utils.ExtractTokenUtil;
 import com.ap.listing.utils.SecurityContextUtil;
 import com.ap.listing.validator.BuyContentPlacementRequestValidator;
 import com.bloggios.provider.payload.ModuleResponse;
+import com.bloggios.provider.utils.IpUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -76,6 +79,7 @@ public class BuyServiceImplementation implements BuyService {
     private final TaskPublisherRepository taskPublisherRepository;
     private final TaskBuyerRepository taskBuyerRepository;
     private final ApPaymentServiceFeignClient apPaymentServiceFeignClient;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Override
     @Transactional
@@ -110,6 +114,13 @@ public class BuyServiceImplementation implements BuyService {
                 )
         );
         log.info("Response received from ap-payment-service for sendFundsToReserved: {}", moduleResponse);
+        log.info("Publishing Event >> DemandEvent");
+        applicationEventPublisher.publishEvent(new DemandEvent(
+                new DemandDataRecord(
+                        IpUtils.getRemoteAddress(request),
+                        taskBuyerResponse.getTaskId()
+                )
+        ));
         return ResponseEntity.ok(
                 ModuleResponse
                         .builder()
