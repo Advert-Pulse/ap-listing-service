@@ -38,6 +38,7 @@ package com.ap.listing.controller;
  */
 
 import com.ap.listing.constants.ApiConstants;
+import com.ap.listing.scheduler.service.AutoRejectTaskScheduler;
 import com.ap.listing.scheduler.service.FetchWebsiteDataScheduler;
 import com.ap.listing.scheduler.service.WebsitePublisherScheduler;
 import com.bloggios.provider.payload.ModuleResponse;
@@ -59,6 +60,7 @@ public class SchedulerController {
 
     private final FetchWebsiteDataScheduler fetchWebsiteDataScheduler;
     private final WebsitePublisherScheduler websitePublisherScheduler;
+    private final AutoRejectTaskScheduler autoRejectTaskScheduler;
 
     @GetMapping("/fetch-website")
     public ResponseEntity<ModuleResponse> executeFetchWebsiteScheduler() {
@@ -80,6 +82,18 @@ public class SchedulerController {
                     return ResponseEntity.ok(ModuleResponse.builder().message("Executed").build());
                 },
                 ApiConstants.EXECUTE_FETCH_WEBSITE_SCHEDULER,
+                LOGGER
+        );
+    }
+
+    @GetMapping("/auto-reject")
+    public ResponseEntity<ModuleResponse> executeAutRejectTaskScheduler() {
+        return ControllerHelper.loggedResponse(
+                ()-> {
+                    autoRejectTaskScheduler.doProcess();
+                    return ResponseEntity.ok(ModuleResponse.builder().message("Executed").build());
+                },
+                ApiConstants.AUTO_REJECT_TASK_SCHEDULER,
                 LOGGER
         );
     }
