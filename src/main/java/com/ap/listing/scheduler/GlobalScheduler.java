@@ -37,6 +37,7 @@ package com.ap.listing.scheduler;
   File: GlobalScheduler
  */
 
+import com.ap.listing.scheduler.service.AutoRejectTaskScheduler;
 import com.ap.listing.scheduler.service.FetchWebsiteDataScheduler;
 import com.ap.listing.scheduler.service.WebsitePublisherScheduler;
 import lombok.RequiredArgsConstructor;
@@ -53,6 +54,7 @@ public class GlobalScheduler {
 
     private final FetchWebsiteDataScheduler fetchWebsiteDataScheduler;
     private final WebsitePublisherScheduler websitePublisherScheduler;
+    private final AutoRejectTaskScheduler autoRejectTaskScheduler;
 
 //    @Scheduled(cron = "0 0 * * * ?")
 
@@ -80,5 +82,13 @@ public class GlobalScheduler {
         log.info("Approve Website scheduled task ran at {}", new Date());
         websitePublisherScheduler.doProcess();
         log.info("Approve Website Scheduler took {} ms", System.currentTimeMillis() - startTime);
+    }
+
+    @Scheduled(cron = "0 0 */2 * * *")
+    public void autoRejectTask() {
+        long startTime = System.currentTimeMillis();
+        log.info("Auto Reject Task scheduled task ran at {}", new Date());
+        autoRejectTaskScheduler.doProcess();
+        log.info("Auto Reject Task Scheduler took {} ms", System.currentTimeMillis() - startTime);
     }
 }

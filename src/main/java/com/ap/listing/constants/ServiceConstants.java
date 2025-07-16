@@ -47,6 +47,7 @@ public class ServiceConstants {
     public static final String HTTP = "http://";
     public static final String HTTPS = "https://";
     public static final String AUTHORIZATION = "Authorization";
+    public static final String AP_PAYMENT_INTERNAL_KEY = "ap-internal-payment-key";
     public static final String FALSE = "false";
     public static final String SCHEDULER_ID = "schedulerId";
     public static final String LOCAL_REMOTE = "0:0:0:0:0:0:0:1";

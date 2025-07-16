@@ -67,4 +67,7 @@ public interface ApPaymentServiceFeignClient {
 
     @PostMapping("/v1/wallet/reserved-to-balance")
     ModuleResponse reserveFundsToBalance(@RequestHeader(ServiceConstants.AUTHORIZATION) String token, @RequestBody ReserveFundToBalanceRequest reserveFundToBalanceRequest);
+
+    @PostMapping("/v1/internal/reverse-reserved")
+    ModuleResponse reverseReservedFundInternal(@RequestHeader(ServiceConstants.AP_PAYMENT_INTERNAL_KEY) String internalKey, @RequestBody ReverseReservedFundsRequest reverseReservedFundsRequest);
 }

@@ -52,6 +52,7 @@ import com.bloggios.provider.payload.ModuleResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -66,10 +67,30 @@ public class PublisherRejectedTaskProcessor {
     private final TaskBuyerRepository taskBuyerRepository;
     private final TaskPublisherRepository taskPublisherRepository;
 
+    @Value("${feign-client.ap-payment-service.ap-payment-internal-key}")
+    private String apInternalPaymentKey;
+
     public void process(TaskPublisher taskPublisher, TaskBuyer taskBuyer, HttpServletRequest request) {
         log.info("Processing publisher rejected task taskPublisher: {}, taskBuyer: {}", taskPublisher, taskBuyer);
         ModuleResponse reverseReservedFundResponse = apPaymentServiceFeignClient.reverseReservedFund(
                 ExtractTokenUtil.extractToken(request),
+                new ReverseReservedFundsRequest(
+                        taskBuyer.getBuyerId(),
+                        taskPublisher.getPublisherId(),
+                        taskPublisher.getTotalPrice(),
+                        taskPublisher.getTaskId()
+                )
+        );
+        Date now = new Date();
+        updateBuyerTask(taskBuyer, now);
+        updatePublisher(taskPublisher, now);
+        log.info("{} process completed", getClass().getSimpleName());
+    }
+
+    public void process(TaskPublisher taskPublisher, TaskBuyer taskBuyer) {
+        log.info("Processing publisher rejected task taskPublisher: {}, taskBuyer: {}", taskPublisher, taskBuyer);
+        ModuleResponse reverseReservedFundResponse = apPaymentServiceFeignClient.reverseReservedFundInternal(
+                apInternalPaymentKey,
                 new ReverseReservedFundsRequest(
                         taskBuyer.getBuyerId(),
                         taskPublisher.getPublisherId(),

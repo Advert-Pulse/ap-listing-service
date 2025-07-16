@@ -149,6 +149,7 @@ feign-client:
     name: apPaymentServiceClient
 #    url: http://localhost:8082/payment-service
     url: https://devapi.advertpulse.com/payment-service
+    ap-payment-internal-key: ${AP_INTERNAL_PAYMENT_KEY}
   google-service:
     name: googleClient
     url: https://oauth2.googleapis.com

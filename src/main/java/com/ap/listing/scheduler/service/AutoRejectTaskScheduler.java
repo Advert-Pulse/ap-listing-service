@@ -28,39 +28,50 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.processor;
+package com.ap.listing.scheduler.service;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: BuyContentPlacementNotificationProcessor
+  File: AutoRejectTaskScheduler
  */
 
-import com.ap.listing.model.TaskPublisher;
-import com.ap.listing.payload.kafka.BuyContentPlacementEvent;
-import com.ap.listing.processor.kafka.BuyContentPlacementNotificationProducer;
+import com.ap.listing.constants.ServiceConstants;
+import com.ap.listing.dao.repository.SchedulerRepository;
+import com.ap.listing.enums.ScheduleTaskType;
+import com.ap.listing.model.Scheduler;
+import com.ap.listing.scheduler.processor.AutoRejectTaskSchedulerProcessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
+
+import java.util.Date;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class BuyContentPlacementNotificationProcessor {
+public class AutoRejectTaskScheduler {
 
-    private final BuyContentPlacementNotificationProducer buyContentPlacementNotificationProducer;
+    private final SchedulerRepository schedulerRepository;
+    private final AutoRejectTaskSchedulerProcessor autoRejectTaskSchedulerProcessor;
 
-    public void process(TaskPublisher taskPublisherResponse) {
-        log.info("{} >> process -> taskPublisherResponse: {}", taskPublisherResponse.getClass().getSimpleName(), taskPublisherResponse);
-        BuyContentPlacementEvent buyContentPlacementEvent = BuyContentPlacementEvent
-                .builder()
-                .buyerId(taskPublisherResponse.getBuyerId())
-                .publisherId(taskPublisherResponse.getPublisherId())
-                .taskId(taskPublisherResponse.getTaskId())
-                .domain(taskPublisherResponse.getSiteUrl())
-                .publishingId(taskPublisherResponse.getPublishingId())
-                .build();
-        buyContentPlacementNotificationProducer.sendMessage(buyContentPlacementEvent);
+    public void doProcess() {
+        try {
+            List<Scheduler> listOfSchedulers = schedulerRepository.findAllByScheduledTaskTypeAndIsSchedulingDoneAndScheduledOnBefore(
+                    ScheduleTaskType.AUTO_REJECT_TASK,
+                    Boolean.FALSE,
+                    new Date()
+            );
+            log.info("Found {} schedulers", listOfSchedulers.size());
+            for (Scheduler scheduler : listOfSchedulers) {
+                MDC.put(ServiceConstants.SCHEDULER_ID, scheduler.getSchedulerId());
+                autoRejectTaskSchedulerProcessor.process(scheduler);
+            }
+        } finally {
+            MDC.remove(ServiceConstants.SCHEDULER_ID);
+        }
     }
 }
