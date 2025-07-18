@@ -28,31 +28,62 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.constants;
+package com.ap.listing.model;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: EntityConstants
+  File: OwnershipDetails
  */
 
-import lombok.experimental.UtilityClass;
+import com.ap.listing.annotation.GeneratedCustomId;
+import com.ap.listing.constants.EntityConstants;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
+import lombok.*;
 
-@UtilityClass
-public class EntityConstants {
+import java.util.Date;
 
-    public static final String LISTING_SCHEMA = "listing";
-    public static final String PREFERENCE = "preference";
-    public static final String WEBSITE = "website_data";
-    public static final String LISTING = "listing";
-    public static final String DOMAIN_METRICS = "domain_metrics";
-    public static final String WEBSITE_PUBLISHER = "website_publisher";
-    public static final String SOCIAL_MEDIA = "social_media";
-    public static final String ORDER_ARTICLE = "order_article";
-    public static final String TASK_PUBLISHER = "task_publisher";
-    public static final String TASK_BUYER = "task_buyer";
-    public static final String SCHEDULER = "scheduler";
-    public static final String DEMAND_TABLE = "demand_table";
-    public static final String OWNERSHIP_DETAILS = "ownership_details";
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
+@ToString
+@Table(
+        name = EntityConstants.OWNERSHIP_DETAILS,
+        schema = EntityConstants.LISTING_SCHEMA
+)
+public class OwnershipDetails {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String ownershipDetailsUUID;
+
+    @GeneratedCustomId(
+            prefix = "APOWND",
+            sequence = "listing.ap_ownership-details_sequence",
+            length = 7
+    )
+    @Column(unique = true)
+    private String ownershipDetailsId;
+
+    @Column(unique = true)
+    private String uniqueId;
+
+    @Column(unique = true)
+    private String publishingId;
+    private String websiteId;
+
+    private String finalLink;
+    private String domain;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updatedAt;
 }

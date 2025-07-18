@@ -28,31 +28,44 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.constants;
+package com.ap.listing.controller;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: EntityConstants
+  File: OwnershipController
  */
 
-import lombok.experimental.UtilityClass;
+import com.ap.listing.constants.ApiConstants;
+import com.ap.listing.payload.response.OwnershipDetailsResponse;
+import com.ap.listing.service.OwnershipService;
+import com.bloggios.provider.payload.ModuleResponse;
+import com.bloggios.provider.utils.ControllerHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@UtilityClass
-public class EntityConstants {
+@RestController
+@RequestMapping("/v1/ownership")
+public class OwnershipController {
 
-    public static final String LISTING_SCHEMA = "listing";
-    public static final String PREFERENCE = "preference";
-    public static final String WEBSITE = "website_data";
-    public static final String LISTING = "listing";
-    public static final String DOMAIN_METRICS = "domain_metrics";
-    public static final String WEBSITE_PUBLISHER = "website_publisher";
-    public static final String SOCIAL_MEDIA = "social_media";
-    public static final String ORDER_ARTICLE = "order_article";
-    public static final String TASK_PUBLISHER = "task_publisher";
-    public static final String TASK_BUYER = "task_buyer";
-    public static final String SCHEDULER = "scheduler";
-    public static final String DEMAND_TABLE = "demand_table";
-    public static final String OWNERSHIP_DETAILS = "ownership_details";
+    private static final Logger LOGGER = LoggerFactory.getLogger(OwnershipController.class);
+    private final OwnershipService ownershipService;
+
+    public OwnershipController(OwnershipService ownershipService) {
+        this.ownershipService = ownershipService;
+    }
+
+    @PostMapping
+    public ResponseEntity<OwnershipDetailsResponse> createOwnershipDetails(String publishingId) {
+        return ControllerHelper.loggedResponse(
+                ()-> ownershipService.createOrGetOwnershipDetails(publishingId),
+                ApiConstants.CREATE_OWNERSHIP_DETAILS,
+                LOGGER
+        );
+    }
 }

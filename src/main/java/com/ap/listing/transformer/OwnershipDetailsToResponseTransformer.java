@@ -28,31 +28,32 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.constants;
+package com.ap.listing.transformer;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: EntityConstants
+  File: OwnershipDetailsToResponseTransformer
  */
 
-import lombok.experimental.UtilityClass;
+import com.ap.listing.model.OwnershipDetails;
+import com.ap.listing.payload.response.OwnershipDetailsResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Component;
 
-@UtilityClass
-public class EntityConstants {
+@Component
+@RequiredArgsConstructor
+@Slf4j
+public class OwnershipDetailsToResponseTransformer {
 
-    public static final String LISTING_SCHEMA = "listing";
-    public static final String PREFERENCE = "preference";
-    public static final String WEBSITE = "website_data";
-    public static final String LISTING = "listing";
-    public static final String DOMAIN_METRICS = "domain_metrics";
-    public static final String WEBSITE_PUBLISHER = "website_publisher";
-    public static final String SOCIAL_MEDIA = "social_media";
-    public static final String ORDER_ARTICLE = "order_article";
-    public static final String TASK_PUBLISHER = "task_publisher";
-    public static final String TASK_BUYER = "task_buyer";
-    public static final String SCHEDULER = "scheduler";
-    public static final String DEMAND_TABLE = "demand_table";
-    public static final String OWNERSHIP_DETAILS = "ownership_details";
+    private final ModelMapper modelMapper;
+
+    public OwnershipDetailsResponse transform(OwnershipDetails ownershipDetails) {
+        OwnershipDetailsResponse ownershipDetailsResponse = modelMapper.map(ownershipDetails, OwnershipDetailsResponse.class);
+        log.info("Transformed Ownership Details Response : {}", ownershipDetailsResponse.toString());
+        return ownershipDetailsResponse;
+    }
 }

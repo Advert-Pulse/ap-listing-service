@@ -28,31 +28,19 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.constants;
+package com.ap.listing.service;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: EntityConstants
+  File: OwnershipService
  */
 
-import lombok.experimental.UtilityClass;
+import com.ap.listing.payload.response.OwnershipDetailsResponse;
+import com.bloggios.provider.payload.ModuleResponse;
+import org.springframework.http.ResponseEntity;
 
-@UtilityClass
-public class EntityConstants {
-
-    public static final String LISTING_SCHEMA = "listing";
-    public static final String PREFERENCE = "preference";
-    public static final String WEBSITE = "website_data";
-    public static final String LISTING = "listing";
-    public static final String DOMAIN_METRICS = "domain_metrics";
-    public static final String WEBSITE_PUBLISHER = "website_publisher";
-    public static final String SOCIAL_MEDIA = "social_media";
-    public static final String ORDER_ARTICLE = "order_article";
-    public static final String TASK_PUBLISHER = "task_publisher";
-    public static final String TASK_BUYER = "task_buyer";
-    public static final String SCHEDULER = "scheduler";
-    public static final String DEMAND_TABLE = "demand_table";
-    public static final String OWNERSHIP_DETAILS = "ownership_details";
+public interface OwnershipService {
+    ResponseEntity<OwnershipDetailsResponse> createOrGetOwnershipDetails(String publishingId);
 }

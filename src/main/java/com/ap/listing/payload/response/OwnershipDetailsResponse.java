@@ -28,31 +28,31 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.constants;
+package com.ap.listing.payload.response;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: EntityConstants
+  File: OwnershipResponse
  */
 
-import lombok.experimental.UtilityClass;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
 
-@UtilityClass
-public class EntityConstants {
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
+@ToString
+public class OwnershipDetailsResponse {
 
-    public static final String LISTING_SCHEMA = "listing";
-    public static final String PREFERENCE = "preference";
-    public static final String WEBSITE = "website_data";
-    public static final String LISTING = "listing";
-    public static final String DOMAIN_METRICS = "domain_metrics";
-    public static final String WEBSITE_PUBLISHER = "website_publisher";
-    public static final String SOCIAL_MEDIA = "social_media";
-    public static final String ORDER_ARTICLE = "order_article";
-    public static final String TASK_PUBLISHER = "task_publisher";
-    public static final String TASK_BUYER = "task_buyer";
-    public static final String SCHEDULER = "scheduler";
-    public static final String DEMAND_TABLE = "demand_table";
-    public static final String OWNERSHIP_DETAILS = "ownership_details";
+    private String ownershipDetailsId;
+    private String uniqueId;
+    private String publishingId;
+    private String websiteId;
+    private String finalLink;
+    private String domain;
 }

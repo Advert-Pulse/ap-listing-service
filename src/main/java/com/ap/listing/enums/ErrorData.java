@@ -99,7 +99,8 @@ public enum ErrorData {
     WEBSITE_ID_NOT_VALID("AP__ERROR--3326", "Website id is not valid" ),
     GOOGLE_AUTH_TOKEN_EXCHANGE_ERROR("AP__ERROR--3327", "Google auth token exchange error" ),
     GET_DEMAND_DAYS_ERROR("AP__ERROR--3328", "Demand days should be greater than 0 and less than 180" ),
-    JSON_DESERIALIZATION("AP__ERROR--3329", "JSON deserialization error occurred" ),;
+    JSON_DESERIALIZATION("AP__ERROR--3329", "JSON deserialization error occurred" ),
+    OWNER_ALREADY_ADDED("AP__ERROR--3330", "Owner already added for the given site" ),;
 
     private final String code;
     private final String message;

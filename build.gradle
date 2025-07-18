@@ -83,3 +83,4 @@ license {
 	ext.year = Year.now().toString()
 	strictCheck = true
 }
+classes.dependsOn(licenseFormat)
