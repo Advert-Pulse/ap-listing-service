@@ -37,6 +37,7 @@ package com.ap.listing.transformer;
   File: OwnershipDetailsTransformer
  */
 
+import com.ap.listing.constants.ServiceConstants;
 import com.ap.listing.model.OwnershipDetails;
 import com.ap.listing.model.WebsiteData;
 import lombok.RequiredArgsConstructor;
@@ -59,7 +60,7 @@ public class OwnershipDetailsTransformer {
                 .websiteId(websiteData.getWebsiteId())
                 .publishingId(publishingId)
                 .uniqueId(UUID.randomUUID().toString().replaceAll("-", ""))
-                .finalLink(websiteData.getDomain() + "/advertpulse.txt")
+                .finalLink(websiteData.getDomain() + "/" + ServiceConstants.OWNERSHIP_FILE_NAME)
                 .domain(websiteData.getDomain())
                 .createdAt(now)
                 .updatedAt(now)

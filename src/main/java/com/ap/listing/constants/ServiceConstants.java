@@ -52,4 +52,6 @@ public class ServiceConstants {
     public static final String SCHEDULER_ID = "schedulerId";
     public static final String LOCAL_REMOTE = "0:0:0:0:0:0:0:1";
     public static final String BREADCRUMB_ID = "breadcrumbId";
+    public static final String FILE_DIRECTORY = System.getProperty("java.io.tmpdir");
+    public static final String OWNERSHIP_FILE_NAME = "advertpulse.txt";
 }

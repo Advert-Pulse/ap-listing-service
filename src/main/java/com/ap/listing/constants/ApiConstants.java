@@ -74,4 +74,5 @@ public class ApiConstants {
     public static final String GET_DEMAND = "GetDemand";
     public static final String AUTO_REJECT_TASK_SCHEDULER = "AutoRejectTaskScheduler";
     public static final String CREATE_OWNERSHIP_DETAILS = "CreateOwnershipDetails";
+    public static final String CREATE_AND_DOWNLOAD_OWNERSHIP_DETAILS = "CreateAndDownloadOwnershipDetails";
 }

@@ -37,6 +37,7 @@ package com.ap.listing.service.implementation;
   File: OwnershipServiceImplementation
  */
 
+import com.ap.listing.constants.ServiceConstants;
 import com.ap.listing.dao.repository.OwnershipDetailsRepository;
 import com.ap.listing.dao.repository.WebsitePublisherRepository;
 import com.ap.listing.dao.repository.WebsiteRepository;
@@ -52,9 +53,19 @@ import com.ap.listing.transformer.OwnershipDetailsToResponseTransformer;
 import com.ap.listing.transformer.OwnershipDetailsTransformer;
 import com.bloggios.provider.payload.ModuleResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Service
 @RequiredArgsConstructor
@@ -74,5 +85,19 @@ public class OwnershipServiceImplementation implements OwnershipService {
                     return ownershipDetailsToResponseTransformer.transform(ownershipDetails);
                 });
         return ResponseEntity.ok(ownershipDetailsResponse);
+    }
+
+    @Override
+    @SneakyThrows(value = IOException.class)
+    public ResponseEntity<InputStreamResource> createAndDownloadOwnershipDetails(String publishingId) {
+        OwnershipDetailsResponse ownershipDetailsResponse = this.createOrGetOwnershipDetails(publishingId).getBody();
+        Path filePath = Paths.get(ServiceConstants.FILE_DIRECTORY, ServiceConstants.OWNERSHIP_FILE_NAME);
+        Files.write(filePath, ownershipDetailsResponse.getUniqueId().getBytes());
+        InputStreamResource inputStreamResource = new InputStreamResource(new FileInputStream(filePath.toFile()));
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + ServiceConstants.OWNERSHIP_FILE_NAME)
+                .contentLength(Files.size(filePath))
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(inputStreamResource);
     }
 }

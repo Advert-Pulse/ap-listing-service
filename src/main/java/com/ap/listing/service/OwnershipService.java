@@ -39,8 +39,10 @@ package com.ap.listing.service;
 
 import com.ap.listing.payload.response.OwnershipDetailsResponse;
 import com.bloggios.provider.payload.ModuleResponse;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.ResponseEntity;
 
 public interface OwnershipService {
     ResponseEntity<OwnershipDetailsResponse> createOrGetOwnershipDetails(String publishingId);
+    ResponseEntity<InputStreamResource> createAndDownloadOwnershipDetails(String publishingId);
 }
