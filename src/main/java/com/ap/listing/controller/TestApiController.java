@@ -40,6 +40,7 @@ package com.ap.listing.controller;
 import com.ap.listing.dao.repository.SchedulerRepository;
 import com.ap.listing.feign.AhrefFeignClient;
 import com.ap.listing.model.Scheduler;
+import com.ap.listing.payload.response.AhrefMetricsResponse;
 import com.ap.listing.processor.VerifyOwnershipProcessor;
 import org.springframework.web.bind.annotation.*;
 
@@ -60,8 +61,8 @@ public class TestApiController {
     }
 
     @GetMapping
-    public Object listItems(@RequestParam String finalLink) {
-        return verifyOwnershipProcessor.getLinkData(finalLink);
+    public AhrefMetricsResponse listItems(@RequestParam String finalLink) {
+        return ahrefFeignClient.getMetricsData(finalLink).getBody();
     }
 
     @PostMapping

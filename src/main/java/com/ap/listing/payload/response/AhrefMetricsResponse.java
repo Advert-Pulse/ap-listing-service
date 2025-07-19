@@ -34,17 +34,11 @@ package com.ap.listing.payload.response;
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: AhrefWebsiteTrafficResponse
+  File: AhrefMetricsResponse
  */
 
-import com.ap.listing.payload.AhrefTrafficDataResponse;
-import com.ap.listing.payload.TopCountry;
-import com.ap.listing.payload.TrafficHistory;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
-
-import java.util.List;
 
 @Getter
 @Setter
@@ -53,17 +47,51 @@ import java.util.List;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 @ToString
-public class AhrefWebsiteTrafficResponse {
+public class AhrefMetricsResponse {
 
-    private String status;
+    private boolean success;
+    private Data data;
 
-    @JsonProperty("traffic")
-    private AhrefTrafficDataResponse traffic;
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    @ToString
+    public static class Data {
+        private Page page;
+        private Domain domain;
+    }
 
-    @JsonProperty("traffic_history")
-    private List<TrafficHistory> trafficHistory;
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    @ToString
+    public static class Page {
+        private int backlinks;
+        private int refDomains;
+        private double traffic;
+        private double trafficValue;
+        private int organicKeywords;
+        private int urlRating;
+        private int numberOfWordsOnPage;
+    }
 
-    @JsonProperty("top_countries")
-    private List<TopCountry> topCountries;
-
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    @ToString
+    public static class Domain {
+        private int domainRating;
+        private int domainRank;
+        private long backlinks;
+        private int refDomains;
+        private double traffic;
+        private double trafficValue;
+        private int organicKeywords;
+    }
 }
