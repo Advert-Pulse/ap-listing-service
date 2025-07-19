@@ -28,23 +28,30 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.service;
+package com.ap.listing.payload.request;
 
 /*
-  Developer: Rohit Parihar
+  Developer: Prajjwal Agrahari
   Project: ap-listing-service
-  GitHub: github.com/rohit-zip
-  File: BuyService
- */
+  GitHub: github.com/prajjwalag
+  File: BuyLinkInsertionRequest
+*/
 
-import com.ap.listing.payload.request.BuyContentPlacementRequest;
-import com.ap.listing.payload.request.BuyLinkInsertionRequest;
-import com.bloggios.provider.payload.ModuleResponse;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.http.ResponseEntity;
+import com.ap.listing.payload.UrlAnchorTextPayload;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
 
-public interface BuyService {
-    ResponseEntity<ModuleResponse> buyContentPlacement(BuyContentPlacementRequest buyContentPlacementRequest, String publishingId, HttpServletRequest request);
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
+@ToString
+public class BuyLinkInsertionRequest {
 
-    ResponseEntity<ModuleResponse> buyLinkInsertion(BuyLinkInsertionRequest buyLinkInsertionRequest, String publishingId, HttpServletRequest request);
+    private String pageUrl;
+    private String specialRequirements;
+    private UrlAnchorTextPayload urlAnchorTexts;
+
 }

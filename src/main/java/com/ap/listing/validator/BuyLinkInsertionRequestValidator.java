@@ -28,23 +28,42 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.service;
+package com.ap.listing.validator;
 
-/*
-  Developer: Rohit Parihar
-  Project: ap-listing-service
-  GitHub: github.com/rohit-zip
-  File: BuyService
- */
 
-import com.ap.listing.payload.request.BuyContentPlacementRequest;
+import com.ap.listing.enums.ErrorData;
+import com.ap.listing.exception.BadRequestException;
 import com.ap.listing.payload.request.BuyLinkInsertionRequest;
-import com.bloggios.provider.payload.ModuleResponse;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.http.ResponseEntity;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
-public interface BuyService {
-    ResponseEntity<ModuleResponse> buyContentPlacement(BuyContentPlacementRequest buyContentPlacementRequest, String publishingId, HttpServletRequest request);
+@Component
+@Slf4j
+public class BuyLinkInsertionRequestValidator {
+    public void validate(BuyLinkInsertionRequest buyLinkInsertionRequest) {
+        if (buyLinkInsertionRequest.getSpecialRequirements() == null || buyLinkInsertionRequest.getSpecialRequirements().isEmpty()) {
+            throw new BadRequestException(
+                    ErrorData.SPECIAL_REQUIREMENT_MANDATORY,
+                    "specialRequirementText",
+                    "Please give special requirement."
+            );
+        }
 
-    ResponseEntity<ModuleResponse> buyLinkInsertion(BuyLinkInsertionRequest buyLinkInsertionRequest, String publishingId, HttpServletRequest request);
+        if (buyLinkInsertionRequest.getUrlAnchorTexts().getUrl() == null || buyLinkInsertionRequest.getUrlAnchorTexts().getUrl().isEmpty()) {
+            throw new BadRequestException(
+                    ErrorData.URL_MANDATORY_FOR_URL_ANCHOR_TEXT,
+                    "urlText",
+                    "Please give promoted url."
+            );
+        }
+
+        if (buyLinkInsertionRequest.getUrlAnchorTexts().getAnchorText() == null || buyLinkInsertionRequest.getUrlAnchorTexts().getAnchorText().isEmpty()) {
+            throw new BadRequestException(
+                    ErrorData.ANCHOR_TEXT_MANDATORY_FOR_URL_ANCHOR_TEXT,
+                    "urlAnchorText",
+                    "Please give Anchor Text for promoted url."
+            );
+        }
+    }
+
 }
