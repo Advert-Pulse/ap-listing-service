@@ -107,7 +107,8 @@ public enum ErrorData {
     VERIFY_WEBSITE_FAILURE_INVALID_DATA_PRESENT("AP__ERROR--3334", "Invalid data present in the page. Please make sure you uploaded the same downloaded file at the root of your website" ),
     NO_STATIC_PAGE_FOUND_AT_LINK("AP__ERROR--3335", "No Static Page found at Verification Link" ),
     FAILED_TO_READ_DATA_FROM_SITE("AP__ERROR--3336", "Failed To Read Data From Site" ),
-    HTML_DATA_VERIFICATION_ERROR("AP__ERROR--3337", "Website not verified as either there is no given code present or invalid code present. Please make sure you added the correct code" ),;
+    HTML_DATA_VERIFICATION_ERROR("AP__ERROR--3337", "Website not verified as either there is no given code present or invalid code present. Please make sure you added the correct code" ),
+    SPECIAL_REQUIREMENT_MANDATORY("AP__ERROR-3338", "Special requirement is mandatory and cannot be null.");
 
     private final String code;
     private final String message;

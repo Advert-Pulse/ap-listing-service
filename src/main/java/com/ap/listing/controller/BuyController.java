@@ -39,6 +39,7 @@ package com.ap.listing.controller;
 
 import com.ap.listing.constants.ApiConstants;
 import com.ap.listing.payload.request.BuyContentPlacementRequest;
+import com.ap.listing.payload.request.BuyLinkInsertionRequest;
 import com.ap.listing.service.BuyService;
 import com.bloggios.provider.payload.ExceptionResponse;
 import com.bloggios.provider.payload.ModuleResponse;
@@ -83,6 +84,31 @@ public class BuyController {
         return ControllerHelper.loggedResponse(
                 ()-> buyService.buyContentPlacement(buyContentPlacementRequest, publishingId, request),
                 ApiConstants.BUY_CONTENT_PLACEMENT,
+                LOGGER
+        );
+    }
+
+    @Operation(
+            responses = {
+                    @ApiResponse(description = "SUCCESS", responseCode = "200", content = @Content(
+                            mediaType = "application/json", schema = @Schema(implementation = ModuleResponse.class)
+                    )),
+                    @ApiResponse(description = "No Content", responseCode = "401", content = {
+                            @Content(schema = @Schema())
+                    }),
+                    @ApiResponse(description = "FORBIDDEN", responseCode = "403", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))
+                    }),
+                    @ApiResponse(description = "BAD REQUEST", responseCode = "400", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = ExceptionResponse.class))
+                    })
+            }
+    )
+    @PostMapping("/link-insertion/{publishingId}")
+    ResponseEntity<ModuleResponse> buyClickInsertion(@RequestBody BuyLinkInsertionRequest buyLinkInsertionRequest, @PathVariable String publishingId, HttpServletRequest request) {
+        return ControllerHelper.loggedResponse(
+                ()-> buyService.buyLinkInsertion(buyLinkInsertionRequest, publishingId, request),
+                ApiConstants.BUY_LINK_INSERTION,
                 LOGGER
         );
     }
