@@ -41,6 +41,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class BuyLinkInsertionRequestValidator {
     public void validate(BuyLinkInsertionRequest buyLinkInsertionRequest) {
+
         if (buyLinkInsertionRequest.getSpecialRequirements() == null || buyLinkInsertionRequest.getSpecialRequirements().isEmpty()) {
             throw new BadRequestException(
                     ErrorData.SPECIAL_REQUIREMENT_MANDATORY,

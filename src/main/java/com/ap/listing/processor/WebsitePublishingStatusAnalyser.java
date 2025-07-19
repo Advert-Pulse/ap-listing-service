@@ -52,8 +52,8 @@ public class WebsitePublishingStatusAnalyser {
 
     public WebsitePublisher analyse(WebsitePublisher websitePublisher) {
             if (
-                    (Objects.nonNull(websitePublisher.getContentPlacementPrice()) && websitePublisher.getContentPlacementPrice() >= 4 &&
-                            Objects.nonNull(websitePublisher.getWritingAndPlacementPrice()) && websitePublisher.getWritingAndPlacementPrice() >= 4) ||
+                    Objects.nonNull(websitePublisher.getContentPlacementPrice()) && websitePublisher.getContentPlacementPrice() >= 4 ||
+                            Objects.nonNull(websitePublisher.getWritingAndPlacementPrice()) && websitePublisher.getWritingAndPlacementPrice() >= 4 ||
                             Objects.nonNull(websitePublisher.getLinkInsertionPrice()) && websitePublisher.getLinkInsertionPrice() >= 4
             ) {
                 websitePublisher.setWebsitePublishingStatus(WebsitePublishingStatus.PENDING_MODERATION.name());

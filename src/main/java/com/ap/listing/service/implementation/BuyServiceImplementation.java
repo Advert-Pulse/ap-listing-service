@@ -143,6 +143,9 @@ public class BuyServiceImplementation implements BuyService {
         WebsitePublisher websitePublisher = websitePublisherRepository.findByPublishingId(publishingId)
                 .orElseThrow(() -> new BadRequestException(ErrorData.WEBSITE_PUBLISHER_NOT_FOUND));
 
+        if (websitePublisher.getUserId().equals(SecurityContextUtil.getLoggedInUser().getUserId()))
+            throw new BadRequestException(ErrorData.CANNOT_PURCHASE_OWN_LISTED_ORDER);
+        
         buyLinkInsertionRequestValidator.validate(buyLinkInsertionRequest);
 
         WalletResponse walletResponse = getWalletForBuyer(request);

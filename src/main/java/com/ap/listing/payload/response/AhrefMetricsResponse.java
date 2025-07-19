@@ -57,9 +57,9 @@ public class AhrefMetricsResponse {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
+    @JsonIgnoreProperties(ignoreUnknown = true)
     @ToString
     public static class Data {
-        private Page page;
         private Domain domain;
     }
 
@@ -68,30 +68,14 @@ public class AhrefMetricsResponse {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    @ToString
-    public static class Page {
-        private int backlinks;
-        private int refDomains;
-        private double traffic;
-        private double trafficValue;
-        private int organicKeywords;
-        private int urlRating;
-        private int numberOfWordsOnPage;
-    }
-
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Builder
+    @JsonIgnoreProperties(ignoreUnknown = true)
     @ToString
     public static class Domain {
         private int domainRating;
         private int domainRank;
         private long backlinks;
         private int refDomains;
-        private double traffic;
-        private double trafficValue;
+        private long traffic;
         private int organicKeywords;
     }
 }

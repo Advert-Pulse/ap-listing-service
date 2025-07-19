@@ -146,9 +146,9 @@ public class FetchWebsiteDataSchedulerProcessor {
                 if (analyseDomainMetrics && analyseDomainRating) {
                     websiteData.setIsActive(Boolean.TRUE.toString());
                 }
-                websiteData.setAhrefOrganicTraffic((long) ahrefMetrics.getData().getPage().getTraffic());
+                websiteData.setAhrefOrganicTraffic(ahrefMetrics.getData().getDomain().getTraffic());
                 websiteData.setSimilarWebTraffic(similarWebWebsiteTraffic.getDomainAnalytics().getEngagements().getVisits());
-                websiteData.setUrlRating(ahrefMetrics.getData().getPage().getUrlRating());
+//                websiteData.setUrlRating(ahrefMetrics.getData().getPage().getUrlRating());
                 websiteData.setCountryCode(similarWebWebsiteTraffic.getDomainAnalytics().getCountryRank().getCountryCode());
                 websiteData.setCountry(CountryNameUtil.getCountryName(similarWebWebsiteTraffic.getDomainAnalytics().getCountryRank().getCountryCode()));
                 websiteData.setSimilarWebTrafficHistory(processSimilarWebTraffic(similarWebWebsiteTraffic));

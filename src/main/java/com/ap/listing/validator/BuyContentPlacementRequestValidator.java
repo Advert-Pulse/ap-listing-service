@@ -43,6 +43,7 @@ import com.ap.listing.exception.BadRequestException;
 import com.ap.listing.model.WebsitePublisher;
 import com.ap.listing.payload.UrlAnchorTextPayload;
 import com.ap.listing.payload.request.BuyContentPlacementRequest;
+import com.ap.listing.utils.SecurityContextUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -53,6 +54,9 @@ import java.util.List;
 public class BuyContentPlacementRequestValidator {
 
     public void validate(BuyContentPlacementRequest buyContentPlacementRequest, WebsitePublisher websitePublisher) {
+        if (websitePublisher.getUserId().equals(SecurityContextUtil.getLoggedInUser().getUserId()))
+            throw new BadRequestException(ErrorData.CANNOT_PURCHASE_OWN_LISTED_ORDER);
+
         List<UrlAnchorTextPayload> urlAnchorTexts = buyContentPlacementRequest.getUrlAnchorTexts();
 
         if (urlAnchorTexts == null) {
