@@ -39,19 +39,17 @@ package com.ap.listing.service.implementation;
 
 import com.ap.listing.constants.ServiceConstants;
 import com.ap.listing.dao.repository.OwnershipDetailsRepository;
-import com.ap.listing.dao.repository.WebsitePublisherRepository;
-import com.ap.listing.dao.repository.WebsiteRepository;
 import com.ap.listing.enums.ErrorData;
 import com.ap.listing.exception.BadRequestException;
 import com.ap.listing.model.OwnershipDetails;
-import com.ap.listing.model.WebsiteData;
-import com.ap.listing.model.WebsitePublisher;
 import com.ap.listing.payload.response.OwnershipDetailsResponse;
+import com.ap.listing.payload.response.VerifyOwnershipResponse;
 import com.ap.listing.processor.CreateOrUpdateOwnershipProcessor;
+import com.ap.listing.processor.HtmlCodeVerifyOwnershipProcessor;
+import com.ap.listing.processor.VerifyOwnershipOwnerAvailableProcessor;
+import com.ap.listing.processor.VerifyOwnershipProcessor;
 import com.ap.listing.service.OwnershipService;
 import com.ap.listing.transformer.OwnershipDetailsToResponseTransformer;
-import com.ap.listing.transformer.OwnershipDetailsTransformer;
-import com.bloggios.provider.payload.ModuleResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -66,6 +64,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -75,6 +74,9 @@ public class OwnershipServiceImplementation implements OwnershipService {
     private final OwnershipDetailsRepository ownershipDetailsRepository;
     private final CreateOrUpdateOwnershipProcessor createOrUpdateOwnershipProcessor;
     private final OwnershipDetailsToResponseTransformer ownershipDetailsToResponseTransformer;
+    private final VerifyOwnershipProcessor verifyOwnershipProcessor;
+    private final VerifyOwnershipOwnerAvailableProcessor verifyOwnershipOwnerAvailableProcessor;
+    private final HtmlCodeVerifyOwnershipProcessor htmlCodeVerifyOwnershipProcessor;
 
     @Override
     public ResponseEntity<OwnershipDetailsResponse> createOrGetOwnershipDetails(String publishingId) {
@@ -99,5 +101,51 @@ public class OwnershipServiceImplementation implements OwnershipService {
                 .contentLength(Files.size(filePath))
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(inputStreamResource);
+    }
+
+    @Override
+    public ResponseEntity<VerifyOwnershipResponse> verifyOwnership(String publishingId) {
+        OwnershipDetails ownershipDetails = ownershipDetailsRepository.findByPublishingId(publishingId)
+                .orElseThrow(() -> new BadRequestException(ErrorData.OWNERSHIP_DETAILS_NOT_FOUND));
+        String finalLink = ownershipDetails.getFinalLink();
+        String linkData = verifyOwnershipProcessor.getLinkData(finalLink);
+        if (Objects.isNull(linkData))
+            throw new BadRequestException(
+                    ErrorData.NULL_RESPONSE_VERIFY_LINK_DATA,
+                    "link",
+                    "There is no static content found for link: " + finalLink
+            );
+        if (!linkData.equals(ownershipDetails.getUniqueId()))
+            throw new BadRequestException(ErrorData.VERIFY_WEBSITE_FAILURE_INVALID_DATA_PRESENT);
+        verifyOwnershipOwnerAvailableProcessor.process(publishingId);
+        return ResponseEntity.ok(
+                VerifyOwnershipResponse
+                        .builder()
+                        .isOwner(true)
+                        .domain(ownershipDetails.getDomain())
+                        .websiteId(ownershipDetails.getWebsiteId())
+                        .publishingId(ownershipDetails.getPublishingId())
+                        .build()
+        );
+    }
+
+    @Override
+    public ResponseEntity<VerifyOwnershipResponse> verifyOwnershipUsingHtmlCode(String publishingId) {
+        OwnershipDetails ownershipDetails = ownershipDetailsRepository.findByPublishingId(publishingId)
+                .orElseThrow(() -> new BadRequestException(ErrorData.OWNERSHIP_DETAILS_NOT_FOUND));
+        boolean isAvailable = htmlCodeVerifyOwnershipProcessor.checkForCode(ownershipDetails.getDomain(), ownershipDetails.getPublishingId());
+        if (!isAvailable) {
+            throw new BadRequestException(ErrorData.HTML_DATA_VERIFICATION_ERROR);
+        }
+        verifyOwnershipOwnerAvailableProcessor.process(publishingId);
+        return ResponseEntity.ok(
+                VerifyOwnershipResponse
+                        .builder()
+                        .isOwner(true)
+                        .domain(ownershipDetails.getDomain())
+                        .websiteId(ownershipDetails.getWebsiteId())
+                        .publishingId(ownershipDetails.getPublishingId())
+                        .build()
+        );
     }
 }

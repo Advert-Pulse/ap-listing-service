@@ -52,7 +52,6 @@ import com.ap.listing.utils.IntegerUtils;
 import com.ap.listing.utils.MessageUtil;
 import com.bloggios.provider.utils.DateUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

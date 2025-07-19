@@ -47,7 +47,6 @@ import com.ap.listing.model.WebsitePublisher;
 import com.ap.listing.utils.MessageUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.common.message.LeaderAndIsrResponseData;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 

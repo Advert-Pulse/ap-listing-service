@@ -37,7 +37,6 @@ package com.ap.listing.payload.response;
   File: DetailedTaskBuyerResponse
  */
 
-import com.ap.listing.payload.BuyerTaskStatusPayload;
 import com.ap.listing.payload.PricingPayload;
 import com.ap.listing.payload.UrlAnchorTextPayload;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

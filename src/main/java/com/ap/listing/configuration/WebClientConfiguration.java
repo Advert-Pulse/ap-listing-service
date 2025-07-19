@@ -28,32 +28,24 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.payload.response;
+package com.ap.listing.configuration;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: OwnershipResponse
+  File: WebClientConfiguration
  */
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.reactive.function.client.WebClient;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@JsonIgnoreProperties(ignoreUnknown = true)
-@ToString
-public class OwnershipDetailsResponse {
+@Configuration
+public class WebClientConfiguration {
 
-    private String ownershipDetailsId;
-    private String uniqueId;
-    private String htmlUniqueId;
-    private String publishingId;
-    private String websiteId;
-    private String finalLink;
-    private String domain;
+    @Bean
+    public WebClient webClient() {
+        return WebClient.builder().build();
+    }
 }

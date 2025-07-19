@@ -75,6 +75,9 @@ public class OwnershipDetails {
     private String uniqueId;
 
     @Column(unique = true)
+    private String htmlUniqueId;
+
+    @Column(unique = true)
     private String publishingId;
     private String websiteId;
 

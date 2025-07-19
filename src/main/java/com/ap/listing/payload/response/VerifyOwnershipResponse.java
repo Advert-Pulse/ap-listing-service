@@ -34,7 +34,7 @@ package com.ap.listing.payload.response;
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: OwnershipResponse
+  File: VerifyOwnershipResponse
  */
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -47,13 +47,10 @@ import lombok.*;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 @ToString
-public class OwnershipDetailsResponse {
+public class VerifyOwnershipResponse {
 
-    private String ownershipDetailsId;
-    private String uniqueId;
-    private String htmlUniqueId;
+    private String domain;
+    private boolean isOwner;
     private String publishingId;
     private String websiteId;
-    private String finalLink;
-    private String domain;
 }

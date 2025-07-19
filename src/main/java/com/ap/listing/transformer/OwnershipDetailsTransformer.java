@@ -42,7 +42,6 @@ import com.ap.listing.model.OwnershipDetails;
 import com.ap.listing.model.WebsiteData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.internal.bytebuddy.description.modifier.Ownership;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -55,11 +54,14 @@ public class OwnershipDetailsTransformer {
 
     public OwnershipDetails transform(WebsiteData websiteData, String publishingId) {
         Date now = new Date();
+        String uniqueId = UUID.randomUUID().toString().replaceAll("-", "");
+        String htmlUniqueId = "<!-- " + uniqueId + " -->";
         OwnershipDetails ownershipDetails = OwnershipDetails
                 .builder()
                 .websiteId(websiteData.getWebsiteId())
                 .publishingId(publishingId)
-                .uniqueId(UUID.randomUUID().toString().replaceAll("-", ""))
+                .uniqueId(uniqueId)
+                .htmlUniqueId(htmlUniqueId)
                 .finalLink(websiteData.getDomain() + "/" + ServiceConstants.OWNERSHIP_FILE_NAME)
                 .domain(websiteData.getDomain())
                 .createdAt(now)

@@ -41,7 +41,6 @@ import com.ap.listing.constants.ServiceConstants;
 import com.ap.listing.model.WebsiteData;
 import com.ap.listing.utils.SecurityContextUtil;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
