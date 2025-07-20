@@ -28,27 +28,29 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.payload.request;
+package com.ap.listing.utils;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: GoogleOauthGa4Request
+  File: ApPayload
  */
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.Data;
+import lombok.SneakyThrows;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@JsonIgnoreProperties(ignoreUnknown = true)
-@ToString
-public class GoogleOauthGa4Request {
+@Data
+public abstract class ApPayload<A> {
 
-    private String accessToken;
-    private String publishingId;
+    static final ObjectMapper objectMapper = new ObjectMapper();
+
+    @SneakyThrows(
+            value = {JsonProcessingException.class}
+    )
+    public String toJson() {
+        return objectMapper.writeValueAsString(this);
+    }
 }

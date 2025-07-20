@@ -37,8 +37,11 @@ package com.ap.listing.service.implementation;
   File: GoogleOauthServiceImplementation
  */
 
+import com.ap.listing.dao.repository.WebsitePublisherRepository;
+import com.ap.listing.enums.ErrorData;
+import com.ap.listing.exception.BadRequestException;
+import com.ap.listing.model.WebsitePublisher;
 import com.ap.listing.payload.request.GoogleOauthGa4Request;
-import com.ap.listing.payload.request.GoogleRefreshTokenResponse;
 import com.ap.listing.processor.GoogleGa4OauthInitiator;
 import com.ap.listing.service.GoogleOauthService;
 import com.bloggios.provider.payload.ModuleResponse;
@@ -53,11 +56,13 @@ import org.springframework.stereotype.Service;
 public class GoogleOauthServiceImplementation implements GoogleOauthService {
 
     private final GoogleGa4OauthInitiator googleGa4OauthInitiator;
+    private final WebsitePublisherRepository websitePublisherRepository;
 
     @Override
     public ResponseEntity<ModuleResponse> initiateOauth(GoogleOauthGa4Request googleOauthGa4Request) {
-        GoogleRefreshTokenResponse tokenResponse = googleGa4OauthInitiator.getToken(googleOauthGa4Request);
-
+        WebsitePublisher websitePublisher = websitePublisherRepository.findByPublishingId(googleOauthGa4Request.getPublishingId())
+                .orElseThrow(() -> new BadRequestException(ErrorData.WEBSITE_PUBLISHER_NOT_FOUND));
+        googleGa4OauthInitiator.initiate(googleOauthGa4Request, websitePublisher);
         return null;
     }
 }

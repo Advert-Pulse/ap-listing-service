@@ -28,27 +28,45 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.payload.request;
+package com.ap.listing.feign;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: GoogleOauthGa4Request
+  File: GoogleAnalyticsAdminFeign
  */
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.*;
+import com.ap.listing.constants.ServiceConstants;
+import com.ap.listing.payload.response.GoogleAnalyticsAccountResponse;
+import com.ap.listing.payload.response.GoogleAnalyticsDataStreamResponse;
+import com.ap.listing.payload.response.GoogleAnalyticsPropertyResponse;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@JsonIgnoreProperties(ignoreUnknown = true)
-@ToString
-public class GoogleOauthGa4Request {
+@FeignClient(
+        name = "${feign-client.google-service.analytics-admin.name}",
+        url = "${feign-client.google-service.analytics-admin.url}"
+)
+public interface GoogleAnalyticsAdminFeign {
 
-    private String accessToken;
-    private String publishingId;
+    @GetMapping("/accounts")
+    GoogleAnalyticsAccountResponse getAccountDetails(
+            @RequestHeader(name = ServiceConstants.AUTHORIZATION) String token
+    );
+
+    @GetMapping("/properties")
+    GoogleAnalyticsPropertyResponse getPropertyDetails(
+            @RequestHeader(name = ServiceConstants.AUTHORIZATION) String token,
+            @RequestParam(name = ServiceConstants.FILTER) String filter
+    );
+
+    @GetMapping("/properties/{propertyId}/dataStreams")
+    GoogleAnalyticsDataStreamResponse getDataStreams(
+            @RequestHeader(name = ServiceConstants.AUTHORIZATION) String token,
+            @PathVariable(name = "propertyId") String propertyId
+    );
 }

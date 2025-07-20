@@ -76,6 +76,7 @@ public class WebsiteResponse {
     private Double writingAndPlacementPrice;
     private Double linkInsertionPrice;
     private String isWritingPlacement;
+    private String isLinkInsertion;
     private List<WebsiteCategory> categories = new ArrayList<>();
     private Integer mozDa;
     private Integer majesticTf;

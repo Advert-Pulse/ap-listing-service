@@ -152,10 +152,12 @@ feign-client:
     url: https://devapi.advertpulse.com/payment-service
     ap-payment-internal-key: ${AP_INTERNAL_PAYMENT_KEY:fkbndfkbndfibdfbodfbondf}
   google-service:
-    name: googleClient
-    url: https://oauth2.googleapis.com
-    client-id: 898797817545-3lnhm1esudbkd5lcvlibvvdb73t7n866.apps.googleusercontent.com
-    client-secret: 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
+    analytics-admin:
+      name: googleAnalyticsAdminFeignClient
+      url: https://analyticsadmin.googleapis.com/v1alpha
+    analytics-data:
+      name: googleAnalyticsDataFeign
+      url: https://analyticsdata.googleapis.com/v1beta
   ipClient:
     name: ipClientFeign
     url: http://ip-api.com/json

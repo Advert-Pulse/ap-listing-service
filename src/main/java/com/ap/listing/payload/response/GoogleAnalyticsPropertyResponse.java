@@ -28,17 +28,20 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.payload.request;
+package com.ap.listing.payload.response;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: GoogleOauthGa4Request
+  File: GoogleAnalyticsPropertyResponse
  */
 
+import com.ap.listing.utils.ApPayload;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -47,8 +50,7 @@ import lombok.*;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 @ToString
-public class GoogleOauthGa4Request {
+public class GoogleAnalyticsPropertyResponse extends ApPayload<GoogleAnalyticsPropertyResponse> {
 
-    private String accessToken;
-    private String publishingId;
+    private List<GoogleAnalyticsPropertyDetails> properties;
 }

@@ -28,31 +28,27 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.feign;
+package com.ap.listing.payload;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: GoogleFeignClient
+  File: WebStreamData
  */
 
-import com.ap.listing.payload.request.GoogleRefreshTokenResponse;
-import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.MediaType;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
 
-@FeignClient(
-        name = "${feign-client.google-service.name}",
-        url = "${feign-client.google-service.url}"
-)
-public interface GoogleFeignClient {
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
+@ToString
+public class WebStreamData {
 
-    @PostMapping(
-            value = "/token",
-            consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
-    )
-    GoogleRefreshTokenResponse exchangeAuthCodeForToken(@RequestBody MultiValueMap<String, String> formParams);
+    private String measurementId;
+    private String defaultUri;
 }

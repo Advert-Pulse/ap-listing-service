@@ -28,18 +28,20 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.payload.request;
+package com.ap.listing.payload.response;
 
 /*
   Developer: Rohit Parihar
-  Project: ap-auth-provider
+  Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: GoogleRefreshTokenResponse
+  File: GoogleAnalyticsAccountResponseFeign
  */
 
+import com.ap.listing.utils.ApPayload;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -48,17 +50,8 @@ import lombok.*;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 @ToString
-public class GoogleRefreshTokenResponse {
+public class GoogleAnalyticsAccountResponse extends ApPayload<GoogleAnalyticsAccountResponse> {
 
-    @JsonProperty("access_token")
-    private String accessToken;
+    private List<GoogleAnalyticsAccountDetails> accounts;
 
-    @JsonProperty("refresh_token")
-    private String refreshToken;
-
-    @JsonProperty("scope")
-    private String scope;
-
-    @JsonProperty("id_token")
-    private String idToken;
 }
