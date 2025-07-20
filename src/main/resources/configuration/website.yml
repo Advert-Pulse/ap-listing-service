@@ -163,3 +163,9 @@ website:
       searchAllowed: false
       searchField: isActive
       partialSearch: false
+    isPublisherAvailable:
+      type: STRING
+      filterAndSortField: isPublisherAvailable
+      searchAllowed: false
+      searchField: isPublisherAvailable
+      partialSearch: false

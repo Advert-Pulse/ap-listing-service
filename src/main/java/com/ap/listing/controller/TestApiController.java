@@ -42,6 +42,7 @@ import com.ap.listing.feign.AhrefFeignClient;
 import com.ap.listing.model.Scheduler;
 import com.ap.listing.payload.response.AhrefMetricsResponse;
 import com.ap.listing.processor.VerifyOwnershipProcessor;
+import com.ap.listing.scheduler.service.FetchWebsiteDataScheduler;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -53,16 +54,18 @@ public class TestApiController {
     private final SchedulerRepository schedulerRepository;
     private final AhrefFeignClient ahrefFeignClient;
     private final VerifyOwnershipProcessor verifyOwnershipProcessor;
+    private final FetchWebsiteDataScheduler fetchWebsiteDataScheduler;
 
-    public TestApiController(SchedulerRepository schedulerRepository, AhrefFeignClient ahrefFeignClient, VerifyOwnershipProcessor verifyOwnershipProcessor) {
+    public TestApiController(SchedulerRepository schedulerRepository, AhrefFeignClient ahrefFeignClient, VerifyOwnershipProcessor verifyOwnershipProcessor, FetchWebsiteDataScheduler fetchWebsiteDataScheduler) {
         this.schedulerRepository = schedulerRepository;
         this.ahrefFeignClient = ahrefFeignClient;
         this.verifyOwnershipProcessor = verifyOwnershipProcessor;
+        this.fetchWebsiteDataScheduler = fetchWebsiteDataScheduler;
     }
 
     @GetMapping
-    public AhrefMetricsResponse listItems(@RequestParam String finalLink) {
-        return ahrefFeignClient.getMetricsData(finalLink).getBody();
+    public void listItems() {
+        fetchWebsiteDataScheduler.doProcess();
     }
 
     @PostMapping

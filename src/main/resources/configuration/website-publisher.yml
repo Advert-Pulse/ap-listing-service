@@ -169,3 +169,9 @@ website-publisher:
       searchAllowed: false
       searchField: dateUpdated
       partialSearch: false
+    isActive:
+      type: STRING
+      filterAndSortField: isActive
+      searchAllowed: true
+      searchField: isActive
+      partialSearch: true

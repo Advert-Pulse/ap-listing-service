@@ -155,6 +155,4 @@ public class WebsitePublisher {
     private String publishingManager;
 
     private String isActive;
-    private String isLinkInsertionActive;
-    private String isGuestPostingActive;
 }
