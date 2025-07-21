@@ -31,6 +31,20 @@ spring:
       schema-locations:
         - classpath:scripts/001_listing-schema.sql
         - classpath:scripts/002_create-task-sequence.sql
+  kafka:
+    bootstrap-servers: ${BOOTSTRAP_SERVER}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: false
+    consumer:
+      auto-offset-reset: latest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
+        spring.json.trusted.packages: com.ap.listing
 
 application:
   profile: ${ACTIVE_PROFILE:local}
@@ -53,6 +67,7 @@ bloggios-auth:
   excluded-paths:
     jwt-paths:
       exclude-paths:
+        - /test/**
         - /v1/url-api/**
         - /actuator/**
         - /oauth2/**
@@ -122,8 +137,8 @@ feign-client:
   ahref:
     website-traffic:
       name: ahrefWebsiteTrafficClient
-      url: https://ahrefs2.p.rapidapi.com
-      host: ahrefs2.p.rapidapi.com
+      url: https://ahrefs-dr-rank-checker.p.rapidapi.com
+      host: ahrefs-dr-rank-checker.p.rapidapi.com
       api-key: 770cdcf629msh8ac0af84d9825b2p1ba4fdjsn3e5df144492e
   similar-web:
     analytics:
@@ -135,11 +150,15 @@ feign-client:
     name: apPaymentServiceClient
 #    url: http://localhost:8082/payment-service
     url: https://devapi.advertpulse.com/payment-service
+    ap-payment-internal-key: ${AP_INTERNAL_PAYMENT_KEY:fkbndfkbndfibdfbodfbondf}
   google-service:
     name: googleClient
     url: https://oauth2.googleapis.com
     client-id: 898797817545-3lnhm1esudbkd5lcvlibvvdb73t7n866.apps.googleusercontent.com
     client-secret: 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
+  ipClient:
+    name: ipClientFeign
+    url: http://ip-api.com/json
 
 ap:
   platform-fee:
@@ -148,3 +167,19 @@ ap:
     link-insertion: 20
   reserved-balance:
     hidden-url: 100
+
+scheduler:
+  fetchWebsite:
+    limit: 4
+    multiplier: 4
+  autoRejectTask:
+    scheduleAfter: 4
+
+website-analyser:
+  mozDA: 10
+  domainRating: 10
+
+kafka:
+  producer:
+    topics:
+      buy-content-placement: ${application.profile}.listing-service.buy-content-placement

@@ -28,6 +28,7 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
+
 package com.ap.listing.service.implementation;
 
 /*
@@ -104,7 +105,7 @@ public class WebsitePublisherServiceImplementation implements WebsitePublisherSe
         WebsitePublisher analysed = websitePublishingStatusAnalyser.analyse(transformedWebsitePublisher);
         WebsitePublisher websitePublisherResponse = websitePublisherRepository.saveAndFlush(analysed);
         log.info("Website publisher saved to database: {}", websitePublisherResponse);
-        CompletableFuture.runAsync(() -> publishedWebsiteAnalyseApprovalProcessor.process(websitePublisher.getPublishingId()));
+        //CompletableFuture.runAsync(() -> publishedWebsiteAnalyseApprovalProcessor.process(websitePublisher.getPublishingId()));
         websitePublisherToWebsiteSyncProcessor.doSync(websitePublisherResponse);
         websitePublisherSchedulerGenerator.process(websitePublisherResponse);
         return ResponseEntity.ok(ModuleResponse

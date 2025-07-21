@@ -182,7 +182,7 @@ public class TaskController {
     @GetMapping("/details/{taskId}")
     public ResponseEntity<DetailedTaskResponse> getTaskDetails(@PathVariable String taskId, @RequestParam String preference) {
         return ControllerHelper.loggedResponse(
-                ()-> taskService.getTaskDetails(taskId),
+                ()-> taskService.getTaskDetails(taskId, preference),
                 ApiConstants.GET_BUYER_TASK,
                 LOGGER
         );

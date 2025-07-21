@@ -38,7 +38,6 @@ package com.ap.listing.model;
  */
 
 import com.ap.listing.constants.EntityConstants;
-import com.bloggios.provider.payload.BaseModel;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;

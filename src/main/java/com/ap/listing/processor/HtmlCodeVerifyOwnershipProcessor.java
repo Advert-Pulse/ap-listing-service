@@ -28,29 +28,44 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.payload;
+package com.ap.listing.processor;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: AhrefBacklinkResponse
+  File: HtmlCodeVerifyOwnershipProcessor
  */
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.*;
+import com.ap.listing.enums.ErrorData;
+import com.ap.listing.exception.BadRequestException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.jsoup.Jsoup;
+import org.springframework.stereotype.Component;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@JsonIgnoreProperties(ignoreUnknown = true)
-@ToString
-public class AhrefBacklinkResponse {
+import java.io.IOException;
 
-    private String domainRating;
-    private String urlRating;
+@Component
+@RequiredArgsConstructor
+@Slf4j
+public class HtmlCodeVerifyOwnershipProcessor {
 
-
+    public boolean checkForCode(String url, String code) {
+        try {
+            String html = Jsoup.connect(url)
+                    .userAgent("Mozilla/5.0")
+                    .timeout(10000)
+                    .get()
+                    .html();
+            log.debug("HTML content received for site: {}, data: {}", url, html);
+            return html.contains(code);
+        } catch (IOException exception) {
+            throw new BadRequestException(
+                    ErrorData.FAILED_TO_READ_DATA_FROM_SITE,
+                    "link",
+                    String.format("Error reading data from site: %s. Please make sure your site is reachable", url)
+            );
+        }
+    }
 }

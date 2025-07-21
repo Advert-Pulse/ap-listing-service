@@ -32,18 +32,13 @@ package com.ap.listing.payload.response;
 
 /*
   Developer: Rohit Parihar
-  Project: ap-listing-service
+  Project: bloggios-auth-server
   GitHub: github.com/rohit-zip
-  File: AhrefWebsiteTrafficResponse
+  File: IPResponse
  */
 
-import com.ap.listing.payload.TopCountry;
-import com.ap.listing.payload.TrafficHistory;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
-
-import java.util.List;
 
 @Getter
 @Setter
@@ -52,17 +47,18 @@ import java.util.List;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 @ToString
-public class AhrefWebsiteTrafficResponse {
+public class IPResponse {
 
     private String status;
-    private String url;
-    private long trafficMonthlyAvg;
-    private long costMonthlyAvg;
-
-    @JsonProperty("traffic_history")
-    private List<TrafficHistory> trafficHistory;
-
-    @JsonProperty("top_countries")
-    private List<TopCountry> topCountries;
-
+    private String country;
+    private String countryCode;
+    private String region;
+    private String regionName;
+    private String city;
+    private String zip;
+    private double lat;
+    private double lon;
+    private String timezone;
+    private String isp;
+    private String org;
 }

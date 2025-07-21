@@ -71,4 +71,11 @@ public class ApiConstants {
     public static final String MANAGE_COMPLETED = "ManageCompleted";
     public static final String GET_WEBSITE_DATA = "GetWebsiteData";
     public static final String INITIAL_GOOGLE_OAUTH = "InitialGoogleOAuth";
+    public static final String EXECUTE_FETCH_WEBSITE_SCHEDULER = "ExecuteFetchWebsiteScheduler";
+    public static final String GET_DEMAND = "GetDemand";
+    public static final String AUTO_REJECT_TASK_SCHEDULER = "AutoRejectTaskScheduler";
+    public static final String CREATE_OWNERSHIP_DETAILS = "CreateOwnershipDetails";
+    public static final String CREATE_AND_DOWNLOAD_OWNERSHIP_DETAILS = "CreateAndDownloadOwnershipDetails";
+    public static final String VERIFY_OWNERSHIP = "VerifyOwnership";
+    public static final String BUY_LINK_INSERTION = "BuyLinkInsertion";
 }

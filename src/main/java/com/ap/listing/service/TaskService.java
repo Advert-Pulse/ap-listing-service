@@ -50,5 +50,5 @@ public interface TaskService {
     ResponseEntity<ListResponse> myListBuyerTasks(ListPayload listPayload);
 
     ResponseEntity<ListResponse> myListPublisherTasks(ListPayload listPayload);
-    ResponseEntity<DetailedTaskResponse> getTaskDetails(String taskId);
+    ResponseEntity<DetailedTaskResponse> getTaskDetails(String taskId, String preference);
 }

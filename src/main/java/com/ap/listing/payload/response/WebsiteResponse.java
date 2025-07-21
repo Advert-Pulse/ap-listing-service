@@ -89,4 +89,6 @@ public class WebsiteResponse {
     private List<TopCountry> ahrefTopCountries;
     private List<TrafficHistory> similarWebTrafficHistory;
     private List<TopCountry> similarWebTopCountries;
+    private String isActive;
+    private String isPublisherAvailable;
 }

@@ -115,4 +115,6 @@ public class TaskBuyer {
 
     private double platformFee;
 
+    private String publishingId;
+
 }

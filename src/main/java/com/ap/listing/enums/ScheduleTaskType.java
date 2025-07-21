@@ -40,5 +40,6 @@ package com.ap.listing.enums;
 public enum ScheduleTaskType {
 
     FETCH_WEBSITE_DATA,
-    APPROVE_PUBLISHER
+    APPROVE_PUBLISHER,
+    AUTO_REJECT_TASK
 }

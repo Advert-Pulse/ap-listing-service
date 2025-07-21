@@ -28,48 +28,28 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.scheduler.service;
+package com.ap.listing.payload.response;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: OneHourScheduler
+  File: DemandDataResponse
  */
 
-import com.ap.listing.constants.ServiceConstants;
-import com.ap.listing.dao.repository.SchedulerRepository;
-import com.ap.listing.enums.ScheduleTaskType;
-import com.ap.listing.model.Scheduler;
-import com.ap.listing.scheduler.processor.FetchWebsiteDataSchedulerProcessor;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.slf4j.MDC;
-import org.springframework.stereotype.Component;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
 
-import java.util.List;
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
+@ToString
+public class DemandDataResponse {
 
-@Component
-@RequiredArgsConstructor
-@Slf4j
-public class OneHourScheduler {
-
-
-    private final SchedulerRepository schedulerRepository;
-    private final FetchWebsiteDataSchedulerProcessor fetchWebsiteDataSchedulerProcessor;
-
-    public void doProcess() {
-        try {
-            List<Scheduler> listOfSchedulers = schedulerRepository.findAllByIsSchedulingDone(Boolean.FALSE);
-            log.info("Found {} schedulers", listOfSchedulers.size());
-            for (Scheduler scheduler : listOfSchedulers) {
-                MDC.put(ServiceConstants.SCHEDULER_ID, scheduler.getSchedulerId());
-                switch (scheduler.getScheduledTaskType()) {
-                    case ScheduleTaskType.FETCH_WEBSITE_DATA -> fetchWebsiteDataSchedulerProcessor.process(scheduler);
-                }
-            }
-        } finally {
-            MDC.remove(ServiceConstants.SCHEDULER_ID);
-        }
-    }
+    private String countryCode;
+    private int demand;
+    private int demandPercent;
 }

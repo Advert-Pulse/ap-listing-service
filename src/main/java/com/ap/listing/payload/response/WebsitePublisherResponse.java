@@ -85,4 +85,13 @@ public class WebsitePublisherResponse {
     private WebsiteResponseForPublisher website;
     private Date dateCreated;
     private Date dateUpdated;
+    private Double minPrice;
+    private Double maxPrice;
+
+    private String message;
+    private String publishingManager;
+
+    private String isActive;
+    private String isLinkInsertionActive;
+    private String isGuestPostingActive;
 }

@@ -37,14 +37,14 @@ package com.ap.listing.scheduler;
   File: GlobalScheduler
  */
 
-import com.ap.listing.scheduler.service.OneHourScheduler;
+import com.ap.listing.scheduler.service.AutoRejectTaskScheduler;
+import com.ap.listing.scheduler.service.FetchWebsiteDataScheduler;
 import com.ap.listing.scheduler.service.WebsitePublisherScheduler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Component
@@ -52,22 +52,43 @@ import java.util.Date;
 @Slf4j
 public class GlobalScheduler {
 
-    private final OneHourScheduler oneHourScheduler;
+    private final FetchWebsiteDataScheduler fetchWebsiteDataScheduler;
     private final WebsitePublisherScheduler websitePublisherScheduler;
+    private final AutoRejectTaskScheduler autoRejectTaskScheduler;
 
+//    @Scheduled(cron = "0 0 * * * ?")
+
+    /**
+     * Next Run : 2:00
+     * Website List: 1:20
+     *
+     */
     @Scheduled(cron = "0 0 * * * ?")
-    public void taskEveryOneHour() {
+    public void taskFetchWebsite() {
         long startTime = System.currentTimeMillis();
-        log.info("One hour scheduled task ran at {}", new Date());
-        oneHourScheduler.doProcess();
-        log.info("One Hour Scheduler took {} ms", System.currentTimeMillis() - startTime);
+        log.info("Fetch Website scheduled task ran at {}", new Date());
+        fetchWebsiteDataScheduler.doProcess();
+        log.info("Fetch Website Scheduler took {} ms", System.currentTimeMillis() - startTime);
     }
 
+    /**
+     * Next Run : 1:30
+     * Website Publisher : 1:22 (Pending Moderation)
+     * Website In Active
+     */
     @Scheduled(fixedRate = 5400000)
-    public void taskEveryTwoHours() {
+    public void taskApproveWebsite() {
         long startTime = System.currentTimeMillis();
-        log.info("Two hour scheduled task ran at {}", new Date());
+        log.info("Approve Website scheduled task ran at {}", new Date());
         websitePublisherScheduler.doProcess();
-        log.info("Two Hour Scheduler took {} ms", System.currentTimeMillis() - startTime);
+        log.info("Approve Website Scheduler took {} ms", System.currentTimeMillis() - startTime);
+    }
+
+    @Scheduled(cron = "0 0 */2 * * *")
+    public void autoRejectTask() {
+        long startTime = System.currentTimeMillis();
+        log.info("Auto Reject Task scheduled task ran at {}", new Date());
+        autoRejectTaskScheduler.doProcess();
+        log.info("Auto Reject Task Scheduler took {} ms", System.currentTimeMillis() - startTime);
     }
 }

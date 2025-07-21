@@ -37,7 +37,6 @@ package com.ap.listing.payload.response;
   File: DetailedTaskBuyerResponse
  */
 
-import com.ap.listing.payload.BuyerTaskStatusPayload;
 import com.ap.listing.payload.PricingPayload;
 import com.ap.listing.payload.UrlAnchorTextPayload;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -61,7 +60,7 @@ public class DetailedTaskResponse {
     private List<PricingPayload> priceBreak;
     private double totalPrice;
     private String currentStatus;
-    private List<BuyerTaskStatusPayload> taskStatus;
+    private List<Object> taskStatus;
     private String isSpecialTopic;
     private Date dateCreated;
     private Date dateUpdated;
@@ -72,4 +71,5 @@ public class DetailedTaskResponse {
     private String contentType;
     private String buyerId;
     private String publisherId;
+    private String publishingId;
 }

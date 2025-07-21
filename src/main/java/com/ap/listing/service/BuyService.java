@@ -38,12 +38,13 @@ package com.ap.listing.service;
  */
 
 import com.ap.listing.payload.request.BuyContentPlacementRequest;
-import com.ap.listing.payload.request.BuyWritingAndPlacement;
+import com.ap.listing.payload.request.BuyLinkInsertionRequest;
 import com.bloggios.provider.payload.ModuleResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 
 public interface BuyService {
     ResponseEntity<ModuleResponse> buyContentPlacement(BuyContentPlacementRequest buyContentPlacementRequest, String publishingId, HttpServletRequest request);
-    ResponseEntity<ModuleResponse> buyWritingPlacement(BuyWritingAndPlacement buyWritingAndPlacement,String publishingId,HttpServletRequest httpServletRequest);
+
+    ResponseEntity<ModuleResponse> buyLinkInsertion(BuyLinkInsertionRequest buyLinkInsertionRequest, String publishingId, HttpServletRequest request);
 }

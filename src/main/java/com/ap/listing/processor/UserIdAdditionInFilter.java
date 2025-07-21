@@ -66,4 +66,20 @@ public class UserIdAdditionInFilter {
 
         return listPayload;
     }
+
+    public ListPayload process(ListPayload listPayload, String filterKey) {
+        List<Filter> filters = Optional.ofNullable(listPayload.getFilters())
+                .filter(f -> !f.isEmpty())
+                .orElse(new ArrayList<>());
+
+        Filter userFilter = Filter.builder()
+                .filterKey(filterKey)
+                .selections(List.of(SecurityContextUtil.getLoggedInUserOrThrow().getUserId()))
+                .build();
+
+        filters.add(userFilter);
+        listPayload.setFilters(filters);
+
+        return listPayload;
+    }
 }

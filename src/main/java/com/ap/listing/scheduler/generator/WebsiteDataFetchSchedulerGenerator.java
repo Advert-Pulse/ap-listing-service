@@ -61,6 +61,7 @@ public class WebsiteDataFetchSchedulerGenerator {
                 .primaryId(websiteId)
                 .isSchedulingDone(false)
                 .scheduledTaskType(ScheduleTaskType.FETCH_WEBSITE_DATA)
+                .scheduledOn(now)
                 .timesUsed(0)
                 .createdOn(now)
                 .updatedOn(now)

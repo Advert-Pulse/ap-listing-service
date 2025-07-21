@@ -144,5 +144,6 @@ public class WebsiteData {
     private List<TopCountry> similarWebTopCountries;
 
     private String isActive;
+    private String isPublisherAvailable;
     private String message;
 }

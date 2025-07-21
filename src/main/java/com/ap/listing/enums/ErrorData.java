@@ -97,7 +97,19 @@ public enum ErrorData {
     TASK_SHOULD_BE_IN_IN_PROGRESS_OR_IMPROVEMENT("AP__ERROR--3324", "Task should be in In Progress or Improvement for initial approval" ),
     TASK_SHOULD_BE_BUYER_APPROVAL_TO_MANAGE("AP__ERROR--3325", "Task should be in Your (Buyer) Approval To Manage" ),
     WEBSITE_ID_NOT_VALID("AP__ERROR--3326", "Website id is not valid" ),
-    GOOGLE_AUTH_TOKEN_EXCHANGE_ERROR("AP__ERROR--3327", "Google auth token exchange error" ),;
+    GOOGLE_AUTH_TOKEN_EXCHANGE_ERROR("AP__ERROR--3327", "Google auth token exchange error" ),
+    GET_DEMAND_DAYS_ERROR("AP__ERROR--3328", "Demand days should be greater than 0 and less than 180" ),
+    JSON_DESERIALIZATION("AP__ERROR--3329", "JSON deserialization error occurred" ),
+    OWNER_ALREADY_ADDED("AP__ERROR--3330", "Owner already added for the given site" ),
+    OWNERSHIP_DETAILS_NOT_FOUND("AP__ERROR--3331", "Owner details not found" ),
+    WEBCLIENT_ERROR("AP__ERROR--3332", "Webclient error occurred" ),
+    NULL_RESPONSE_VERIFY_LINK_DATA("AP__ERROR--3333", "Null Response Verify Link Data" ),
+    VERIFY_WEBSITE_FAILURE_INVALID_DATA_PRESENT("AP__ERROR--3334", "Invalid data present in the page. Please make sure you uploaded the same downloaded file at the root of your website" ),
+    NO_STATIC_PAGE_FOUND_AT_LINK("AP__ERROR--3335", "No Static Page found at Verification Link" ),
+    FAILED_TO_READ_DATA_FROM_SITE("AP__ERROR--3336", "Failed To Read Data From Site" ),
+    HTML_DATA_VERIFICATION_ERROR("AP__ERROR--3337", "Website not verified as either there is no given code present or invalid code present. Please make sure you added the correct code" ),
+    SPECIAL_REQUIREMENT_MANDATORY("AP__ERROR-3338", "Special requirement is mandatory and cannot be null."),
+    CANNOT_PURCHASE_OWN_LISTED_ORDER("AP__ERROR-3339", "Cannot Purchase Own List Order" ),;
 
     private final String code;
     private final String message;

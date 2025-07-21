@@ -56,6 +56,7 @@ public class WebsiteTransformer {
                 .dateCreated(now)
                 .dateUpdated(now)
                 .userId(SecurityContextUtil.getLoggedInUserOrThrow().getUserId())
+                .isPublisherAvailable(ServiceConstants.FALSE)
                 .isActive(ServiceConstants.FALSE)
                 .build();
     }

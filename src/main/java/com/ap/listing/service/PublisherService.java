@@ -45,4 +45,5 @@ import org.springframework.http.ResponseEntity;
 public interface PublisherService {
     ResponseEntity<ModuleResponse> manageTaskInitial(String taskId, String status, HttpServletRequest httpServletRequest);
     ResponseEntity<ModuleResponse> initialApproval(String taskId, PublisherInitialApprovalRequest publisherInitialApprovalRequest);
+    ResponseEntity<ModuleResponse> manageTaskInitialInternal(String taskId, String status);
 }
