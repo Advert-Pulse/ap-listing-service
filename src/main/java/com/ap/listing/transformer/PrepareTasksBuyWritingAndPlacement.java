@@ -30,13 +30,6 @@
  */
 package com.ap.listing.transformer;
 
-/*
-  Developer: Rohit Parihar
-  Project: ap-listing-service
-  GitHub: github.com/rohit-zip
-  File: PrepareTask
- */
-
 import com.ap.listing.enums.BuyerTaskStatus;
 import com.ap.listing.enums.ProductType;
 import com.ap.listing.enums.PublisherTaskStatus;
@@ -61,17 +54,16 @@ import java.util.Date;
 import java.util.List;
 
 @Component
-@RequiredArgsConstructor
 @Slf4j
-public class PrepareTaskBuyContentPlacement {
-
+@RequiredArgsConstructor
+public class PrepareTasksBuyWritingAndPlacement {
     private final ModelMapper modelMapper;
     private final AdvertPulseProperties advertPulseProperties;
 
-    public TaskPublisher preparePublisherTask(BuyContentPlacementRequest buyContentPlacementRequest, WebsitePublisher websitePublisher) {
+    public TaskPublisher preparePublisherTask(BuyWritingAndPlacement buyWritingAndPlacement, WebsitePublisher websitePublisher) {
         TaskPublisher taskPublisher = new TaskPublisher();
         Date now = new Date();
-        List<PricingPayload> pricingPayloads = preparePricingPayload(buyContentPlacementRequest, websitePublisher);
+        List<PricingPayload> pricingPayloads = preparePricingPayload(buyWritingAndPlacement, websitePublisher);
         List<PricingPayload> finalPricingPayloads = prepareFinalPricingPayload(pricingPayloads);
         taskPublisher.setProductType(ProductType.CONTENT_PLACEMENT.name());
         taskPublisher.setPriceBreak(finalPricingPayloads);
@@ -82,9 +74,9 @@ public class PrepareTaskBuyContentPlacement {
         taskPublisher.setIsSpecialTopic(Boolean.FALSE.toString());
         taskPublisher.setDateCreated(now);
         taskPublisher.setDateUpdated(now);
-        taskPublisher.setContent(buyContentPlacementRequest.getContent());
-        taskPublisher.setSpecialRequirements(buyContentPlacementRequest.getSpecialRequirements());
-        taskPublisher.setUrlAnchorTexts(buyContentPlacementRequest.getUrlAnchorTexts());
+        taskPublisher.setContent(buyWritingAndPlacement.getContent());
+        taskPublisher.setSpecialRequirements(buyWritingAndPlacement.getSpecialRequirements());
+        taskPublisher.setUrlAnchorTexts(buyWritingAndPlacement.getUrlAnchorTexts());
         taskPublisher.setContentType("N/A");
         taskPublisher.setBuyerId(SecurityContextUtil.getLoggedInUserOrThrow().getUserId());
         taskPublisher.setPublisherId(websitePublisher.getUserId());
@@ -108,8 +100,8 @@ public class PrepareTaskBuyContentPlacement {
                 .sum();
     }
 
-    private List<PricingPayload> preparePricingPayload(BuyContentPlacementRequest buyContentPlacementRequest, WebsitePublisher websitePublisher) {
-        List<UrlAnchorTextPayload> urlAnchorTexts = buyContentPlacementRequest.getUrlAnchorTexts();
+    private List<PricingPayload> preparePricingPayload(BuyWritingAndPlacement buyWritingAndPlacement, WebsitePublisher websitePublisher) {
+        List<UrlAnchorTextPayload> urlAnchorTexts = buyWritingAndPlacement.getUrlAnchorTexts();
         List<PricingPayload> pricingPayloads = new ArrayList<>();
         PricingPayload pricingPayload = PricingPayload
                 .builder()
