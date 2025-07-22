@@ -42,6 +42,7 @@ import com.ap.listing.enums.ErrorData;
 import com.ap.listing.exception.BadRequestException;
 import com.ap.listing.model.WebsitePublisher;
 import com.ap.listing.payload.request.GoogleOauthGa4Request;
+import com.ap.listing.payload.response.InitiateGA4OAuthResponse;
 import com.ap.listing.processor.GoogleGa4OauthInitiator;
 import com.ap.listing.service.GoogleOauthService;
 import com.bloggios.provider.payload.ModuleResponse;
@@ -49,6 +50,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
@@ -59,10 +62,10 @@ public class GoogleOauthServiceImplementation implements GoogleOauthService {
     private final WebsitePublisherRepository websitePublisherRepository;
 
     @Override
-    public ResponseEntity<ModuleResponse> initiateOauth(GoogleOauthGa4Request googleOauthGa4Request) {
+    public ResponseEntity<InitiateGA4OAuthResponse> initiateOauth(GoogleOauthGa4Request googleOauthGa4Request) {
         WebsitePublisher websitePublisher = websitePublisherRepository.findByPublishingId(googleOauthGa4Request.getPublishingId())
                 .orElseThrow(() -> new BadRequestException(ErrorData.WEBSITE_PUBLISHER_NOT_FOUND));
-        googleGa4OauthInitiator.initiate(googleOauthGa4Request, websitePublisher);
-        return null;
+        InitiateGA4OAuthResponse initiateGA4OAuthResponse = googleGa4OauthInitiator.initiate(googleOauthGa4Request, websitePublisher);
+        return ResponseEntity.ok(initiateGA4OAuthResponse);
     }
 }

@@ -39,6 +39,7 @@ package com.ap.listing.controller;
 
 import com.ap.listing.constants.ApiConstants;
 import com.ap.listing.payload.request.GoogleOauthGa4Request;
+import com.ap.listing.payload.response.InitiateGA4OAuthResponse;
 import com.ap.listing.service.GoogleOauthService;
 import com.bloggios.provider.payload.ModuleResponse;
 import com.bloggios.provider.utils.ControllerHelper;
@@ -60,7 +61,7 @@ public class GoogleOauthController {
     private final GoogleOauthService googleOauthService;
 
     @PostMapping
-    public ResponseEntity<ModuleResponse> initiateOauth(@RequestBody GoogleOauthGa4Request googleOauthGa4Request) {
+    public ResponseEntity<InitiateGA4OAuthResponse> initiateOauth(@RequestBody GoogleOauthGa4Request googleOauthGa4Request) {
         return ControllerHelper.loggedResponse(
                 () -> googleOauthService.initiateOauth(googleOauthGa4Request),
                 ApiConstants.INITIAL_GOOGLE_OAUTH,
