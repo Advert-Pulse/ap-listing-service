@@ -38,6 +38,7 @@ package com.ap.listing.payload.response;
  */
 
 import com.ap.listing.model.WebsiteCategory;
+import com.ap.listing.payload.GA4Channel;
 import com.ap.listing.payload.TopCountry;
 import com.ap.listing.payload.TrafficHistory;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -95,4 +96,6 @@ public class WebsiteResponse {
     private List<TrafficHistory> ga4TrafficHistory;
     private List<TopCountry> ga4TopCountries;
     private String isGa4Metrics;
+    private GA4Channel ga4Channel;
+    private Long ga4Traffic;
 }
