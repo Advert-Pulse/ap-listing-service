@@ -79,7 +79,7 @@ public class TaskPublisher {
     @Column(unique = true)
     private String taskId;
 
-    // From Product Type Enum
+
     private String productType;
 
     private String siteUrl;
