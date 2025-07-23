@@ -66,6 +66,7 @@ dependencies {
 	implementation group: "dnsjava", name: "dnsjava", version: "3.6.3"
 	implementation "com.bloggios.query:bloggios-sql-query-provider:${bloggiosSqlQuery}"
 	implementation "org.springframework.boot:spring-boot-starter-webflux"
+	implementation group: 'com.google.analytics', name: 'google-analytics-data', version: '0.79.0'
 }
 
 dependencyManagement {

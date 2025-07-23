@@ -28,29 +28,33 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.payload.response;
+package com.ap.listing.utils;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: InitiateGA4OAuthResponse
+  File: HostNameExtractor
  */
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.*;
+import com.ap.listing.enums.ErrorData;
+import com.ap.listing.exception.BadRequestException;
+import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@JsonIgnoreProperties(ignoreUnknown = true)
-@ToString
-public class InitiateGA4OAuthResponse {
+import java.net.URL;
 
-    private String message;
-    private boolean isExist;
-    private String hostName;
-    private String domain;
+@UtilityClass
+@Slf4j
+public class HostNameExtractor {
+
+    public String extractHostName(String domain) {
+        log.info("Extracting Host Name from Domain : {}", domain);
+        try {
+            URL url = new URL(domain);
+            return url.getHost();
+        } catch (Exception e) {
+            throw new BadRequestException(ErrorData.INVALID_URL);
+        }
+    }
 }

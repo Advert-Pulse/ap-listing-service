@@ -119,7 +119,7 @@ public class BuyServiceImplementation implements BuyService {
                 )
         );
         log.info("Response received from ap-payment-service for sendFundsToReserved: {}", moduleResponse);
-        //buyContentPlacementNotificationProcessor.process(taskPublisherResponse);
+        buyContentPlacementNotificationProcessor.process(taskPublisherResponse);
         log.info("Publishing Event >> DemandEvent");
         applicationEventPublisher.publishEvent(new DemandEvent(
                 new DemandDataRecord(

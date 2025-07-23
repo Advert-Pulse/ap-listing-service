@@ -28,29 +28,35 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.payload.response;
+package com.ap.listing.feign;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: InitiateGA4OAuthResponse
+  File: GoogleAnalyticsDataFeign
  */
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.*;
+import com.ap.listing.constants.ServiceConstants;
+import com.ap.listing.payload.request.GA4RunReportRequest;
+import com.ap.listing.payload.response.GA4RunReportResponse;
+import com.google.analytics.data.v1beta.RunReportRequest;
+import com.google.analytics.data.v1beta.RunReportResponse;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@JsonIgnoreProperties(ignoreUnknown = true)
-@ToString
-public class InitiateGA4OAuthResponse {
+@FeignClient(
+        name = "${feign-client.google-service.analytics-data.name}",
+        url = "${feign-client.google-service.analytics-data.url}"
+)
+public interface GoogleAnalyticsDataFeign {
 
-    private String message;
-    private boolean isExist;
-    private String hostName;
-    private String domain;
+    @PostMapping("/properties/{propertyId}:runReport")
+    GA4RunReportResponse runReportRequest(
+            @RequestHeader(name = ServiceConstants.AUTHORIZATION) String token,
+            @RequestBody GA4RunReportRequest runReportRequest,
+            @PathVariable String propertyId);
 }

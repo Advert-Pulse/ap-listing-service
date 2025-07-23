@@ -43,6 +43,7 @@ import com.ap.listing.feign.GoogleAnalyticsAdminFeign;
 import com.ap.listing.model.WebsitePublisher;
 import com.ap.listing.payload.request.GoogleOauthGa4Request;
 import com.ap.listing.payload.response.*;
+import com.ap.listing.utils.HostNameExtractor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -60,7 +61,7 @@ public class GoogleGa4OauthInitiator {
     private final GA4DetailsProcessor gA4DetailsProcessor;
 
     public InitiateGA4OAuthResponse initiate(GoogleOauthGa4Request googleOauthGa4Request, WebsitePublisher websitePublisher) {
-        String publisherHost = extractHostName(websitePublisher.getDomain());
+        String publisherHost = HostNameExtractor.extractHostName(websitePublisher.getDomain());
         InitiateGA4OAuthResponse response = new InitiateGA4OAuthResponse();
         response.setHostName(publisherHost);
         response.setDomain(websitePublisher.getDomain());
@@ -90,11 +91,11 @@ public class GoogleGa4OauthInitiator {
                 for (GoogleAnalyticsDataStreamDetails googleAnalyticsDataStreamDetails : streams) {
                     log.info("Processing Data Stream for property : {}", googleAnalyticsDataStreamDetails.getName());
                     String defaultUri = googleAnalyticsDataStreamDetails.getWebStreamData().getDefaultUri();
-                    String googleAnalyticsHost = extractHostName(defaultUri);
+                    String googleAnalyticsHost = HostNameExtractor.extractHostName(defaultUri);
                     if (googleAnalyticsHost.equals(publisherHost)) {
                         log.info("Website Found the Google Analytics Host : {}", googleAnalyticsHost);
                         CompletableFuture.runAsync(
-                                ()-> gA4DetailsProcessor.process(websitePublisher, propertyId)
+                                ()-> gA4DetailsProcessor.process(websitePublisher, propertyId, googleOauthGa4Request)
                         );
                         response.setExist(Boolean.TRUE);
                         response.setMessage(String.format("Processing the data from Google Analytics for Analytics Id : %s", googleAnalyticsDataStreamDetails.getWebStreamData().getMeasurementId()));
@@ -106,15 +107,5 @@ public class GoogleGa4OauthInitiator {
         response.setExist(Boolean.FALSE);
         response.setMessage(String.format("No Data Streams found in Analytics for Host : %s. Please check whether the host %s is present in any of your account or not", publisherHost, publisherHost));
         return response;
-    }
-
-    private String extractHostName(String domain) {
-        log.info("Extracting Host Name from Domain : {}", domain);
-        try {
-            URL url = new URL(domain);
-            return url.getHost();
-        } catch (Exception e) {
-            throw new BadRequestException(ErrorData.INVALID_URL);
-        }
     }
 }

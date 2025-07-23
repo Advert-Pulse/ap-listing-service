@@ -34,23 +34,91 @@ package com.ap.listing.payload.response;
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: InitiateGA4OAuthResponse
+  File: GA4RunReportResponse
  */
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
+import java.util.List;
+
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-@ToString
-public class InitiateGA4OAuthResponse {
+public class GA4RunReportResponse {
 
-    private String message;
-    private boolean isExist;
-    private String hostName;
-    private String domain;
+    @JsonProperty("dimensionHeaders")
+    private List<DimensionHeader> dimensionHeaders;
+
+    @JsonProperty("metricHeaders")
+    private List<MetricHeader> metricHeaders;
+
+    @JsonProperty("rows")
+    private List<Row> rows;
+
+    @JsonProperty("rowCount")
+    private Integer rowCount;
+
+    @JsonProperty("metadata")
+    private Metadata metadata;
+
+    @JsonProperty("kind")
+    private String kind;
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class DimensionHeader {
+        private String name;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class MetricHeader {
+        private String name;
+        private String type;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class Row {
+        private List<DimensionValue> dimensionValues;
+        private List<MetricValue> metricValues;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class DimensionValue {
+        private String value;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class MetricValue {
+        private String value;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class Metadata {
+        private String currencyCode;
+        private String timeZone;
+    }
 }
