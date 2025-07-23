@@ -49,9 +49,6 @@ import lombok.*;
 @ToString
 public class GoogleOauthGa4Request {
 
-    private String code;
-    private String redirectUri;
-    private String clientId;
-    private String clientSecret;
+    private String accessToken;
     private String publishingId;
 }

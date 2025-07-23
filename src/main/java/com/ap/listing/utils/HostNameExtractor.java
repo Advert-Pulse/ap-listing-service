@@ -28,50 +28,33 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.controller;
+package com.ap.listing.utils;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: TestApiController
+  File: HostNameExtractor
  */
 
-import com.ap.listing.dao.repository.SchedulerRepository;
-import com.ap.listing.feign.AhrefFeignClient;
-import com.ap.listing.model.Scheduler;
-import com.ap.listing.processor.VerifyOwnershipProcessor;
-import com.ap.listing.scheduler.service.FetchWebsiteDataScheduler;
-import org.springframework.web.bind.annotation.*;
+import com.ap.listing.enums.ErrorData;
+import com.ap.listing.exception.BadRequestException;
+import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 
-import java.util.Date;
+import java.net.URL;
 
-@RestController
-@RequestMapping("/test/data")
-public class TestApiController {
+@UtilityClass
+@Slf4j
+public class HostNameExtractor {
 
-    private final SchedulerRepository schedulerRepository;
-    private final AhrefFeignClient ahrefFeignClient;
-    private final VerifyOwnershipProcessor verifyOwnershipProcessor;
-    private final FetchWebsiteDataScheduler fetchWebsiteDataScheduler;
-
-    public TestApiController(SchedulerRepository schedulerRepository, AhrefFeignClient ahrefFeignClient, VerifyOwnershipProcessor verifyOwnershipProcessor, FetchWebsiteDataScheduler fetchWebsiteDataScheduler) {
-        this.schedulerRepository = schedulerRepository;
-        this.ahrefFeignClient = ahrefFeignClient;
-        this.verifyOwnershipProcessor = verifyOwnershipProcessor;
-        this.fetchWebsiteDataScheduler = fetchWebsiteDataScheduler;
-    }
-
-    @GetMapping
-    public void listItems() {
-        fetchWebsiteDataScheduler.doProcess();
-    }
-
-    @PostMapping
-    public Scheduler addData(@RequestBody Scheduler scheduler) {
-        scheduler.setCreatedOn(new Date());
-        scheduler.setScheduledOn(new Date());
-        scheduler.setUpdatedOn(new Date());
-        return schedulerRepository.save(scheduler);
+    public String extractHostName(String domain) {
+        log.info("Extracting Host Name from Domain : {}", domain);
+        try {
+            URL url = new URL(domain);
+            return url.getHost();
+        } catch (Exception e) {
+            throw new BadRequestException(ErrorData.INVALID_URL);
+        }
     }
 }

@@ -37,41 +37,72 @@ package com.ap.listing.processor;
   File: GoogleGa4OauthInitiator
  */
 
-import com.ap.listing.enums.ErrorData;
-import com.ap.listing.exception.BadRequestException;
-import com.ap.listing.feign.GoogleFeignClient;
+import com.ap.listing.feign.GoogleAnalyticsAdminFeign;
+import com.ap.listing.model.WebsitePublisher;
 import com.ap.listing.payload.request.GoogleOauthGa4Request;
-import com.ap.listing.payload.request.GoogleRefreshTokenResponse;
+import com.ap.listing.payload.response.*;
+import com.ap.listing.utils.HostNameExtractor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
+
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class GoogleGa4OauthInitiator {
 
-    private final GoogleFeignClient googleFeignClient;
-    @Value("${feign-client.google-service.client-id}")
-    private String clientId;
+    private final GoogleAnalyticsAdminFeign googleAnalyticsAdminFeign;
+    private final GA4DetailsProcessor gA4DetailsProcessor;
 
-    @Value("${feign-client.google-service.client-secret}")
-    private String clientSecret;
+    public InitiateGA4OAuthResponse initiate(GoogleOauthGa4Request googleOauthGa4Request, WebsitePublisher websitePublisher) {
+        String publisherHost = HostNameExtractor.extractHostName(websitePublisher.getDomain());
+        InitiateGA4OAuthResponse response = new InitiateGA4OAuthResponse();
+        response.setHostName(publisherHost);
+        response.setDomain(websitePublisher.getDomain());
+        GoogleAnalyticsAccountResponse googleAnalyticsAccountResponse = googleAnalyticsAdminFeign.getAccountDetails(
+                String.format("Bearer %s", googleOauthGa4Request.getAccessToken())
+        );
+        log.info("Google Analytics Account Response : {}", googleAnalyticsAccountResponse.toJson());
+        List<GoogleAnalyticsAccountDetails> accounts = googleAnalyticsAccountResponse.getAccounts();
 
-    public GoogleRefreshTokenResponse getToken(GoogleOauthGa4Request googleOAuthRequest) {
-        MultiValueMap<String, String> formParams = new LinkedMultiValueMap<>();
-        formParams.add("client_id", clientId);
-        formParams.add("client_secret", clientSecret);
-        formParams.add("code", googleOAuthRequest.getCode());
-        formParams.add("grant_type", "authorization_code");
-        formParams.add("redirect_uri", googleOAuthRequest.getRedirectUri());
-        try {
-            return googleFeignClient.exchangeAuthCodeForToken(formParams);
-        } catch (Exception e) {
-            throw new BadRequestException(ErrorData.GOOGLE_AUTH_TOKEN_EXCHANGE_ERROR, "Error Occurred while fetching the token response through auth code", e.getLocalizedMessage());
+        for (GoogleAnalyticsAccountDetails googleAnalyticsAccountDetails : accounts) {
+            log.info("Fetching Property details for account: {}", googleAnalyticsAccountDetails.getName());
+            GoogleAnalyticsPropertyResponse googleAnalyticsPropertyResponse = googleAnalyticsAdminFeign.getPropertyDetails(
+                    String.format("Bearer %s", googleOauthGa4Request.getAccessToken()),
+                    String.format("parent:%s", googleAnalyticsAccountDetails.getName())
+            );
+            log.info("Property details for account : {}", googleAnalyticsPropertyResponse.toJson());
+            List<GoogleAnalyticsPropertyDetails> properties = googleAnalyticsPropertyResponse.getProperties();
+            for (GoogleAnalyticsPropertyDetails googleAnalyticsPropertyDetails : properties) {
+                log.info("Fetching Property details for property: {}", googleAnalyticsPropertyDetails.getName());
+                String propertyId = googleAnalyticsPropertyDetails.getName().substring(11);
+                GoogleAnalyticsDataStreamResponse dataStreams = googleAnalyticsAdminFeign.getDataStreams(
+                        String.format("Bearer %s", googleOauthGa4Request.getAccessToken()),
+                        propertyId
+                );
+                log.info("DataStream details for property : {}", dataStreams.toJson());
+                List<GoogleAnalyticsDataStreamDetails> streams = dataStreams.getDataStreams();
+                for (GoogleAnalyticsDataStreamDetails googleAnalyticsDataStreamDetails : streams) {
+                    log.info("Processing Data Stream for property : {}", googleAnalyticsDataStreamDetails.getName());
+                    String defaultUri = googleAnalyticsDataStreamDetails.getWebStreamData().getDefaultUri();
+                    String googleAnalyticsHost = HostNameExtractor.extractHostName(defaultUri);
+                    if (googleAnalyticsHost.equals(publisherHost)) {
+                        log.info("Website Found the Google Analytics Host : {}", googleAnalyticsHost);
+                        CompletableFuture.runAsync(
+                                ()-> gA4DetailsProcessor.process(websitePublisher, propertyId, googleOauthGa4Request)
+                        );
+                        response.setExist(Boolean.TRUE);
+                        response.setMessage(String.format("Processing the data from Google Analytics for Analytics Id : %s", googleAnalyticsDataStreamDetails.getWebStreamData().getMeasurementId()));
+                        return response;
+                    }
+                }
+            }
         }
+        response.setExist(Boolean.FALSE);
+        response.setMessage(String.format("No Data Streams found in Analytics for Host : %s. Please check whether the host %s is present in any of your account or not", publisherHost, publisherHost));
+        return response;
     }
 }

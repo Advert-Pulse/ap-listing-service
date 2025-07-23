@@ -109,7 +109,9 @@ public enum ErrorData {
     FAILED_TO_READ_DATA_FROM_SITE("AP__ERROR--3336", "Failed To Read Data From Site" ),
     HTML_DATA_VERIFICATION_ERROR("AP__ERROR--3337", "Website not verified as either there is no given code present or invalid code present. Please make sure you added the correct code" ),
     SPECIAL_REQUIREMENT_MANDATORY("AP__ERROR-3338", "Special requirement is mandatory and cannot be null."),
-    CANNOT_PURCHASE_OWN_LISTED_ORDER("AP__ERROR-3339", "Cannot Purchase Own List Order" ),;
+    CANNOT_PURCHASE_OWN_LISTED_ORDER("AP__ERROR-3339", "Cannot Purchase Own List Order" ),
+    INVALID_URL("AP__ERROR-3340", "Invalid URL" ),
+    WEBSITE_NOT_FOUND_GA("AP__ERROR-3341", "Website not found in GA" ),;
 
     private final String code;
     private final String message;

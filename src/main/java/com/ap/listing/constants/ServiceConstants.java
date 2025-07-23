@@ -54,4 +54,5 @@ public class ServiceConstants {
     public static final String BREADCRUMB_ID = "breadcrumbId";
     public static final String FILE_DIRECTORY = System.getProperty("java.io.tmpdir");
     public static final String OWNERSHIP_FILE_NAME = "advertpulse.txt";
+    public static final String FILTER = "filter";
 }

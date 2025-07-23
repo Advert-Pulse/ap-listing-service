@@ -38,9 +38,9 @@ package com.ap.listing.service;
  */
 
 import com.ap.listing.payload.request.GoogleOauthGa4Request;
-import com.bloggios.provider.payload.ModuleResponse;
+import com.ap.listing.payload.response.InitiateGA4OAuthResponse;
 import org.springframework.http.ResponseEntity;
 
 public interface GoogleOauthService {
-    ResponseEntity<ModuleResponse> initiateOauth(GoogleOauthGa4Request googleOauthGa4Request);
+    ResponseEntity<InitiateGA4OAuthResponse> initiateOauth(GoogleOauthGa4Request googleOauthGa4Request);
 }

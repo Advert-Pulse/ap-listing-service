@@ -28,50 +28,62 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.controller;
+package com.ap.listing.model;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: TestApiController
+  File: GA4History
  */
 
-import com.ap.listing.dao.repository.SchedulerRepository;
-import com.ap.listing.feign.AhrefFeignClient;
-import com.ap.listing.model.Scheduler;
-import com.ap.listing.processor.VerifyOwnershipProcessor;
-import com.ap.listing.scheduler.service.FetchWebsiteDataScheduler;
-import org.springframework.web.bind.annotation.*;
+import com.ap.listing.payload.response.GA4RunReportResponse;
+import com.ap.listing.utils.ApPayload;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.util.Date;
 
-@RestController
-@RequestMapping("/test/data")
-public class TestApiController {
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
+@ToString
+public class GA4History extends ApPayload<GA4History> {
 
-    private final SchedulerRepository schedulerRepository;
-    private final AhrefFeignClient ahrefFeignClient;
-    private final VerifyOwnershipProcessor verifyOwnershipProcessor;
-    private final FetchWebsiteDataScheduler fetchWebsiteDataScheduler;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String gA4HistoryId;
 
-    public TestApiController(SchedulerRepository schedulerRepository, AhrefFeignClient ahrefFeignClient, VerifyOwnershipProcessor verifyOwnershipProcessor, FetchWebsiteDataScheduler fetchWebsiteDataScheduler) {
-        this.schedulerRepository = schedulerRepository;
-        this.ahrefFeignClient = ahrefFeignClient;
-        this.verifyOwnershipProcessor = verifyOwnershipProcessor;
-        this.fetchWebsiteDataScheduler = fetchWebsiteDataScheduler;
-    }
+    private String propertyId;
+    private String publishingId;
+    private String message;
 
-    @GetMapping
-    public void listItems() {
-        fetchWebsiteDataScheduler.doProcess();
-    }
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = "jsonb")
+    private GA4RunReportResponse trafficHistoryResponse;
 
-    @PostMapping
-    public Scheduler addData(@RequestBody Scheduler scheduler) {
-        scheduler.setCreatedOn(new Date());
-        scheduler.setScheduledOn(new Date());
-        scheduler.setUpdatedOn(new Date());
-        return schedulerRepository.save(scheduler);
-    }
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = "jsonb")
+    private GA4RunReportResponse channelResponse;
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = "jsonb")
+    private GA4RunReportResponse trafficResponse;
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = "jsonb")
+    private GA4RunReportResponse countryTrafficHistoryResponse;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateCreated;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateUpdated;
 }

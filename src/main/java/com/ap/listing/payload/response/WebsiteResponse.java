@@ -76,6 +76,7 @@ public class WebsiteResponse {
     private Double writingAndPlacementPrice;
     private Double linkInsertionPrice;
     private String isWritingPlacement;
+    private String isLinkInsertion;
     private List<WebsiteCategory> categories = new ArrayList<>();
     private Integer mozDa;
     private Integer majesticTf;
@@ -91,4 +92,7 @@ public class WebsiteResponse {
     private List<TopCountry> similarWebTopCountries;
     private String isActive;
     private String isPublisherAvailable;
+    private List<TrafficHistory> ga4TrafficHistory;
+    private List<TopCountry> ga4TopCountries;
+    private String isGa4Metrics;
 }

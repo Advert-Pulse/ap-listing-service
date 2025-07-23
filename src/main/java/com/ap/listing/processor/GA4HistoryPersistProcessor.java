@@ -28,50 +28,35 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.controller;
+package com.ap.listing.processor;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: TestApiController
+  File: GA4HistoryPersistProcessor
  */
 
-import com.ap.listing.dao.repository.SchedulerRepository;
-import com.ap.listing.feign.AhrefFeignClient;
-import com.ap.listing.model.Scheduler;
-import com.ap.listing.processor.VerifyOwnershipProcessor;
-import com.ap.listing.scheduler.service.FetchWebsiteDataScheduler;
-import org.springframework.web.bind.annotation.*;
+import com.ap.listing.dao.repository.GA4HistoryRepository;
+import com.ap.listing.model.GA4History;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
-@RestController
-@RequestMapping("/test/data")
-public class TestApiController {
+@Component
+@RequiredArgsConstructor
+@Slf4j
+public class GA4HistoryPersistProcessor {
 
-    private final SchedulerRepository schedulerRepository;
-    private final AhrefFeignClient ahrefFeignClient;
-    private final VerifyOwnershipProcessor verifyOwnershipProcessor;
-    private final FetchWebsiteDataScheduler fetchWebsiteDataScheduler;
+    private final GA4HistoryRepository gA4HistoryRepository;
 
-    public TestApiController(SchedulerRepository schedulerRepository, AhrefFeignClient ahrefFeignClient, VerifyOwnershipProcessor verifyOwnershipProcessor, FetchWebsiteDataScheduler fetchWebsiteDataScheduler) {
-        this.schedulerRepository = schedulerRepository;
-        this.ahrefFeignClient = ahrefFeignClient;
-        this.verifyOwnershipProcessor = verifyOwnershipProcessor;
-        this.fetchWebsiteDataScheduler = fetchWebsiteDataScheduler;
-    }
-
-    @GetMapping
-    public void listItems() {
-        fetchWebsiteDataScheduler.doProcess();
-    }
-
-    @PostMapping
-    public Scheduler addData(@RequestBody Scheduler scheduler) {
-        scheduler.setCreatedOn(new Date());
-        scheduler.setScheduledOn(new Date());
-        scheduler.setUpdatedOn(new Date());
-        return schedulerRepository.save(scheduler);
+    public void persist(GA4History ga4History, String message) {
+        log.info("Persisting GA4History: {}, message: {}", ga4History, message);
+        ga4History.setMessage(message);
+        ga4History.setDateUpdated(new Date());
+        GA4History gA4HistoryResponse = gA4HistoryRepository.save(ga4History);
+        log.info("Persisted GA4History: {}", ga4History.toJson());
     }
 }

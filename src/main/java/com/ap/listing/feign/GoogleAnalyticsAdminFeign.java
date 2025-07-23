@@ -28,43 +28,45 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.controller;
+package com.ap.listing.feign;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: GoogleOauthController
+  File: GoogleAnalyticsAdminFeign
  */
 
-import com.ap.listing.constants.ApiConstants;
-import com.ap.listing.payload.request.GoogleOauthGa4Request;
-import com.ap.listing.payload.response.InitiateGA4OAuthResponse;
-import com.ap.listing.service.GoogleOauthService;
-import com.bloggios.provider.utils.ControllerHelper;
-import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.ap.listing.constants.ServiceConstants;
+import com.ap.listing.payload.response.GoogleAnalyticsAccountResponse;
+import com.ap.listing.payload.response.GoogleAnalyticsDataStreamResponse;
+import com.ap.listing.payload.response.GoogleAnalyticsPropertyResponse;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 
-@RestController
-@RequestMapping("/v1/google-oauth")
-@RequiredArgsConstructor
-public class GoogleOauthController {
+@FeignClient(
+        name = "${feign-client.google-service.analytics-admin.name}",
+        url = "${feign-client.google-service.analytics-admin.url}"
+)
+public interface GoogleAnalyticsAdminFeign {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(GoogleOauthController.class);
-    private final GoogleOauthService googleOauthService;
+    @GetMapping("/accounts")
+    GoogleAnalyticsAccountResponse getAccountDetails(
+            @RequestHeader(name = ServiceConstants.AUTHORIZATION) String token
+    );
 
-    @PostMapping
-    public ResponseEntity<InitiateGA4OAuthResponse> initiateOauth(@RequestBody GoogleOauthGa4Request googleOauthGa4Request) {
-        return ControllerHelper.loggedResponse(
-                () -> googleOauthService.initiateOauth(googleOauthGa4Request),
-                ApiConstants.INITIAL_GOOGLE_OAUTH,
-                LOGGER
-        );
-    }
+    @GetMapping("/properties")
+    GoogleAnalyticsPropertyResponse getPropertyDetails(
+            @RequestHeader(name = ServiceConstants.AUTHORIZATION) String token,
+            @RequestParam(name = ServiceConstants.FILTER) String filter
+    );
+
+    @GetMapping("/properties/{propertyId}/dataStreams")
+    GoogleAnalyticsDataStreamResponse getDataStreams(
+            @RequestHeader(name = ServiceConstants.AUTHORIZATION) String token,
+            @PathVariable(name = "propertyId") String propertyId
+    );
 }

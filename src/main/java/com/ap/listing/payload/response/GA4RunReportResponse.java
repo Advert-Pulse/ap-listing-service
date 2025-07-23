@@ -28,37 +28,97 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.payload.request;
+package com.ap.listing.payload.response;
 
 /*
   Developer: Rohit Parihar
-  Project: ap-auth-provider
+  Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: GoogleRefreshTokenResponse
+  File: GA4RunReportResponse
  */
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
+import java.util.List;
+
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-@ToString
-public class GoogleRefreshTokenResponse {
+public class GA4RunReportResponse {
 
-    @JsonProperty("access_token")
-    private String accessToken;
+    @JsonProperty("dimensionHeaders")
+    private List<DimensionHeader> dimensionHeaders;
 
-    @JsonProperty("refresh_token")
-    private String refreshToken;
+    @JsonProperty("metricHeaders")
+    private List<MetricHeader> metricHeaders;
 
-    @JsonProperty("scope")
-    private String scope;
+    @JsonProperty("rows")
+    private List<Row> rows;
 
-    @JsonProperty("id_token")
-    private String idToken;
+    @JsonProperty("rowCount")
+    private Integer rowCount;
+
+    @JsonProperty("metadata")
+    private Metadata metadata;
+
+    @JsonProperty("kind")
+    private String kind;
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class DimensionHeader {
+        private String name;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class MetricHeader {
+        private String name;
+        private String type;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class Row {
+        private List<DimensionValue> dimensionValues;
+        private List<MetricValue> metricValues;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class DimensionValue {
+        private String value;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class MetricValue {
+        private String value;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class Metadata {
+        private String currencyCode;
+        private String timeZone;
+    }
 }

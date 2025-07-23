@@ -28,50 +28,29 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.controller;
+package com.ap.listing.utils;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: TestApiController
+  File: ApPayload
  */
 
-import com.ap.listing.dao.repository.SchedulerRepository;
-import com.ap.listing.feign.AhrefFeignClient;
-import com.ap.listing.model.Scheduler;
-import com.ap.listing.processor.VerifyOwnershipProcessor;
-import com.ap.listing.scheduler.service.FetchWebsiteDataScheduler;
-import org.springframework.web.bind.annotation.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.Data;
+import lombok.SneakyThrows;
 
-import java.util.Date;
+@Data
+public abstract class ApPayload<A> {
 
-@RestController
-@RequestMapping("/test/data")
-public class TestApiController {
+    static final ObjectMapper objectMapper = new ObjectMapper();
 
-    private final SchedulerRepository schedulerRepository;
-    private final AhrefFeignClient ahrefFeignClient;
-    private final VerifyOwnershipProcessor verifyOwnershipProcessor;
-    private final FetchWebsiteDataScheduler fetchWebsiteDataScheduler;
-
-    public TestApiController(SchedulerRepository schedulerRepository, AhrefFeignClient ahrefFeignClient, VerifyOwnershipProcessor verifyOwnershipProcessor, FetchWebsiteDataScheduler fetchWebsiteDataScheduler) {
-        this.schedulerRepository = schedulerRepository;
-        this.ahrefFeignClient = ahrefFeignClient;
-        this.verifyOwnershipProcessor = verifyOwnershipProcessor;
-        this.fetchWebsiteDataScheduler = fetchWebsiteDataScheduler;
-    }
-
-    @GetMapping
-    public void listItems() {
-        fetchWebsiteDataScheduler.doProcess();
-    }
-
-    @PostMapping
-    public Scheduler addData(@RequestBody Scheduler scheduler) {
-        scheduler.setCreatedOn(new Date());
-        scheduler.setScheduledOn(new Date());
-        scheduler.setUpdatedOn(new Date());
-        return schedulerRepository.save(scheduler);
+    @SneakyThrows(
+            value = {JsonProcessingException.class}
+    )
+    public String toJson() {
+        return objectMapper.writeValueAsString(this);
     }
 }

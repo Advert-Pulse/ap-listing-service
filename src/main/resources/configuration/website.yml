@@ -102,6 +102,12 @@ website:
       searchAllowed: false
       searchField: isWritingPlacement
       partialSearch: false
+    isLinkInsertion:
+      type: STRING
+      filterAndSortField: isLinkInsertion
+      searchAllowed: false
+      searchField: isLinkInsertion
+      partialSearch: false
     category:
       type: STRING
       filterAndSortField: category
@@ -168,4 +174,10 @@ website:
       filterAndSortField: isPublisherAvailable
       searchAllowed: false
       searchField: isPublisherAvailable
+      partialSearch: false
+    isGa4Metrics:
+      type: STRING
+      filterAndSortField: isGa4Metrics
+      searchAllowed: false
+      searchField: isGa4Metrics
       partialSearch: false
