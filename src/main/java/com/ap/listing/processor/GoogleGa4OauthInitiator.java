@@ -37,8 +37,6 @@ package com.ap.listing.processor;
   File: GoogleGa4OauthInitiator
  */
 
-import com.ap.listing.enums.ErrorData;
-import com.ap.listing.exception.BadRequestException;
 import com.ap.listing.feign.GoogleAnalyticsAdminFeign;
 import com.ap.listing.model.WebsitePublisher;
 import com.ap.listing.payload.request.GoogleOauthGa4Request;
@@ -48,7 +46,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.net.URL;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 

@@ -28,41 +28,52 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.service.implementation;
+package com.ap.listing.processor;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: GoogleOauthServiceImplementation
+  File: GA4TrafficProcessor
  */
 
-import com.ap.listing.dao.repository.WebsitePublisherRepository;
-import com.ap.listing.enums.ErrorData;
-import com.ap.listing.exception.BadRequestException;
-import com.ap.listing.model.WebsitePublisher;
-import com.ap.listing.payload.request.GoogleOauthGa4Request;
-import com.ap.listing.payload.response.InitiateGA4OAuthResponse;
-import com.ap.listing.processor.GoogleGa4OauthInitiator;
-import com.ap.listing.service.GoogleOauthService;
+import com.ap.listing.model.GA4History;
+import com.ap.listing.payload.response.GA4RunReportResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+import java.util.List;
+import java.util.Objects;
+
+@Component
 @RequiredArgsConstructor
 @Slf4j
-public class GoogleOauthServiceImplementation implements GoogleOauthService {
+public class GA4TrafficProcessor {
 
-    private final GoogleGa4OauthInitiator googleGa4OauthInitiator;
-    private final WebsitePublisherRepository websitePublisherRepository;
+    private final GA4HistoryPersistProcessor gA4HistoryPersistProcessor;
 
-    @Override
-    public ResponseEntity<InitiateGA4OAuthResponse> initiateOauth(GoogleOauthGa4Request googleOauthGa4Request) {
-        WebsitePublisher websitePublisher = websitePublisherRepository.findByPublishingId(googleOauthGa4Request.getPublishingId())
-                .orElseThrow(() -> new BadRequestException(ErrorData.WEBSITE_PUBLISHER_NOT_FOUND));
-        InitiateGA4OAuthResponse initiateGA4OAuthResponse = googleGa4OauthInitiator.initiate(googleOauthGa4Request, websitePublisher);
-        return ResponseEntity.ok(initiateGA4OAuthResponse);
+    public Long process(GA4RunReportResponse ga4RunReportResponse, GA4History ga4History) {
+        if (Objects.isNull(ga4RunReportResponse.getRows()) || ga4RunReportResponse.getRows().isEmpty()) {
+            log.error("Ga4History Rows is null or empty : {}", ga4RunReportResponse);
+            gA4HistoryPersistProcessor.persist(ga4History, "No Rows present in the GA4TrafficResponse");
+            return null;
+        }
+        GA4RunReportResponse.Row row = ga4RunReportResponse.getRows().get(0);
+        List<GA4RunReportResponse.MetricValue> metricValues = row.getMetricValues();
+
+        if (metricValues == null || metricValues.isEmpty()) {
+            log.error("Ga4History Metrics is null or empty : {}", ga4RunReportResponse);
+            gA4HistoryPersistProcessor.persist(ga4History, "No Metrics present in the GA4TrafficResponse.MetricValue");
+            return null;
+        }
+
+        try {
+            return Long.parseLong(metricValues.get(0).getValue());
+        } catch (NumberFormatException e) {
+            log.error("Parsing Exception for long value : {}", metricValues.get(0).getValue());
+            gA4HistoryPersistProcessor.persist(ga4History, "Parsing Exception for long value in the GA4TrafficResponse.MetricValue");
+            return null;
+        }
     }
 }

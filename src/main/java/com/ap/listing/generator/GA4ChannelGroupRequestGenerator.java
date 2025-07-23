@@ -38,7 +38,6 @@ package com.ap.listing.generator;
  */
 
 import com.ap.listing.payload.request.GA4RunReportRequest;
-import lombok.Data;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 

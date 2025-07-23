@@ -175,3 +175,9 @@ website:
       searchAllowed: false
       searchField: isPublisherAvailable
       partialSearch: false
+    isGa4Metrics:
+      type: STRING
+      filterAndSortField: isGa4Metrics
+      searchAllowed: false
+      searchField: isGa4Metrics
+      partialSearch: false

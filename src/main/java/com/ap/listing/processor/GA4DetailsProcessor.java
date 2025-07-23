@@ -42,16 +42,20 @@ import com.ap.listing.generator.GA4ChannelGroupRequestGenerator;
 import com.ap.listing.generator.GA4CountryTrafficHistoryGenerator;
 import com.ap.listing.generator.GA4TrafficHistoryRequestGenerator;
 import com.ap.listing.generator.GA4TrafficRequestGenerator;
+import com.ap.listing.model.GA4History;
 import com.ap.listing.model.WebsitePublisher;
+import com.ap.listing.payload.records.GA4WebsiteDataRecord;
 import com.ap.listing.payload.request.GA4RunReportRequest;
 import com.ap.listing.payload.request.GoogleOauthGa4Request;
 import com.ap.listing.payload.response.GA4RunReportResponse;
+import com.ap.listing.utils.AsyncUtils;
 import com.ap.listing.utils.HostNameExtractor;
-import com.google.analytics.data.v1beta.RunReportRequest;
-import com.google.analytics.data.v1beta.RunReportResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.util.Date;
+import java.util.concurrent.CompletableFuture;
 
 @Component
 @RequiredArgsConstructor
@@ -59,36 +63,121 @@ import org.springframework.stereotype.Component;
 public class GA4DetailsProcessor {
 
     private final GoogleAnalyticsDataFeign googleAnalyticsDataFeign;
+    private final GA4ToWebsiteDataSyncProcessor gA4ToWebsiteDataSyncProcessor;
 
     public void process(WebsitePublisher websitePublisher, String propertyId, GoogleOauthGa4Request googleOauthGa4Request) {
         String hostName = HostNameExtractor.extractHostName(websitePublisher.getDomain());
+        CompletableFuture<GA4RunReportResponse> trafficHistoryFuture = CompletableFuture.supplyAsync(() ->
+                this.processTrafficHistory(
+                        googleOauthGa4Request,
+                        hostName,
+                        propertyId
+                )
+        );
+        CompletableFuture<GA4RunReportResponse> trafficFuture = CompletableFuture.supplyAsync(() ->
+                this.processTraffic(
+                        googleOauthGa4Request,
+                        hostName,
+                        propertyId
+                )
+        );
+        CompletableFuture<GA4RunReportResponse> channelFuture = CompletableFuture.supplyAsync(() ->
+                this.processChannel(
+                        googleOauthGa4Request,
+                        hostName,
+                        propertyId
+                )
+        );
+        CompletableFuture<GA4RunReportResponse> countryTrafficHistoryFuture = CompletableFuture.supplyAsync(() ->
+                this.processCountryTrafficHistory(
+                        googleOauthGa4Request,
+                        hostName,
+                        propertyId
+                )
+        );
+        AsyncUtils.getAsyncResult(CompletableFuture.allOf(trafficHistoryFuture, trafficFuture, channelFuture, countryTrafficHistoryFuture));
+        GA4RunReportResponse trafficHistoryResponse = trafficHistoryFuture.join();
+        GA4RunReportResponse trafficResponse = trafficFuture.join();
+        GA4RunReportResponse channelResponse = channelFuture.join();
+        GA4RunReportResponse countryTrafficHistoryResponse = countryTrafficHistoryFuture.join();
+        GA4WebsiteDataRecord ga4WebsiteDataRecord = new GA4WebsiteDataRecord(
+                trafficHistoryResponse,
+                trafficResponse,
+                channelResponse,
+                countryTrafficHistoryResponse
+        );
+        GA4History ga4History = this.generate(ga4WebsiteDataRecord, websitePublisher.getPublishingId(), propertyId);
+        gA4ToWebsiteDataSyncProcessor.process(
+                ga4WebsiteDataRecord,
+                ga4History
+        );
+    }
+
+    private GA4RunReportResponse processTrafficHistory(
+            GoogleOauthGa4Request googleOauthGa4Request,
+            String hostName,
+            String propertyId
+    ) {
         GA4RunReportRequest trafficHistoryRequest = GA4TrafficHistoryRequestGenerator.buildRequestBody(hostName);
-        GA4RunReportResponse trafficHistoryResponse = googleAnalyticsDataFeign.runReportRequest(
+        return googleAnalyticsDataFeign.runReportRequest(
                 String.format("Bearer %s", googleOauthGa4Request.getAccessToken()),
                 trafficHistoryRequest,
                 propertyId
         );
+    }
 
+    private GA4RunReportResponse processTraffic(
+            GoogleOauthGa4Request googleOauthGa4Request,
+            String hostName,
+            String propertyId
+    ) {
         GA4RunReportRequest trafficRequest = GA4TrafficRequestGenerator.buildRequestBody(hostName);
-        GA4RunReportResponse trafficResponse = googleAnalyticsDataFeign.runReportRequest(
+        return googleAnalyticsDataFeign.runReportRequest(
                 String.format("Bearer %s", googleOauthGa4Request.getAccessToken()),
                 trafficRequest,
                 propertyId
         );
+    }
 
+    private GA4RunReportResponse processChannel(
+            GoogleOauthGa4Request googleOauthGa4Request,
+            String hostName,
+            String propertyId
+    ) {
         GA4RunReportRequest channelRequest = GA4ChannelGroupRequestGenerator.buildRequestBody(hostName);
-        GA4RunReportResponse channelResponse = googleAnalyticsDataFeign.runReportRequest(
+        return googleAnalyticsDataFeign.runReportRequest(
                 String.format("Bearer %s", googleOauthGa4Request.getAccessToken()),
                 channelRequest,
                 propertyId
         );
+    }
 
+    private GA4RunReportResponse processCountryTrafficHistory(
+            GoogleOauthGa4Request googleOauthGa4Request,
+            String hostName,
+            String propertyId
+    ) {
         GA4RunReportRequest countryHistoryRequest = GA4CountryTrafficHistoryGenerator.buildRequestBody(hostName);
-
-        GA4RunReportResponse countryTrafficHistoryResponse = googleAnalyticsDataFeign.runReportRequest(
+        return googleAnalyticsDataFeign.runReportRequest(
                 String.format("Bearer %s", googleOauthGa4Request.getAccessToken()),
                 countryHistoryRequest,
                 propertyId
         );
+    }
+
+    private GA4History generate(GA4WebsiteDataRecord ga4WebsiteDataRecord, String publishingId, String propertyId) {
+        GA4History ga4History = GA4History
+                .builder()
+                .countryTrafficHistoryResponse(ga4WebsiteDataRecord.trafficHistoryResponse())
+                .channelResponse(ga4WebsiteDataRecord.channelResponse())
+                .trafficHistoryResponse(ga4WebsiteDataRecord.trafficHistoryResponse())
+                .trafficResponse(ga4WebsiteDataRecord.trafficResponse())
+                .dateCreated(new Date())
+                .dateUpdated(new Date())
+                .propertyId(propertyId)
+                .publishingId(publishingId)
+                .build();
+        log.info("GA4History generated : {}", ga4History.toJson());
+        return ga4History;
     }
 }

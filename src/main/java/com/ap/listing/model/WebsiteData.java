@@ -38,6 +38,7 @@ package com.ap.listing.model;
  */
 
 import com.ap.listing.constants.EntityConstants;
+import com.ap.listing.payload.GA4Channel;
 import com.ap.listing.payload.TopCountry;
 import com.ap.listing.payload.TrafficHistory;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -143,7 +144,22 @@ public class WebsiteData {
     @Column(columnDefinition = "jsonb")
     private List<TopCountry> similarWebTopCountries;
 
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = "jsonb")
+    private List<TrafficHistory> ga4TrafficHistory;
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = "jsonb")
+    private List<TopCountry> ga4TopCountries;
+
     private String isActive;
     private String isPublisherAvailable;
     private String message;
+    private String isGa4Metrics;
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = "jsonb")
+    private GA4Channel ga4Channel;
+
+    private Long ga4Traffic;
 }

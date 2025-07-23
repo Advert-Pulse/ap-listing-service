@@ -28,43 +28,17 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.controller;
+package com.ap.listing.dao.repository;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: GoogleOauthController
+  File: GA4HistoryRepository
  */
 
-import com.ap.listing.constants.ApiConstants;
-import com.ap.listing.payload.request.GoogleOauthGa4Request;
-import com.ap.listing.payload.response.InitiateGA4OAuthResponse;
-import com.ap.listing.service.GoogleOauthService;
-import com.bloggios.provider.utils.ControllerHelper;
-import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.ap.listing.model.GA4History;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-@RestController
-@RequestMapping("/v1/google-oauth")
-@RequiredArgsConstructor
-public class GoogleOauthController {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(GoogleOauthController.class);
-    private final GoogleOauthService googleOauthService;
-
-    @PostMapping
-    public ResponseEntity<InitiateGA4OAuthResponse> initiateOauth(@RequestBody GoogleOauthGa4Request googleOauthGa4Request) {
-        return ControllerHelper.loggedResponse(
-                () -> googleOauthService.initiateOauth(googleOauthGa4Request),
-                ApiConstants.INITIAL_GOOGLE_OAUTH,
-                LOGGER
-        );
-    }
+public interface GA4HistoryRepository extends JpaRepository<GA4History, String> {
 }

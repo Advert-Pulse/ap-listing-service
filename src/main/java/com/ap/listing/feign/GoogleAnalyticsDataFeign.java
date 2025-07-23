@@ -40,8 +40,6 @@ package com.ap.listing.feign;
 import com.ap.listing.constants.ServiceConstants;
 import com.ap.listing.payload.request.GA4RunReportRequest;
 import com.ap.listing.payload.response.GA4RunReportResponse;
-import com.google.analytics.data.v1beta.RunReportRequest;
-import com.google.analytics.data.v1beta.RunReportResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
