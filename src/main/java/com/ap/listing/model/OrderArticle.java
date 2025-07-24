@@ -37,6 +37,7 @@ package com.ap.listing.model;
   File: OrderArticle
  */
 
+import com.ap.listing.annotation.GeneratedCustomId;
 import com.ap.listing.constants.EntityConstants;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
@@ -60,6 +61,14 @@ public class OrderArticle {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String orderArticleId;
+
+    @GeneratedCustomId(
+            prefix = "APOD",
+            sequence = "listing.ap_order_sequence",
+            length = 7
+    )
+    @Column(unique = true)
+    private String orderId;
     private String wordCount;
     private String category;
 

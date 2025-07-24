@@ -31,6 +31,8 @@ spring:
       schema-locations:
         - classpath:scripts/001_listing-schema.sql
         - classpath:scripts/002_create-task-sequence.sql
+        - classpath:scripts/003_create-ownership-details-sequence.sql
+        - classpath:scripts/004_create-order-sequence.sql
   kafka:
     bootstrap-servers: ${BOOTSTRAP_SERVER}
     producer:

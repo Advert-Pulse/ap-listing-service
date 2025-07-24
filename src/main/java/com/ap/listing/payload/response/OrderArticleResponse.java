@@ -49,6 +49,7 @@ import lombok.*;
 @ToString
 public class OrderArticleResponse {
 
+    private String orderId;
     private String wordCount;
     private String category;
     private String titleSuggestion;
