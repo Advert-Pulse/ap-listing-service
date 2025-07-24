@@ -28,32 +28,39 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.processor.kafka;
+package com.ap.listing.processor;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: BuyContentPlacementNotificationProducer
+  File: BuyContentPlacementNotificationProcessor
  */
 
-import com.ap.listing.constants.EnvironmentConstants;
-import com.ap.listing.kafka.producer.MessageProducer;
-import com.ap.listing.payload.kafka.BuyContentPlacementEvent;
+import com.ap.listing.model.TaskPublisher;
+import com.ap.listing.payload.kafka.BuyTaskEvent;
+import com.ap.listing.processor.kafka.BuyTaskEventProducer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class BuyContentPlacementNotificationProducer extends MessageProducer<BuyContentPlacementEvent> {
+public class BuyTaskEventProcessor {
 
-    private final Environment environment;
+    private final BuyTaskEventProducer buyTaskEventProducer;
 
-    @Override
-    public String setTopic() {
-        return environment.getProperty(EnvironmentConstants.BUY_CONTENT_PLACEMENT_TOPIC);
+    public void process(TaskPublisher taskPublisherResponse) {
+        log.info("{} >> process -> taskPublisherResponse: {}", taskPublisherResponse.getClass().getSimpleName(), taskPublisherResponse);
+        BuyTaskEvent buyTaskEvent = BuyTaskEvent
+                .builder()
+                .buyerId(taskPublisherResponse.getBuyerId())
+                .publisherId(taskPublisherResponse.getPublisherId())
+                .taskId(taskPublisherResponse.getTaskId())
+                .domain(taskPublisherResponse.getSiteUrl())
+                .publishingId(taskPublisherResponse.getPublishingId())
+                .build();
+        buyTaskEventProducer.sendMessage(buyTaskEvent);
     }
 }

@@ -53,7 +53,7 @@ import com.ap.listing.payload.request.BuyLinkInsertionRequest;
 import com.ap.listing.payload.request.BuyWritingAndPlacement;
 import com.ap.listing.payload.request.SendFundsToReservedRequest;
 import com.ap.listing.payload.response.WalletResponse;
-import com.ap.listing.processor.BuyContentPlacementNotificationProcessor;
+import com.ap.listing.processor.BuyTaskEventProcessor;
 import com.ap.listing.scheduler.generator.AutoTaskRejectScheduler;
 import com.ap.listing.service.BuyService;
 import com.ap.listing.transformer.PrepareTaskBuyContentPlacement;
@@ -88,7 +88,7 @@ public class BuyServiceImplementation implements BuyService {
     private final TaskBuyerRepository taskBuyerRepository;
     private final ApPaymentServiceFeignClient apPaymentServiceFeignClient;
     private final ApplicationEventPublisher applicationEventPublisher;
-    private final BuyContentPlacementNotificationProcessor buyContentPlacementNotificationProcessor;
+    private final BuyTaskEventProcessor buyTaskEventProcessor;
     private final AutoTaskRejectScheduler autoTaskRejectScheduler;
     private final BuyLinkInsertionRequestValidator buyLinkInsertionRequestValidator;
     private final PrepareTaskBuyLinkInsertion prepareTaskBuyLinkInsertion;
@@ -124,7 +124,7 @@ public class BuyServiceImplementation implements BuyService {
                 )
         );
         log.info("Response received from ap-payment-service for sendFundsToReserved: {}", moduleResponse);
-        buyContentPlacementNotificationProcessor.process(taskPublisherResponse);
+        buyTaskEventProcessor.process(taskPublisherResponse);
         log.info("Publishing Event >> DemandEvent");
         applicationEventPublisher.publishEvent(new DemandEvent(
                 new DemandDataRecord(

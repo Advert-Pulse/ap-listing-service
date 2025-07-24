@@ -28,39 +28,32 @@
  * <p>
  * For inquiries regarding licensing, please contact support@bloggios.com.
  */
-package com.ap.listing.processor;
+package com.ap.listing.processor.kafka;
 
 /*
   Developer: Rohit Parihar
   Project: ap-listing-service
   GitHub: github.com/rohit-zip
-  File: BuyContentPlacementNotificationProcessor
+  File: BuyContentPlacementNotificationProducer
  */
 
-import com.ap.listing.model.TaskPublisher;
-import com.ap.listing.payload.kafka.BuyContentPlacementEvent;
-import com.ap.listing.processor.kafka.BuyContentPlacementNotificationProducer;
+import com.ap.listing.constants.EnvironmentConstants;
+import com.ap.listing.kafka.producer.MessageProducer;
+import com.ap.listing.payload.kafka.BuyTaskEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class BuyContentPlacementNotificationProcessor {
+public class BuyTaskEventProducer extends MessageProducer<BuyTaskEvent> {
 
-    private final BuyContentPlacementNotificationProducer buyContentPlacementNotificationProducer;
+    private final Environment environment;
 
-    public void process(TaskPublisher taskPublisherResponse) {
-        log.info("{} >> process -> taskPublisherResponse: {}", taskPublisherResponse.getClass().getSimpleName(), taskPublisherResponse);
-        BuyContentPlacementEvent buyContentPlacementEvent = BuyContentPlacementEvent
-                .builder()
-                .buyerId(taskPublisherResponse.getBuyerId())
-                .publisherId(taskPublisherResponse.getPublisherId())
-                .taskId(taskPublisherResponse.getTaskId())
-                .domain(taskPublisherResponse.getSiteUrl())
-                .publishingId(taskPublisherResponse.getPublishingId())
-                .build();
-        buyContentPlacementNotificationProducer.sendMessage(buyContentPlacementEvent);
+    @Override
+    public String setTopic() {
+        return environment.getProperty(EnvironmentConstants.BUY_CONTENT_PLACEMENT_TOPIC);
     }
 }

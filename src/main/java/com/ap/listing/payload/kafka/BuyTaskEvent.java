@@ -47,7 +47,7 @@ import lombok.*;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 @ToString
-public class BuyContentPlacementEvent {
+public class BuyTaskEvent {
 
     private String buyerId;
     private String publisherId;

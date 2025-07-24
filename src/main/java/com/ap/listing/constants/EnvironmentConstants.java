@@ -42,5 +42,5 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class EnvironmentConstants {
 
-    public static final String BUY_CONTENT_PLACEMENT_TOPIC = "kafka.producer.topics.buy-content-placement";
+    public static final String BUY_CONTENT_PLACEMENT_TOPIC = "kafka.producer.topics.buy-task";
 }
