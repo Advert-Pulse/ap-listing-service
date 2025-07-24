@@ -45,8 +45,10 @@ import com.ap.listing.model.TaskPublisher;
 import com.ap.listing.service.PublisherService;
 import com.ap.listing.utils.MessageUtil;
 import com.bloggios.provider.payload.ModuleResponse;
+import com.bloggios.provider.utils.DateUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
@@ -58,45 +60,81 @@ import java.util.Optional;
 @Slf4j
 public class AutoRejectTaskSchedulerProcessor {
 
+    @Value("${scheduler.autoRejectTask.limit}")
+    private int limit;
+
+    @Value("${scheduler.autoRejectTask.multiplier}")
+    private int multiplier;
+
     private final TaskPublisherRepository taskPublisherRepository;
     private final SchedulerRepository schedulerRepository;
     private final PublisherService publisherService;
 
     public void process(Scheduler scheduler) {
-        log.info("{} >> {}", getClass().getSimpleName(), scheduler.toString());
+        log.info("{} >> {}", getClass().getSimpleName(), scheduler);
+
         String taskUUID = scheduler.getPrimaryId();
         Optional<TaskPublisher> taskOptional = taskPublisherRepository.findById(taskUUID);
         Date now = new Date();
-        if (taskOptional.isEmpty()) {
-            scheduleComplete(scheduler, now, "Task Data is not found with the given primary id: " + taskUUID);
-            return;
-        }
-        TaskPublisher taskPublisher = taskOptional.get();
-        String currentStatus = taskPublisher.getCurrentStatus();
-        if (!currentStatus.equalsIgnoreCase(PublisherTaskStatus.YOUR_ACCEPTANCE.name())) {
-            scheduleComplete(scheduler, now, "Task Data is not in Your Acceptance(Publisher Approval) state: " + taskPublisher.getTaskId());
-            return;
-        }
-        ResponseEntity<ModuleResponse> moduleResponseResponseEntity = publisherService.manageTaskInitialInternal(taskPublisher.getTaskId(), PublisherTaskStatus.REJECTED.name());
-        if (!moduleResponseResponseEntity.getStatusCode().is2xxSuccessful()) {
 
+        if (taskOptional.isEmpty()) {
+            completeScheduling(scheduler, now, "Task not found for primary id: " + taskUUID);
+            return;
+        }
+
+        TaskPublisher taskPublisher = taskOptional.get();
+        if (!PublisherTaskStatus.YOUR_ACCEPTANCE.name().equalsIgnoreCase(taskPublisher.getCurrentStatus())) {
+            completeScheduling(scheduler, now, "Task is not in 'Your Acceptance' state: " + taskPublisher.getTaskId());
+            return;
+        }
+
+        ResponseEntity<ModuleResponse> response = publisherService.manageTaskInitialInternal(
+                taskPublisher.getTaskId(), PublisherTaskStatus.REJECTED.name());
+
+        if (response.getStatusCode().is2xxSuccessful()) {
+            markSchedulerSuccess(scheduler, now);
         } else {
-            scheduler.setIsSchedulingDone(true);
-            scheduler.setScheduleCompletedOn(now);
-            scheduler.setUpdatedOn(now);
-            scheduler.setIsPassed(true);
-            Scheduler schedulerResponse = schedulerRepository.saveAndFlush(scheduler);
-            log.info("Scheduler saved successfully to database {}", schedulerResponse.toString());
+            reschedule(scheduler, now);
         }
     }
 
-    private void scheduleComplete(Scheduler scheduler, Date date, String message) {
+    private void reschedule(Scheduler scheduler, Date now) {
+        int timesUsed = scheduler.getTimesUsed();
+        scheduler.setUpdatedOn(now);
+
+        if (timesUsed < limit) {
+            log.info("Rescheduling task - attempt {}", timesUsed + 1);
+            scheduler.setTimesUsed(timesUsed + 1);
+            scheduler.setScheduledOn(DateUtils.addHours(now, timesUsed * multiplier));
+        } else {
+            log.info("Rescheduling limit reached. Marking as failed.");
+            scheduler.setIsSchedulingDone(true);
+            scheduler.setIsPassed(false);
+            scheduler.setScheduleCompletedOn(now);
+        }
+
+        Scheduler saved = schedulerRepository.save(scheduler);
+        log.info("Scheduler saved to DB: {}", saved);
+    }
+
+    private void markSchedulerSuccess(Scheduler scheduler, Date now) {
         scheduler.setIsSchedulingDone(true);
-        scheduler.setScheduleCompletedOn(date);
-        scheduler.setUpdatedOn(date);
+        scheduler.setIsPassed(true);
+        scheduler.setScheduleCompletedOn(now);
+        scheduler.setUpdatedOn(now);
+
+        Scheduler saved = schedulerRepository.saveAndFlush(scheduler);
+        log.info("Scheduler marked successful: {}", saved);
+    }
+
+    private void completeScheduling(Scheduler scheduler, Date now, String message) {
+        scheduler.setIsSchedulingDone(true);
         scheduler.setIsPassed(false);
+        scheduler.setScheduleCompletedOn(now);
+        scheduler.setUpdatedOn(now);
         scheduler.setMessage(MessageUtil.getMessage(scheduler.getMessage(), message));
-        Scheduler schedulerResponse = schedulerRepository.saveAndFlush(scheduler);
-        log.info("Scheduler saved successfully to database {}", schedulerResponse.toString());
+
+        Scheduler saved = schedulerRepository.saveAndFlush(scheduler);
+        log.info("Scheduler completed with message: {}", saved);
     }
 }

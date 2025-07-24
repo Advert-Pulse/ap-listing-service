@@ -176,6 +176,8 @@ scheduler:
     multiplier: 4
   autoRejectTask:
     scheduleAfter: 4
+    limit: 4
+    multiplier: 2
 
 website-analyser:
   mozDA: 10

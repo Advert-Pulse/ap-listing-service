@@ -56,8 +56,6 @@ public class GlobalScheduler {
     private final WebsitePublisherScheduler websitePublisherScheduler;
     private final AutoRejectTaskScheduler autoRejectTaskScheduler;
 
-//    @Scheduled(cron = "0 0 * * * ?")
-
     /**
      * Next Run : 2:00
      * Website List: 1:20

@@ -40,7 +40,6 @@ import com.ap.listing.payload.BuyerTaskStatusPayload;
 import com.ap.listing.payload.PricingPayload;
 import com.ap.listing.payload.PublisherTaskStatusPayload;
 import com.ap.listing.payload.UrlAnchorTextPayload;
-import com.ap.listing.payload.request.BuyContentPlacementRequest;
 import com.ap.listing.payload.request.BuyWritingAndPlacement;
 import com.ap.listing.properties.AdvertPulseProperties;
 import com.ap.listing.utils.SecurityContextUtil;

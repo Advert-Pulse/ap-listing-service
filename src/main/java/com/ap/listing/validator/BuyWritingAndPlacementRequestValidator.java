@@ -34,7 +34,6 @@ import com.ap.listing.enums.ErrorData;
 import com.ap.listing.exception.BadRequestException;
 import com.ap.listing.model.WebsitePublisher;
 import com.ap.listing.payload.UrlAnchorTextPayload;
-import com.ap.listing.payload.request.BuyContentPlacementRequest;
 import com.ap.listing.payload.request.BuyWritingAndPlacement;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

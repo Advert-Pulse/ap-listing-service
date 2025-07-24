@@ -98,6 +98,7 @@ public class WebsitePublisherToResponseTransformer {
         response.setWebsite(websiteToWebsiteResponseForPublisherTransformer.transform(publisher.getWebsiteData()));
         response.setDateCreated(publisher.getDateCreated());
         response.setDateUpdated(publisher.getDateUpdated());
+        response.setIsActive(publisher.getIsActive());
         log.info("Website publisher transformed response: {}", response.toString());
         return response;
     }
