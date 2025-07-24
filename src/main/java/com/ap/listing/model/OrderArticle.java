@@ -37,6 +37,7 @@ package com.ap.listing.model;
   File: OrderArticle
  */
 
+import com.ap.listing.annotation.CustomIdGeneratorListener;
 import com.ap.listing.annotation.GeneratedCustomId;
 import com.ap.listing.constants.EntityConstants;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -56,6 +57,7 @@ import java.util.Date;
         name = EntityConstants.ORDER_ARTICLE,
         schema = EntityConstants.LISTING_SCHEMA
 )
+@EntityListeners(CustomIdGeneratorListener.class)
 public class OrderArticle {
 
     @Id
