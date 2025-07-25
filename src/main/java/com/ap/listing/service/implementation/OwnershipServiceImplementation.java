@@ -133,7 +133,7 @@ public class OwnershipServiceImplementation implements OwnershipService {
     public ResponseEntity<VerifyOwnershipResponse> verifyOwnershipUsingHtmlCode(String publishingId) {
         OwnershipDetails ownershipDetails = ownershipDetailsRepository.findByPublishingId(publishingId)
                 .orElseThrow(() -> new BadRequestException(ErrorData.OWNERSHIP_DETAILS_NOT_FOUND));
-        boolean isAvailable = htmlCodeVerifyOwnershipProcessor.checkForCode(ownershipDetails.getDomain(), ownershipDetails.getPublishingId());
+        boolean isAvailable = htmlCodeVerifyOwnershipProcessor.checkForCode(ownershipDetails.getDomain(), ownershipDetails.getUniqueId());
         if (!isAvailable) {
             throw new BadRequestException(ErrorData.HTML_DATA_VERIFICATION_ERROR);
         }
