@@ -87,5 +87,7 @@ public class Scheduler {
     private Date scheduledOn;
 
     private Boolean isPassed;
+
+    @Column(length = 7000)
     private String message;
 }
